@@ -1,4 +1,4 @@
-
+//TODO: may have to change everything depending on our file I/O implementation
 import java.util.Date;
 
 public class Transaction {

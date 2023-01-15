@@ -76,6 +76,8 @@ public class User {
      * Add an account for the user.
      * @param anAcct	the account to add
      */
+
+    // TODO: getters and setters for name field, setter for pin (so user can change passwords), reset password function
     public void addAccount(Account anAcct) {
         this.accounts.add(anAcct);
     }
@@ -156,4 +158,5 @@ public class User {
         System.out.println();
 
     }
+
 }

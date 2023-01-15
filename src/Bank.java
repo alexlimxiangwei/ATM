@@ -1,4 +1,6 @@
 
+//TODO: we need to have multiple banks
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;

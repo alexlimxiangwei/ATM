@@ -8,6 +8,8 @@ public class ATM {
         // init Scanner
         Scanner sc = new Scanner(System.in);
 
+        //TODO: accounts, transactions and bank data should be stored in a file, and main should read the file to generate all previous data.
+        //TODO: all new accounts and transaction data should be written into file ofc
         // init Bank
         Bank theBank = new Bank("Bank of Drausin");
 
@@ -49,7 +51,7 @@ public class ATM {
         // prompt user for user ID/pin combo until a correct one is reached
         do {
 
-            System.out.printf("\n\nWelcome to %s\n\n", theBank.getName());
+            System.out.printf("\n\nWelcome to %s\n\n", theBank.getName()); //TODO: maybe we can have multiple banks
             System.out.print("Enter user ID: ");
             userID = sc.nextLine();
             System.out.print("Enter pin: ");
@@ -90,7 +92,7 @@ public class ATM {
             System.out.println("  2) Withdraw");
             System.out.println("  3) Deposit");
             System.out.println("  4) Transfer");
-            System.out.println("  5) Quit");
+            System.out.println("  5) Quit"); // TODO: Account balance check, password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
@@ -135,7 +137,8 @@ public class ATM {
      * @param sc		the Scanner object used for user input
      */
     public static void transferFunds(User theUser, Scanner sc) {
-
+        // TODO: fundamental feature : inter account transfer / third-party transfer
+        //TODO: seems to only have inter account transfer for now, cant xfer to other users
         int fromAcct;
         int toAcct;
         double amount;
@@ -226,7 +229,7 @@ public class ATM {
         System.out.print("Enter a memo: ");
         memo = sc.nextLine();
 
-        // do the withdrwal
+        // do the withdrawal
         theUser.addAcctTransaction(fromAcct, -1*amount, memo);
 
     }
@@ -242,7 +245,8 @@ public class ATM {
         double amount;
         String memo;
 
-        // get account to withdraw from
+        // get account to deposit from
+        //TODO: the code for fetching of account seems to be repeated on withdrawal, deposit, and transfer -  can be put into function to avoid repeating code
         do {
             System.out.printf("Enter the number (1-%d) of the account to " +
                     "deposit to: ", theUser.numAccounts());
@@ -296,5 +300,7 @@ public class ATM {
         theUser.printAcctTransHistory(theAcct);
 
     }
+
+    //TODO: add unit testing function(s) below
 
 }

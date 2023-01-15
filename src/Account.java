@@ -23,6 +23,10 @@ public class Account {
      */
     private ArrayList<Transaction> transactions;
 
+    //TODO: add account balance field, and its getters/setters
+    //TODO: add withdrawal / transfer limits, and its getters/setters
+    //TODO: optional , overseas withdrawal limit (must also add bank country in Bank.java)
+
     /**
      * Create new Account instance
      * @param name		the name of the account
@@ -81,7 +85,8 @@ public class Account {
      * transactions.
      * @return	the balance value
      */
-    public double getBalance() {
+    public double getBalance() { // TODO: the current code doesnt have account balance, which means we need to
+        //TODO:  calculate the balance everytime we need to get the balance. Not good if we have thousands of txsactions
 
         double balance = 0;
         for (Transaction t : this.transactions) {
@@ -105,7 +110,7 @@ public class Account {
             return String.format("%s : $%.02f : %s", this.uuid, balance,
                     this.name);
         } else {
-            return String.format("%s : $(%.02f) : %s", this.uuid, balance,
+            return String.format("%s : $(%.02f) : %s", this.uuid, balance, //TODO: dont think we should allow negative balance
                     this.name);
         }
 
@@ -114,6 +119,7 @@ public class Account {
     /**
      * Print transaction history for account
      */
+    //TODO : make this filo I/O to store all transactions
     public void printTransHistory() {
 
         System.out.printf("\nTransaction history for account %s\n", this.uuid);
