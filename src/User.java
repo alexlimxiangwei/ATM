@@ -44,13 +44,7 @@ public class User {
 
         // store the pin's MD5 hash, rather than the original value, for
         // security reasons
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            this.pinHash = md.digest(pin.getBytes());
-        } catch (Exception e) {
-            System.err.println("error, caught exeption : " + e.getMessage());
-            System.exit(1);
-        }
+        this.pinHash = convertToBytes(pin);
 
         // get a new, unique universal unique ID for the user
         this.uuid = theBank.getNewUserUUID();
@@ -62,6 +56,16 @@ public class User {
         System.out.printf("New user %s, %s with ID %s created.\n",
                 lastName, firstName, this.uuid);
 
+    }
+    public byte[] convertToBytes(String pin){ // maybe move to util.java or something
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            return md.digest(pin.getBytes());
+        } catch (Exception e) {
+            System.err.println("error, caught exeption : " + e.getMessage());
+            System.exit(1);
+            return null;
+        }
     }
 
     /**
@@ -143,6 +147,10 @@ public class User {
         }
 
         return false;
+    }
+
+    public void setPin(String newPin) {
+        this.pinHash = convertToBytes(newPin);
     }
 
     /**

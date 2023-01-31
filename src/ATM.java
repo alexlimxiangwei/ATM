@@ -92,40 +92,30 @@ public class ATM {
             System.out.println("  2) Withdraw");
             System.out.println("  3) Deposit");
             System.out.println("  4) Transfer");
-            System.out.println("  5) Quit"); // TODO: Account balance check, password change/reset, settings
+            System.out.println("  5) Change Password");
+            System.out.println("  6) Quit"); // TODO: Account balance check, password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
 
-            if (choice < 1 || choice > 5) {
+            if (choice < 1 || choice > 6) {
                 System.out.println("Invalid choice. Please choose 1-5.");
             }
 
-        } while (choice < 1 || choice > 5);
+        } while (choice < 1 || choice > 6);
 
         // process the choice
         switch (choice) {
-
-            case 1:
-                ATM.showTransHistory(theUser, sc);
-                break;
-            case 2:
-                ATM.withdrawFunds(theUser, sc);
-                break;
-            case 3:
-                ATM.depositFunds(theUser, sc);
-                break;
-            case 4:
-                ATM.transferFunds(theUser, sc);
-                break;
-            case 5:
-                // gobble up rest of previous input
-                sc.nextLine();
-                break;
+            case 1 -> ATM.showTransHistory(theUser, sc);
+            case 2 -> ATM.withdrawFunds(theUser, sc);
+            case 3 -> ATM.depositFunds(theUser, sc);
+            case 4 -> ATM.transferFunds(theUser, sc);
+            case 5 -> ATM.changePassword(theUser, sc);
+            case 6 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
-        if (choice != 5) {
+        if (choice != 6) {
             ATM.printUserMenu(theUser, sc);
         }
 
@@ -300,7 +290,36 @@ public class ATM {
         theUser.printAcctTransHistory(theAcct);
 
     }
+    //change password
+    public static void changePassword(User theUser, Scanner sc) {
+        String pin;
+        boolean is_validated;
+        sc.nextLine(); // remove empty line first
+        do {
+            System.out.println("Enter current password: ");
+            pin = sc.nextLine();
+            is_validated = theUser.validatePin(pin);
+            if (!is_validated) {
+                System.out.println("Incorrect password, please try again. ");
+            }
+        }while(!is_validated);
+        is_validated = false;
+        do {
+            System.out.println("Enter new password: ");
+            pin = sc.nextLine();
+            System.out.println("Confirm new password: ");
+            String confirm_Pin = sc.nextLine();
+            is_validated = pin.equals(confirm_Pin);
+            if (!is_validated) {
+                System.out.println("The two passwords do not match, please try again.");
 
+            }
+        }while(!is_validated);
+        theUser.setPin(pin);
+        System.out.println("Password successfully changed.");
+
+
+    }
     //TODO: add unit testing function(s) below
 
 }
