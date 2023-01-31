@@ -159,4 +159,8 @@ public class User {
 
     }
 
+    public void userGetBalance(){
+
+    }
+
 }

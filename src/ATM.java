@@ -17,9 +17,10 @@ public class ATM {
         User aUser = theBank.addUser("John", "Doe", "1234");
 
         // add a checking account for our user
-        Account newAccount = new Account("Checking", aUser, theBank);
+        Account newAccount = new Account("Checking", aUser, theBank, 0.0);
         aUser.addAccount(newAccount);
         theBank.addAccount(newAccount);
+
 
         User curUser;
 
@@ -181,6 +182,7 @@ public class ATM {
         // finally, do the transfer
         theUser.addAcctTransaction(fromAcct, -1*amount, String.format(
                 "Transfer to account %s", theUser.getAcctUUID(toAcct)));
+
         theUser.addAcctTransaction(toAcct, amount, String.format(
                 "Transfer from account %s", theUser.getAcctUUID(fromAcct)));
 
