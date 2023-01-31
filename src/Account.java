@@ -66,7 +66,7 @@ public class Account {
 
     /**
      * Add a new transaction in this account.
-     * @param amount	the amount transacted
+     * @param amount the amount transacted
      */
 
     public Double getAccountBal(String uuid) {
