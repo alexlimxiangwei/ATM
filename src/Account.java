@@ -23,9 +23,17 @@ public class Account {
      */
     private ArrayList<Transaction> transactions;
 
+    private Double accountBal;
+
+    /**
+     * The account balance
+     */
+
     //TODO: add account balance field, and its getters/setters
     //TODO: add withdrawal / transfer limits, and its getters/setters
     //TODO: optional , overseas withdrawal limit (must also add bank country in Bank.java)
+
+
 
     /**
      * Create new Account instance
@@ -33,7 +41,7 @@ public class Account {
      * @param holder	the User object that holds this account
      * @param theBank	the bank that issues the account
      */
-    public Account(String name, User holder, Bank theBank) {
+    public Account(String name, User holder, Bank theBank, Double accountBal) {
 
         // set the account name and holder
         this.name = name;
@@ -45,6 +53,7 @@ public class Account {
         // init transactions
         this.transactions = new ArrayList<Transaction>();
 
+        this.accountBal = accountBal;
     }
 
     /**
@@ -59,6 +68,15 @@ public class Account {
      * Add a new transaction in this account.
      * @param amount	the amount transacted
      */
+
+    public Double getAccountBal(String uuid) {
+        return accountBal;
+    }
+
+    public void setAccountBal(Double accountBal) {
+        this.accountBal = accountBal;
+    }
+
     public void addTransaction(double amount) {
 
         // create new transaction and add it to our list
@@ -89,6 +107,7 @@ public class Account {
         //TODO:  calculate the balance everytime we need to get the balance. Not good if we have thousands of txsactions
 
         double balance = 0;
+        double accountBal = 0;
         for (Transaction t : this.transactions) {
             balance += t.getAmount();
         }

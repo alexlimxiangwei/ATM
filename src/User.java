@@ -167,4 +167,8 @@ public class User {
 
     }
 
+    /*public void userGetBalance(){ this one need to be fixed hehe
+
+    }*/
+
 }
