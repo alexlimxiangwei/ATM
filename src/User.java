@@ -148,7 +148,7 @@ public class User {
 
         return false;
     }
-
+    // set pin
     public void setPin(String newPin) {
         this.pinHash = convertToBytes(newPin);
     }

@@ -292,7 +292,7 @@ public class ATM {
         theUser.printAcctTransHistory(theAcct);
 
     }
-    //change password
+    //change passwords
     public static void changePassword(User theUser, Scanner sc) {
         String pin;
         boolean is_validated;
