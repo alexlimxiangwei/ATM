@@ -3,7 +3,6 @@
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Bank {
 
@@ -74,10 +73,10 @@ public class Bank {
      * Generate a new universally unique ID for an account.
      * @return	the uuid
      */
-    public String getNewAccountUUID() {
+    public String getNewAccountID() {
 
         // inits
-        String uuid;
+        String id;
         Random rng = new Random();
         int len = 10;
         boolean nonUnique = false;
@@ -86,14 +85,14 @@ public class Bank {
         do {
 
             // generate the number
-            uuid = "";
+            id = "";
             for (int c = 0; c < len; c++) {
-                uuid += ((Integer)rng.nextInt(10)).toString();
+                id += ((Integer)rng.nextInt(10)).toString();
             }
 
             // check to make sure it's unique
             for (Account a : this.accounts) {
-                if (uuid.compareTo(a.getUUID()) == 0) {
+                if (id.compareTo(a.getAccountID()) == 0) {
                     nonUnique = true;
                     break;
                 }
@@ -101,7 +100,7 @@ public class Bank {
 
         } while (nonUnique);
 
-        return uuid;
+        return id;
 
     }
 

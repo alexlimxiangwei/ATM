@@ -11,7 +11,7 @@ public class Account {
     /**
      * The account ID number.
      */
-    private String uuid;
+    private String accountID;
 
     /**
      * The User object that owns this account.
@@ -48,7 +48,7 @@ public class Account {
         this.holder = holder;
 
         // get next account UUID
-        this.uuid = theBank.getNewAccountUUID();
+        this.accountID = theBank.getNewAccountID();
 
         // init transactions
         this.transactions = new ArrayList<Transaction>();
@@ -60,8 +60,8 @@ public class Account {
      * Get the account number.
      * @return	the uuid
      */
-    public String getUUID() {
-        return this.uuid;
+    public String getAccountID() {
+        return this.accountID;
     }
 
     /**
@@ -126,10 +126,10 @@ public class Account {
 
         // format summary line depending on whether balance is negative
         if (balance >= 0) {
-            return String.format("%s : $%.02f : %s", this.uuid, balance,
+            return String.format("%s : $%.02f : %s", this.accountID, balance,
                     this.name);
         } else {
-            return String.format("%s : $(%.02f) : %s", this.uuid, balance, //TODO: dont think we should allow negative balance
+            return String.format("%s : $(%.02f) : %s", this.accountID, balance, //TODO: dont think we should allow negative balance
                     this.name);
         }
 
@@ -141,7 +141,7 @@ public class Account {
     //TODO : make this filo I/O to store all transactions
     public void printTransHistory() {
 
-        System.out.printf("\nTransaction history for account %s\n", this.uuid);
+        System.out.printf("\nTransaction history for account %s\n", this.accountID);
         for (int t = this.transactions.size()-1; t >= 0; t--) {
             System.out.println(this.transactions.get(t).getSummaryLine());
         }
