@@ -166,4 +166,27 @@ public class Bank {
         return this.name;
     }
 
+    /**
+     * Gets an Account's index in this.accounts by searching accountID
+     *
+     * @return index of found account or -1 if not found
+     */
+    public int getAccountIndex(String accountID){
+        for (int i = 0 ; i < this.accounts.size(); i++){
+            if (accounts.get(i).getAccountID().equals(accountID)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Gets an Account using its index in this.accounts (only call this after getAccountIndex)
+     *
+     * @return Account object
+     */
+    public Account getAccount(int index){
+        return accounts.get(index);
+    }
+
 }

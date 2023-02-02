@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="buggy bank acc balance">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="Changed all uuid &gt; accountID so that we can have inter account transfers">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +70,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675156769921</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Changed all uuid &gt; accountID so that we can have inter account transfers">
+      <created>1675348317563</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1675348317563</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -87,6 +94,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial copy" />
     <MESSAGE value="buggy bank acc balance" />
-    <option name="LAST_COMMIT_MESSAGE" value="buggy bank acc balance" />
+    <MESSAGE value="Changed all uuid &gt; accountID so that we can have inter account transfers" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed all uuid &gt; accountID so that we can have inter account transfers" />
   </component>
 </project>

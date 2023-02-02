@@ -23,11 +23,12 @@ public class Account {
      */
     private ArrayList<Transaction> transactions;
 
-    private Double accountBal;
-
     /**
      * The account balance
      */
+    private Double accountBal;
+
+
 
     //TODO: add account balance field, and its getters/setters
     //TODO: add withdrawal / transfer limits, and its getters/setters
@@ -64,12 +65,9 @@ public class Account {
         return this.accountID;
     }
 
-    /**
-     * Add a new transaction in this account.
-     * @param amount the amount transacted
-     */
 
-    public Double getAccountBal(String uuid) {
+
+    public Double getAccountBal() {
         return accountBal;
     }
 
@@ -77,6 +75,10 @@ public class Account {
         this.accountBal = accountBal;
     }
 
+    /**
+     * Add a new transaction in this account.
+     * @param amount the amount transacted
+     */
     public void addTransaction(double amount) {
 
         // create new transaction and add it to our list
