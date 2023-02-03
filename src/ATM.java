@@ -144,29 +144,22 @@ public class ATM {
             choice = sc.nextInt();
 
         } while(choice < 0 || choice > 2);
+        // get account to transfer from
+        fromAcct = Utils.getInternalTransferAccount(theUser, "transfer from", sc);
+        transferLimit = fromAcct.getBalance();
+
         if (choice == 1){
-
-            // get account to transfer from
-            fromAcct = Utils.getInternalTransferAccount(theUser, "transfer from", sc);
-            transferLimit = fromAcct.getBalance();
-
-            // get account to transfer to
+            // get internal account to transfer to
             toAcct = Utils.getInternalTransferAccount(theUser, "transfer to", sc);
 
-            // get amount to transfer
-            amount = Utils.getTransferAmount(transferLimit, sc);
         }
         else{
-            // get account to transfer from
-            fromAcct = Utils.getInternalTransferAccount(theUser, "transfer from", sc);
-            transferLimit = fromAcct.getBalance();
-
-            //get accountID to transfer to
+            //get third party account to transfer to
             toAcct = Utils.getThirdPartyTransferAccount(theBank, sc);
-
-            // get amount to transfer
-            amount = Utils.getTransferAmount(transferLimit, sc);
         }
+        // get amount to transfer
+        amount = Utils.getTransferAmount(transferLimit, sc);
+
         // finally, do the transfer
         Utils.addAcctTransaction(fromAcct, -1*amount, String.format(
                 "Transfer to account %s", fromAcct.getAccountID()));
@@ -220,7 +213,7 @@ public class ATM {
         String memo;
 
         // get account to deposit from
-        toAcct = Utils.getInternalTransferAccount(theUser, "from", sc);
+        toAcct = Utils.getInternalTransferAccount(theUser, "deposit to", sc);
         // get amount to transfer
         amount = Utils.getTransferAmount(-1, sc);
 

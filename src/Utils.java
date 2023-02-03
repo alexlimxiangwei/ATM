@@ -47,7 +47,7 @@ public class Utils {
             amount = sc.nextDouble();
             if (amount < 0) {
                 System.out.println("Amount must be greater than zero.");
-            } else if (limit != -1 && amount > limit) {
+            } else if (limit != -1 && amount > limit) { // check if transferring more than limit (-1 means no limit)
                 System.out.printf("Amount must not be greater than balance " +
                         "of $%.02f.\n", limit);
             }
