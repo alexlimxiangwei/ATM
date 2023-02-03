@@ -36,7 +36,7 @@ public class Utils {
     }
     /**
      * Gets amount to transfer from user, with an upper transfer limit
-     * @param limit the upper $ amount limit of transfer
+     * @param limit the upper $ amount limit of transfer, or -1 for no limit
      * @return the amount the user inputted
      */
     public static double getTransferAmount(double limit, Scanner sc){
