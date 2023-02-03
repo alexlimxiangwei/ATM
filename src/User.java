@@ -127,15 +127,7 @@ public class User {
         this.accounts.get(acctIdx).printTransHistory();
     }
 
-    /**
-     * Add a transaction to a particular account.
-     * @param acctIdx	the index of the account
-     * @param amount	the amount of the transaction
-     * @param memo		the memo of the transaction
-     */
-    public void addAcctTransaction(int acctIdx, double amount, String memo) {
-        this.accounts.get(acctIdx).addTransaction(amount, memo);
-    }
+
 
     /**
      * Check whether a given pin matches the true User pin

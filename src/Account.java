@@ -77,7 +77,7 @@ public class Account {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-    public void addAccountBal(double amount){
+    public void addBalance(double amount){
         this.balance += amount;
     }
 
