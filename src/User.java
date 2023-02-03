@@ -111,7 +111,14 @@ public class User {
     public String getAcctUUID(int acctIdx) {
         return this.accounts.get(acctIdx).getAccountID();
     }
-
+    /**
+     * Get a particular account.
+     * @param acctIndex	the index of the account to use
+     * @return			The account object
+     */
+    public Account getAcct(int acctIndex) {
+        return this.accounts.get(acctIndex);
+    }
     /**
      * Print transaction history for a particular account.
      * @param acctIdx	the index of the account to use

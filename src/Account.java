@@ -26,7 +26,7 @@ public class Account {
     /**
      * The account balance
      */
-    private Double accountBal;
+    private Double balance;
 
 
 
@@ -42,7 +42,7 @@ public class Account {
      * @param holder	the User object that holds this account
      * @param theBank	the bank that issues the account
      */
-    public Account(String name, User holder, Bank theBank, Double accountBal) {
+    public Account(String name, User holder, Bank theBank, Double balance) {
 
         // set the account name and holder
         this.name = name;
@@ -54,25 +54,31 @@ public class Account {
         // init transactions
         this.transactions = new ArrayList<Transaction>();
 
-        this.accountBal = accountBal;
+        this.balance = balance;
     }
 
     /**
      * Get the account number.
-     * @return	the uuid
+     * @return	the accountID
      */
     public String getAccountID() {
         return this.accountID;
     }
 
+    /**
+     * Get the account balance.
+     * @return	account balance
+     */
 
-
-    public Double getAccountBal() {
-        return accountBal;
+    public Double getBalance() {
+        return balance;
     }
 
-    public void setAccountBal(Double accountBal) {
-        this.accountBal = accountBal;
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+    public void addAccountBal(double amount){
+        this.balance += amount;
     }
 
     /**
@@ -100,22 +106,6 @@ public class Account {
 
     }
 
-    /**
-     * Get the balance of this account by adding the amounts of the
-     * transactions.
-     * @return	the balance value
-     */
-    public double getBalance() { // TODO: the current code doesnt have account balance, which means we need to
-        //TODO:  calculate the balance everytime we need to get the balance. Not good if we have thousands of txsactions
-
-        double balance = 0;
-        double accountBal = 0;
-        for (Transaction t : this.transactions) {
-            balance += t.getAmount();
-        }
-        return balance;
-
-    }
 
     /**
      * Get summary line for account

@@ -165,17 +165,18 @@ public class ATM {
                 System.out.println("Amount must be greater than zero.");
             } else if (amount > acctBal) {
                 System.out.printf("Amount must not be greater than balance " +
-                        "of $.02f.\n", acctBal);
+                        "of $%.02f.\n", acctBal);
             }
         } while (amount < 0 || amount > acctBal);
 
         // finally, do the transfer
         theUser.addAcctTransaction(fromAcct, -1*amount, String.format(
                 "Transfer to account %s", theUser.getAcctUUID(toAcct)));
+        theUser.getAcct(toAcct).addAccountBal(-amount);
 
         theUser.addAcctTransaction(toAcct, amount, String.format(
                 "Transfer from account %s", theUser.getAcctUUID(fromAcct)));
-
+        theUser.getAcct(fromAcct).addAccountBal(amount);
     }
 
     /**
@@ -223,7 +224,7 @@ public class ATM {
 
         // do the withdrawal
         theUser.addAcctTransaction(fromAcct, -1*amount, memo);
-
+        theUser.getAcct(fromAcct).addAccountBal(-amount);
     }
 
     /**
@@ -266,7 +267,7 @@ public class ATM {
 
         // do the deposit
         theUser.addAcctTransaction(toAcct, amount, memo);
-
+        theUser.getAcct(toAcct).addAccountBal(amount);
     }
 
     /**
