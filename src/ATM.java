@@ -46,6 +46,7 @@ public class ATM {
     public static User mainMenuPrompt(Bank theBank, Scanner sc) {
 
         // inits
+        // test
         String userID;
         String pin;
         User authUser;
