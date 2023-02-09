@@ -155,6 +155,7 @@ public class User {
     /**
      * Print summaries for the accounts of this user.
      */
+    
     public void printAccountsSummary() {
 
         System.out.printf("\n\n%s's accounts summary\n", this.firstName);
@@ -162,12 +163,33 @@ public class User {
             System.out.printf("%d) %s\n", a+1,
                     this.accounts.get(a).getSummaryLine());
         }
+
+        System.out.print(
+                "╔════════════════════╦════════════════════╦════════════════════╦════════════════════╗\n" +
+                        "║ Name               ║ Type               ║ Account ID         ║ Amount             ║\n" +
+                        "║════════════════════╠════════════════════╠════════════════════╠════════════════════╣\n"
+        );
+
+//        for (int a = 0; a < this.accounts.size(); a++) {
+        HashMap<String,String> val = this.accounts.get(0).getSummaryLine();
+
+        System.out.printf(
+                "║ %s║ %s║ %s║ %s║ \n",
+                adjustSpacing(this.firstName + " " + this.lastName),
+                adjustSpacing(val.get("type")),
+                adjustSpacing(val.get("uuid")),
+                adjustSpacing("$" + val.get("balance"))
+        );
+
+
+        System.out.println("╚════════════════════╩════════════════════╩════════════════════╩════════════════════╝");
+
+
+
         System.out.println();
 
     }
 
-    /*public void userGetBalance(){ this one need to be fixed hehe
-
-    }*/
-
 }
+
+
