@@ -25,14 +25,28 @@ public class ATM {
 
         User curUser;
 
+
         // continue looping forever
         while (true) {
+            System.out.print("Please press 1 to login or 2 to to sign up ");
 
             // stay in login prompt until successful login
-            curUser = ATM.mainMenuPrompt(theBank, sc);
+            int userInput = sc.nextInt();
 
-            // stay in main menu until user quits
-            ATM.printUserMenu(curUser,theBank, sc);
+            if (userInput == 1){
+                // stay in login prompt until successful login
+                curUser = ATM.mainMenuPrompt(theBank, sc);
+
+                // stay in main menu until user quits
+                ATM.printUserMenu(curUser, theBank, sc);
+                // stay in main menu until user quits
+                ATM.printUserMenu(curUser, theBank, sc);
+            } else if (userInput == 2) {
+                System.out.println("You are on sign up landing");
+            } else {
+                System.out.println("You have entered invalid number");
+            }
+
 
         }
 
