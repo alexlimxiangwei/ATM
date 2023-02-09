@@ -1,8 +1,9 @@
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class User {
+public class User extends CLITools{
 
     /**
      * The first name of the user.
@@ -155,7 +156,7 @@ public class User {
     /**
      * Print summaries for the accounts of this user.
      */
-    
+
     public void printAccountsSummary() {
 
         System.out.printf("\n\n%s's accounts summary\n", this.firstName);
