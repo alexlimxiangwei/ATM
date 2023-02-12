@@ -3,7 +3,6 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 
 public class User {
-
     /**
      * The first name of the user.
      */
@@ -24,10 +23,31 @@ public class User {
      */
     private byte pinHash[];
 
+    public String getTempPin() {
+        return tempPin;
+    }
+
+    public void setTempPin(String tempPin) {
+        this.tempPin = tempPin;
+    }
+
+    /**
+     * Temp pin as i dk how pinHash...
+     */
+    private String tempPin;
+
     /**
      * The list of accounts for this user.
      */
     private ArrayList<Account> accounts;
+
+
+    /**
+     * Default User class
+     */
+    public User(){
+
+    }
 
     /**
      * Create new user
@@ -150,6 +170,28 @@ public class User {
     // set pin
     public void setPin(String newPin) {
         this.pinHash = convertToBytes(newPin);
+    }
+
+    public byte[] getPin(){
+        return pinHash;
+    }
+
+    // Get first name for new acc
+    public String getFirstName() {
+        return firstName;
+    }
+
+    // Set first name for new acc
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**

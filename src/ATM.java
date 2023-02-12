@@ -27,12 +27,51 @@ public class ATM {
 
         // continue looping forever
         while (true) {
+            System.out.print("Please press 1 to login or 2 to to sign up ");
 
             // stay in login prompt until successful login
-            curUser = ATM.mainMenuPrompt(theBank, sc);
+            int userInput = sc.nextInt();
 
-            // stay in main menu until user quits
-            ATM.printUserMenu(curUser,theBank, sc);
+            if (userInput == 1){
+                // stay in login prompt until successful login
+                curUser = ATM.mainMenuPrompt(theBank, sc);
+
+                // stay in main menu until user quits
+                ATM.printUserMenu(curUser, theBank, sc);
+                // stay in main menu until user quits
+                ATM.printUserMenu(curUser, theBank, sc);
+            } else if (userInput == 2) {
+                System.out.println("Welcome to Bank of Drausin Sign Up");
+
+                // init class
+                User newUser = new User();
+
+                System.out.print("Enter First name: ");
+                String fname = sc.nextLine();
+                sc.nextLine();  // Consume newline left-over
+                newUser.setFirstName(fname);
+
+                System.out.println("Enter last name: ");
+                String lname = sc.nextLine();
+
+                newUser.setLastName(lname);
+
+                System.out.println("Enter pin: ");
+                String newPin = sc.nextLine();
+                newUser.setTempPin(newPin);
+
+                // Creates a new user based on user input
+                User createNewUser = theBank.addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getTempPin());
+                Account createNewAccount = new Account("Checking", createNewUser, theBank, 0.0);
+                createNewUser.addAccount(createNewAccount);
+                theBank.addAccount(createNewAccount);
+
+                System.out.println("Account successfully created.");
+
+            } else {
+                System.out.println("You have entered invalid number");
+            }
+
 
         }
 
@@ -56,6 +95,7 @@ public class ATM {
             System.out.printf("\n\nWelcome to %s\n\n", theBank.getName()); //TODO: maybe we can have multiple banks
             System.out.print("Enter user ID: ");
             userID = sc.nextLine();
+            sc.nextLine();  // Consume newline left-over
             System.out.print("Enter pin: ");
             pin = sc.nextLine();
 

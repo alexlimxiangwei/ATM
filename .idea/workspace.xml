@@ -7,7 +7,7 @@
     <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="Changes:&#10;1)&#10;shortened a lot of code for withdraw/transfer/deposit&#10;by converting repeated code into Utils.java functions&#10;2)&#10;added 'balance' attribute to Account class&#10;no longer need to loop through all transactions everytime we want to get an account balance (more efficient)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ATM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
