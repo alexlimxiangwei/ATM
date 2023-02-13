@@ -24,8 +24,14 @@ public class Utils {
      */
     public static Account getInternalTransferAccount(User theUser, String direction, Scanner sc){
         int fromAcctIndex;
+        int printSumFlag = 0;
         do {
             System.out.printf("Enter the number (1-%d) of the account to %s: ", theUser.numAccounts(), direction);
+            while (printSumFlag != 1){
+                theUser.printAccountsSummary();
+                printSumFlag +=1;
+            }
+
             fromAcctIndex = sc.nextInt()-1;
             if (fromAcctIndex < 0 || fromAcctIndex >= theUser.numAccounts()) {
                 System.out.println("Invalid account. Please try again.");

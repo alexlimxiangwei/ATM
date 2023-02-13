@@ -166,24 +166,24 @@ public class User extends CLITools{
         }
 
         System.out.print(
-                "╔════════════════════╦════════════════════╦════════════════════╦════════════════════╗\n" +
-                        "║ Name               ║ Type               ║ Account ID         ║ Amount             ║\n" +
-                        "║════════════════════╠════════════════════╠════════════════════╠════════════════════╣\n"
+                "╦════════════════════╦════════════════════╦════════════════════╗\n" +
+                        "║ Type               ║ Account ID         ║ Amount             ║\n" +
+                        "╠════════════════════╠════════════════════╠════════════════════╣\n"
         );
 
 //        for (int a = 0; a < this.accounts.size(); a++) {
         HashMap<String,String> val = this.accounts.get(0).getSummaryLine();
 
         System.out.printf(
-                "║ %s║ %s║ %s║ %s║ \n",
-                adjustSpacing(this.firstName + " " + this.lastName),
+                "║ %s║ %s║ %s║ \n",
+                //adjustSpacing(this.firstName + " " + this.lastName),
                 adjustSpacing(val.get("type")),
                 adjustSpacing(val.get("uuid")),
                 adjustSpacing("$" + val.get("balance"))
         );
 
 
-        System.out.println("╚════════════════════╩════════════════════╩════════════════════╩════════════════════╝");
+        System.out.println("╩════════════════════╩════════════════════╩════════════════════╝");
 
 
 
