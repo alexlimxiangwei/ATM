@@ -172,8 +172,8 @@ public class User {
         this.pinHash = convertToBytes(newPin);
     }
 
-    public byte[] getPin(){
-        return pinHash;
+    public String getPin(){
+        return pinHash.toString();
     }
 
     // Get first name for new acc
