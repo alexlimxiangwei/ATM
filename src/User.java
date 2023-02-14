@@ -199,6 +199,18 @@ public class User extends CLITools{
     }
 
     /**
+     * prints a simplified accounts summary where if user forgets what is their source and destination account
+     */
+    public void printAccountsSummarySimp(){
+        System.out.printf("\n\n%s's accounts summary\n", this.firstName);
+        for (int a = 0; a < this.accounts.size(); a++) {
+            System.out.printf("%d) %s\n", a+1,
+                    this.accounts.get(a).getSummaryLine());
+        }
+    }
+
+
+    /**
      * Print summaries for the accounts of this user.
      */
 

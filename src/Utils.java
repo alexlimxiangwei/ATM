@@ -28,7 +28,7 @@ public class Utils {
         do {
             System.out.printf("Enter the number (1-%d) of the account to %s: ", theUser.numAccounts(), direction);
             while (printSumFlag != 1){
-                theUser.printAccountsSummary();
+                theUser.printAccountsSummarySimp();
                 printSumFlag +=1;
             }
 
