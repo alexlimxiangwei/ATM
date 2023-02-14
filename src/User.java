@@ -199,7 +199,7 @@ public class User extends CLITools{
     }
 
     /**
-     * prints a simplified accounts summary where if user forgets what is their source and destination account
+     * prints a simplified accounts summary in the event user forgets what is their source and destination account
      */
     public void printAccountsSummarySimp(){
         System.out.printf("\n\n%s's accounts summary\n", this.firstName);
@@ -218,34 +218,31 @@ public class User extends CLITools{
 
         System.out.printf("\n\n%s's accounts summary\n", this.firstName);
         for (int a = 0; a < this.accounts.size(); a++) {
-            System.out.printf("%d) %s\n", a+1,
+            System.out.printf("%d) %s\n", a + 1,
                     this.accounts.get(a).getSummaryLine());
         }
 
         System.out.print(
-                "╦════════════════════╦════════════════════╦════════════════════╗\n" +
+                        "╦════════════════════╦════════════════════╦════════════════════╗\n" +
                         "║ Type               ║ Account ID         ║ Amount             ║\n" +
                         "╠════════════════════╠════════════════════╠════════════════════╣\n"
         );
 
-//        for (int a = 0; a < this.accounts.size(); a++) {
-        HashMap<String,String> val = this.accounts.get(0).getSummaryLine();
+        for (int a = 0; a < this.accounts.size(); a++) {
+            HashMap<String, String> val = this.accounts.get(a).getSummaryLine();
 
-        System.out.printf(
-                "║ %s║ %s║ %s║ \n",
-                //adjustSpacing(this.firstName + " " + this.lastName),
-                adjustSpacing(val.get("type")),
-                adjustSpacing(val.get("uuid")),
-                adjustSpacing("$" + val.get("balance"))
-        );
-
-
-        System.out.println("╩════════════════════╩════════════════════╩════════════════════╝");
+            System.out.printf(
+                    "║ %s║ %s║ %s║ \n",
+                    adjustSpacing(val.get("type")),
+                    adjustSpacing(val.get("uuid")),
+                    adjustSpacing("$" + val.get("balance"))
+            );
+            System.out.println("╩════════════════════╩════════════════════╩════════════════════╝");
 
 
+            System.out.println();
 
-        System.out.println();
-
+        }
     }
 
 }
