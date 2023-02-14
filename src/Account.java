@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Account {
 
@@ -111,19 +112,22 @@ public class Account {
      * Get summary line for account
      * @return	the summary line
      */
-    public String getSummaryLine() {
+    public HashMap<String,String> getSummaryLine() {
 
         // get the account's balance
         double balance = this.getBalance();
 
+        // summary value
+        HashMap<String, String> val = new HashMap<String, String>();
         // format summary line depending on whether balance is negative
-        if (balance >= 0) {
-            return String.format("%s : $%.02f : %s", this.accountID, balance,
-                    this.name);
-        } else {
-            return String.format("%s : $(%.02f) : %s", this.accountID, balance, //TODO: dont think we should allow negative balance
-                    this.name);
-        }
+
+            val.put("balance", String.format("%.2f", balance));
+            val.put("uuid", this.accountID);
+            val.put("type", this.name);
+
+            return val;
+
+
 
     }
 

@@ -18,12 +18,14 @@ public class ATM {
         theBank.addUser("Legoland", "Puteri", "123");
 
         // add a checking account for our user
-        Account newAccount = new Account("Checking", aUser, theBank, 0.0);
+        Account newAccount = new Account("Checking", aUser, theBank, 500.00);
+
         aUser.addAccount(newAccount);
         theBank.addAccount(newAccount);
 
 
         User curUser;
+
 
         // continue looping forever
         while (true) {
@@ -41,6 +43,7 @@ public class ATM {
                 // stay in main menu until user quits
                 ATM.printUserMenu(curUser, theBank, sc);
             } else if (userInput == 2) {
+
                 System.out.println("Welcome to Bank of Drausin Sign Up");
 
                 // init class
@@ -69,6 +72,8 @@ public class ATM {
 
                 System.out.println("Account successfully created.");
 
+                System.out.println("You are on sign up landing");
+
             } else {
                 System.out.println("You have entered invalid number");
             }
@@ -86,6 +91,7 @@ public class ATM {
     public static User mainMenuPrompt(Bank theBank, Scanner sc) {
 
         // inits
+        // test
         String userID;
         String pin;
         User authUser;
@@ -96,7 +102,10 @@ public class ATM {
             System.out.printf("\n\nWelcome to %s\n\n", theBank.getName()); //TODO: maybe we can have multiple banks
             System.out.print("Enter user ID: ");
             userID = sc.nextLine();
+
             sc.nextLine();  // Consume newline left-over
+
+
             System.out.print("Enter pin: ");
             pin = sc.nextLine();
 
@@ -255,6 +264,7 @@ public class ATM {
 
         // get account to deposit from
         toAcct = Utils.getInternalTransferAccount(theUser, "deposit to", sc);
+
         // get amount to transfer
         amount = Utils.getTransferAmount(-1, sc);
 
@@ -283,6 +293,8 @@ public class ATM {
         do {
             System.out.printf("Enter the number (1-%d) of the account\nwhose " +
                     "transactions you want to see: ", theUser.numAccounts());
+
+
             theAcct = sc.nextInt()-1;
             if (theAcct < 0 || theAcct >= theUser.numAccounts()) {
                 System.out.println("Invalid account. Please try again.");
