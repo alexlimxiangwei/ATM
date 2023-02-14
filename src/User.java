@@ -232,12 +232,11 @@ public class User extends CLITools{
             HashMap<String, String> val = this.accounts.get(a).getSummaryLine();
 
             System.out.printf(
-                    "║ %s║ %s║ %s║ \n",
+                    "║ %-18s║ %-18s║ %18s║\n",
                     adjustSpacing(val.get("type")),
                     adjustSpacing(val.get("uuid")),
-                    adjustSpacing("$" + val.get("balance"))
-            );
-            System.out.println("╩════════════════════╩════════════════════╩════════════════════╝");
+                    adjustSpacing("$" + val.get("balance")));
+            System.out.print("╩════════════════════╩════════════════════╩════════════════════╝");
 
 
             System.out.println();
