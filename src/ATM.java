@@ -61,17 +61,16 @@ public class ATM {
                 System.out.print("Enter First name: ");
                 String fname = sc.nextLine();
                 newUser.setFirstName(fname);
-                sc.nextLine();  // Consume newline left-over
+                //sc.nextLine();  // Consume newline left-over
 
                 System.out.print("Enter last name: ");
                 String lname = sc.nextLine();
                 newUser.setLastName(lname);
-                sc.nextLine();  // Consume newline left-over
+                //sc.nextLine();  // Consume newline left-over
 
                 System.out.print("Enter pin: ");
                 String newPin = sc.nextLine();
-
-                sc.nextLine();  // Consume newline left-over
+                //sc.nextLine();  // Consume newline left-over
 
                 // Creates a new user account based on user input
                 User createNewUser = theBank.addUser(fname,lname,newPin);
@@ -81,7 +80,7 @@ public class ATM {
 
                 System.out.println("Account successfully created.");
 
-                System.out.println("You are on sign up landing");
+                System.out.println("Welcome to bank of Drausin Sign up page");
 
             } else {
                 System.out.println("You have entered invalid number");
