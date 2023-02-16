@@ -66,25 +66,18 @@ public class ATM {
                 System.out.print("Enter First name: ");
                 String fname = sc.nextLine();
                 newUser.setFirstName(fname);
-<<<<<<< HEAD
                 //sc.nextLine();  // Consume newline left-over
-=======
->>>>>>> master
+
 
                 System.out.print("Enter last name: ");
                 String lname = sc.nextLine();
                 newUser.setLastName(lname);
-<<<<<<< HEAD
                 //sc.nextLine();  // Consume newline left-over
 
                 System.out.print("Enter pin: ");
                 String newPin = sc.nextLine();
                 //sc.nextLine();  // Consume newline left-over
-=======
 
-                System.out.print("Enter pin: ");
-                String newPin = sc.nextLine();
->>>>>>> master
 
                 // Creates a new user account based on user input
                 User createNewUser = theBank.addUser(fname,lname,newPin);
