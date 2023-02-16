@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ATM {
@@ -8,9 +9,16 @@ public class ATM {
         // init Scanner
         Scanner sc = new Scanner(System.in);
 
-        //TODO: accounts, transactions and bank data should be stored in a file, and main should read the file to generate all previous data.
-        //TODO: all new accounts and transaction data should be written into file ofc
-        // init Bank
+        //TODO: accounts, transactions and bank data should be stored in database,
+        // and main should get previous data from database
+        // all new accounts and transaction data should be written into database
+        // store list of banks into the array list below next time
+        ArrayList<Bank> bankList = new ArrayList<>();
+
+
+        //TODO: delete all the setting up below after integrating with database
+
+        //init Bank
         Bank theBank = new Bank("Bank of Drausin");
 
         // add a user, which also creates a Savings account
@@ -33,6 +41,7 @@ public class ATM {
 
             // stay in login prompt until successful login
             int userInput = sc.nextInt();
+            sc.nextLine();
 
             if (userInput == 1){
                 // stay in login prompt until successful login
@@ -102,8 +111,6 @@ public class ATM {
             System.out.printf("\n\nWelcome to %s\n\n", theBank.getName()); //TODO: maybe we can have multiple banks
             System.out.print("Enter user ID: ");
             userID = sc.nextLine();
-
-            sc.nextLine();  // Consume newline left-over
 
 
             System.out.print("Enter pin: ");
