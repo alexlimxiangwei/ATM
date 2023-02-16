@@ -1,6 +1,7 @@
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -177,7 +178,7 @@ public class User extends CLITools{
     }
 
     public String getPin(){
-        return pinHash.toString();
+        return Arrays.toString(pinHash);
     }
 
     // Get first name for new acc
@@ -204,8 +205,9 @@ public class User extends CLITools{
     public void printAccountsSummarySimp(){
         System.out.printf("\n\n%s's accounts summary\n", this.firstName);
         for (int a = 0; a < this.accounts.size(); a++) {
-            System.out.printf("%d) %s\n", a+1,
-                    this.accounts.get(a).getSummaryLine());
+            HashMap<String, String> summary = this.accounts.get(a).getSummaryLine();
+            System.out.printf("%d) Name: %-18s |Balance: %-18s\n", a+1,
+                    summary.get("name"), summary.get("balance"));
         }
     }
 
@@ -216,32 +218,26 @@ public class User extends CLITools{
 
     public void printAccountsSummary() {
 
-        System.out.printf("\n\n%s's accounts summary\n", this.firstName);
-        for (int a = 0; a < this.accounts.size(); a++) {
-            System.out.printf("%d) %s\n", a + 1,
-                    this.accounts.get(a).getSummaryLine());
-        }
-
+        System.out.printf("\n\n%s %s's accounts summary\n", this.firstName, this.lastName);
         System.out.print(
-                        "╦════════════════════╦════════════════════╦════════════════════╗\n" +
-                        "║ Type               ║ Account ID         ║ Amount             ║\n" +
-                        "╠════════════════════╠════════════════════╠════════════════════╣\n"
+                """
+                        ╔════════════════════╦════════════════════╦════════════════════╗
+                        ║ Name               ║ Account ID         ║ Balance            ║
+                        """
         );
 
-        for (int a = 0; a < this.accounts.size(); a++) {
-            HashMap<String, String> val = this.accounts.get(a).getSummaryLine();
+        for (Account account : this.accounts) {
+            System.out.println("╠════════════════════╬════════════════════╬════════════════════╣");
+            HashMap<String, String> val = account.getSummaryLine();
 
             System.out.printf(
                     "║ %-18s║ %-18s║ %18s║\n",
-                    adjustSpacing(val.get("type")),
+                    adjustSpacing(val.get("name")),
                     adjustSpacing(val.get("uuid")),
                     adjustSpacing("$" + val.get("balance")));
-            System.out.print("╩════════════════════╩════════════════════╩════════════════════╝");
-
-
-            System.out.println();
 
         }
+        System.out.println("╚════════════════════╩════════════════════╩════════════════════╝\n");
     }
 
 }

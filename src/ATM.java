@@ -24,6 +24,7 @@ public class ATM {
         // add a user, which also creates a Savings account
         User aUser = theBank.addUser("John", "Doe", "1234");
         theBank.addUser("Legoland", "Puteri", "123");
+        System.out.println();
 
         // add a checking account for our user
         Account newAccount = new Account("Checking", aUser, theBank, 500.00);
@@ -37,7 +38,10 @@ public class ATM {
 
         // continue looping forever
         while (true) {
-            System.out.print("Please press 1 to login or 2 to to sign up ");
+            System.out.println("What would you like to do?");
+            System.out.println("  1) Log In");
+            System.out.println("  2) Sign Up");
+            System.out.print("Enter choice: ");
 
             // stay in login prompt until successful login
             int userInput = sc.nextInt();

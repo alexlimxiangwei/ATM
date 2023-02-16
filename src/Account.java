@@ -123,7 +123,7 @@ public class Account {
 
             val.put("balance", String.format("%.2f", balance));
             val.put("uuid", this.accountID);
-            val.put("type", this.name);
+            val.put("name", this.name);
 
             return val;
 
