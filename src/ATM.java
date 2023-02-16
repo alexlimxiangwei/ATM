@@ -61,11 +61,11 @@ public class ATM {
 
                 System.out.print("Enter pin: ");
                 String newPin = sc.nextLine();
-                newUser.setPin(newPin);
+
                 sc.nextLine();  // Consume newline left-over
 
                 // Creates a new user account based on user input
-                User createNewUser = theBank.addUser(newUser.getFirstName(), newUser.getLastName(), newUser.getPin());
+                User createNewUser = theBank.addUser(fname,lname,newPin);
                 Account createNewAccount = new Account("Checking", createNewUser, theBank, 0.0);
                 createNewUser.addAccount(createNewAccount);
                 theBank.addAccount(createNewAccount);
