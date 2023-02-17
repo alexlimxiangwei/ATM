@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 // Java Class containing all event/error handlers to call in main file
-public class Utils {
+public class Util {
 
     public void checkNumbers(){
         // todo: all error handler to check for numbers only

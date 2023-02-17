@@ -5,11 +5,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Bank {
+    /**
+     * The id of the bank.
+     */
+    private int bankID;
 
     /**
      * The name of the bank.
      */
     private String name;
+
+    /**
+     * Whether the bank is local or overseas
+     */
+    private boolean local;
 
     /**
      * The account holders of the bank.
@@ -24,10 +33,10 @@ public class Bank {
     /**
      * Create a new Bank object with empty lists of users and accounts.
      */
-    public Bank(String name) {
-
+    public Bank(int bankID, String name, boolean local) {
+        this.bankID = bankID;
         this.name = name;
-
+        this.local = local;
         // init users and accounts
         users = new ArrayList<User>();
         accounts = new ArrayList<Account>();

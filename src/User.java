@@ -70,7 +70,6 @@ public class User extends CLITools{
         // store the pin's MD5 hash, rather than the original value, for
         // security reasons
         this.pinHash = convertToBytes(pin);
-
         // get a new, unique universal unique ID for the user
         this.uuid = theBank.getNewUserUUID();
 
