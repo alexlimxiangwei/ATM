@@ -12,7 +12,7 @@ public class ATM {
             // Step 1: Construct a database 'Connection' object called 'conn'
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "");   // For MySQL only
+                    "root", "password");   // For MySQL only
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
