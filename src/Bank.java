@@ -193,7 +193,7 @@ public class Bank {
         //If userId isnt found locally, search sql database
         System.out.println("User not found, attempting to fetch user from database...");
         User u = DB_Util.findUser(conn, this, userID);
-        if (u != null && u.getUUID() == userID && Objects.equals(u.getPin(), Util.hash(pin))) {
+        if (u != null && u.getUUID() == userID && u.getPin().equalsIgnoreCase(Util.hash(pin))) {
             return u;
         }
         // if we haven't found the user or have an incorrect pin, return null
