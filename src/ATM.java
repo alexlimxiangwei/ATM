@@ -1,5 +1,3 @@
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.sql.*;
@@ -31,7 +29,7 @@ public class ATM {
         //init Bank
         Bank currentBank = bankList.get(0); // for creating accounts in first bank, will be removed next time after testing
         // add a user, which also creates a Savings account
-        User aUser = currentBank.addUser("John", "Doe", "1234");
+        User aUser = currentBank.addUser("John", "Doe", Util.hash("1234"));
 //        theBank.addUser("Legoland", "Puteri", "123");
         System.out.println();
 
@@ -68,7 +66,7 @@ public class ATM {
 
             if (userInput == 1){
                 // stay in login prompt until successful login
-                curUser = ATM.mainMenuPrompt(currentBank, sc);
+                curUser = ATM.mainMenuPrompt(conn, currentBank, sc);
 
                 // stay in main menu until user quits
                 ATM.printUserMenu(curUser, currentBank, sc);
@@ -90,8 +88,9 @@ public class ATM {
                 newUser.setLastName(lname);
 
                 System.out.print("Enter pin: ");
-                String newPin = sc.nextLine();
+                String newPin = Util.hash(sc.nextLine()); //hash it immediately so we don't store the password at all
 
+                // TODO: sql-ize the below
                 // Creates a new user account based on user input
                 User createNewUser = currentBank.addUser(fname,lname,newPin);
                 Account createNewAccount = new Account("Checking", createNewUser, currentBank, 0.0);
@@ -99,13 +98,11 @@ public class ATM {
                 currentBank.addAccount(createNewAccount);
 
                 System.out.println("Account successfully created.");
-
                 System.out.println("You are on sign up landing");
 
             } else {
                 System.out.println("You have entered invalid number");
             }
-
 
         }
 
@@ -116,25 +113,24 @@ public class ATM {
      * @param theBank	the Bank object whose accounts to use
      * @param sc		the Scanner objec to use for user input
      */
-    public static User mainMenuPrompt(Bank theBank, Scanner sc) {
+    public static User mainMenuPrompt(Connection conn, Bank theBank, Scanner sc) {
 
         // inits
         // test
-        String userID;
+        int userID;
         String pin;
         User authUser;
 
         // prompt user for user ID/pin combo until a correct one is reached
         do {
             System.out.print("Enter user ID: ");
-            userID = sc.nextLine();
-
+            userID = sc.nextInt();
+            sc.nextLine();
 
             System.out.print("Enter pin: ");
             pin = sc.nextLine();
-
             // try to get user object corresponding to ID and pin combo
-            authUser = theBank.userLogin(userID, pin);
+            authUser = theBank.userLogin(conn, userID, pin);
             if (authUser == null) {
                 System.out.println("Incorrect user ID/pin combination. " +
                         "Please try again");
@@ -202,9 +198,8 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner object used for user input
      */
+
     public static void transferFunds(User theUser,Bank theBank, Scanner sc) {
-        // TODO: fundamental feature : inter account transfer / third-party transfer
-        //TODO: seems to only have inter account transfer for now, cant xfer to other users
         Account fromAcct;
         Account toAcct;
         double amount;

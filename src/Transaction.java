@@ -1,4 +1,3 @@
-//TODO: may have to change everything depending on our file I/O implementation
 import java.util.Date;
 
 public class Transaction {
@@ -19,35 +18,47 @@ public class Transaction {
     private String memo;
 
     /**
-     * The account in which the transaction was performed.
+     * The accountID in which the transaction was made to.
      */
-    private Account inAccount;
+    private int receiverID;
+
+    /**
+     * The transaction's unique ID.
+     */
+    private int transactionID;
 
     /**
      * Create a new transaction.
      * @param amount		the dollar amount transacted
-     * @param inAccount	the account the transaction belongs to
+     * @param receiverID	the account the transaction belongs to
      */
-    public Transaction(double amount, Account inAccount) {
+    public Transaction(double amount, int receiverID) { //TODO: add transaction ID to this, but need to generate new transactionID :( mafan like 1 dog
 
         this.amount = amount;
-        this.inAccount = inAccount;
+        this.receiverID = receiverID;
         this.timestamp = new Date();
         this.memo = "";
 
+    }
+    public Transaction(int transactionID, int receiverID, double amount, Date timestamp, String memo){
+
+        this.amount = amount;
+        this.receiverID = receiverID;
+        this.timestamp = timestamp;
+        this.memo = memo;
+        this.transactionID = transactionID;
     }
 
     /**
      * Create a new transaction with a memo.
      * @param amount	the dollar amount transacted
      * @param memo		the memo for the transaction
-     * @param inAccount	the account the transaction belongs to
+     * @param receiverID	the account the transaction belongs to
      */
-    public Transaction(double amount, String memo, Account inAccount) {
+    public Transaction(double amount, String memo, int receiverID) {
 
         // call the single-arg constructor first
-        this(amount, inAccount);
-
+        this(amount, receiverID);
         this.memo = memo;
 
     }

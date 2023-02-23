@@ -1,10 +1,6 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+
 public class DB_Util {
     public static ArrayList<Bank> fetchBanks(Connection conn){
         ArrayList<Bank> banks = new ArrayList<>();
@@ -12,8 +8,7 @@ public class DB_Util {
         try {
 //         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
             Statement stmt = conn.createStatement();
-            // Step 3: Write a SQL query string. Execute the SQL query via the 'Statement'.
-            //  The query result is returned in a 'ResultSet' object called 'rset'.
+
             String strSelect = "select * from bank";
 //            System.out.println("The SQL statement is: " + strSelect + "\n"); // Echo For debugging
 
@@ -40,5 +35,87 @@ public class DB_Util {
             ex.printStackTrace();
         }
         return banks;
+    }
+
+    public static User findUser(Connection conn, Bank bank, int idCustomer){
+        User user = null;
+        try {
+//         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
+            Statement stmt = conn.createStatement();
+
+            String strSelect = "select * from customer where idCustomer = " + idCustomer;
+            ResultSet rset = stmt.executeQuery(strSelect);
+
+
+            if (rset.next()) {   // Repeatedly process each row
+                String firstName = rset.getString("firstName");  // retrieve a 'double'-cell in the row
+                String lastName= rset.getString("lastName");
+                String hashedPin = rset.getString("hashedPin");
+                user = bank.addExistingUser(conn, idCustomer, firstName, lastName, hashedPin);
+            }
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return user;
+    }
+    /**
+     * Fetches all existing accounts from sql for a particular user/customer and bank, and adds it to the bank
+     * @param user user to search for accounts from.
+     * @param bank bank to search for accounts from
+     */
+    public static void addAccountsToUser(Connection conn, User user, Bank bank) {
+        try {
+            Statement stmt = conn.createStatement();
+            String strSelect = String.format("select idAccount,name,balance from Account where Customer_idCustomer = %d and Bank_idBank = %d;",user.getUUID(), bank.getBankID());
+            System.out.println(strSelect);
+
+            ResultSet rset = stmt.executeQuery(strSelect);
+            while (rset.next()){
+                int idAccount = rset.getInt("idAccount");
+                System.out.println(idAccount);
+                String name = rset.getString("name");
+                double balance = rset.getDouble("balance");
+                Account newAccount = new Account(idAccount, name, user, balance);
+                // fetch and add all transactions for the account from sql
+                //here
+                DB_Util.addTransactionsToAccount(conn, newAccount);
+                user.addAccount(newAccount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    /**
+     * Fetches all existing transactions from sql for a particular account, and adds it to the account
+     * @param acc account to search for transactions from.
+     */
+    public static void addTransactionsToAccount(Connection conn, Account acc){
+        try {
+            Statement stmt = conn.createStatement();
+            int id = acc.getAccountID();
+            String strSelect = String.format("select * from Transaction where Account_idAccount =" +
+                            " %d or receiverID = %d order by idTransaction;", id, id);
+            ResultSet rset = stmt.executeQuery(strSelect);
+            while (rset.next()){
+                int idTransaction = rset.getInt("idTransaction");
+                int idAccount = rset.getInt("Account_idAccount");
+                int receiverID = rset.getInt("receiverID");
+                Date date = rset.getDate("timeStamp");
+                double amount = rset.getDouble("amount");
+                String memo = rset.getString("memo");
+
+                if (idAccount == id) {
+                    acc.addExistingTransaction(idTransaction, receiverID, amount, date, memo);
+                }
+                else{
+                    acc.addExistingTransaction(idTransaction, idAccount, amount * -1, date, memo);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

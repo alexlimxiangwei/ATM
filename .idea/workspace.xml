@@ -4,14 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="fixed nextLine issues with logging in">
-      <change afterPath="$PROJECT_DIR$/src/DB_Util.java" afterDir="false" />
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ATM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ATM.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ATM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DB_Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DB_Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Transaction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,16 +38,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-j-8.0.32.jar",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-j-8.0.32.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\.idea" />
@@ -127,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676525886775</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use.">
+      <created>1676654966271</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1676654966271</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -149,6 +157,22 @@
     <MESSAGE value="new balance field in Account class to keep track of each account's balance." />
     <MESSAGE value="Changes:&#10;1)&#10;shortened a lot of code for withdraw/transfer/deposit&#10;by converting repeated code into Utils.java functions&#10;2)&#10;added 'balance' attribute to Account class&#10;no longer need to loop through all transactions everytime we want to get an account balance (more efficient)" />
     <MESSAGE value="fixed nextLine issues with logging in" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed nextLine issues with logging in" />
+    <MESSAGE value="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use." />
+    <option name="LAST_COMMIT_MESSAGE" value="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/DB_Util.java</url>
+          <line>4</line>
+          <properties class="DB_Util" method="fetchBanks">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
