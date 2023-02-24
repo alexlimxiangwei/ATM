@@ -118,4 +118,36 @@ public class DB_Util {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Fetches all account balances and updates the balance of the accountId that user chooses
+     * @param acc account to search for balances from.
+     */
+    public static void updateWithdrawals(Connection conn, Account acc) {
+        try {
+            String strSelect = "update account set balance = ? where idAccount = ?";
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            stmt.setDouble(1, (acc.getBalance()));
+            stmt.setInt(2, acc.getAccountID());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Fetches all account balances and updates the balance of the accountId that user chooses
+     * @param acc account to search for balances from.
+     */
+    public static void updateDeposits(Connection conn, Account acc) {
+        try {
+            String strSelect = "update account set balance = ? where idAccount = ?";
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            stmt.setDouble(1, (acc.getBalance()));
+            stmt.setInt(2, acc.getAccountID());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
