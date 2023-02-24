@@ -133,7 +133,7 @@ public class DB_Util {
      */
     public static void updateWithdrawals(Connection conn, Account acc) {
         try {
-            String strSelect = "update account set balance = ? where idAccount =" + acc;
+            String strSelect = "update account set balance = ? where idAccount = ?";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
             stmt.setDouble(1, (acc.getBalance()));
             stmt.setInt(2, acc.getAccountID());
@@ -149,7 +149,7 @@ public class DB_Util {
      */
     public static void updateDeposits(Connection conn, Account acc) {
         try {
-            String strSelect = "update account set balance = ? where idAccount =" + acc;
+            String strSelect = "update account set balance = ? where idAccount = ?";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
             stmt.setDouble(1, (acc.getBalance()));
             stmt.setInt(2, acc.getAccountID());
