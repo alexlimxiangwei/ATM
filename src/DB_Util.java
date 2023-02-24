@@ -118,4 +118,45 @@ public class DB_Util {
             e.printStackTrace();
         }
     }
+
+    /*
+    * idAccount, Bank_idBank, balance from Account
+    * example sql statement: UPDATE Employees SET age=20 WHERE id=100;
+    * int executeUpdate (String SQL) − Returns the number of rows affected by the execution of the SQL statement.
+    * Use this method to execute SQL statements for which you expect to get a number of rows affected
+    *  - for example, an INSERT, UPDATE, or DELETE statement.
+    * */
+
+    /**
+     * Fetches all account balances and updates the balance of the accountId that user chooses
+     * @param acc account to search for balances from.
+     */
+    public static void updateWithdrawals(Connection conn, Account acc) {
+        try {
+            String strSelect = "update account set balance = ? where idAccount =" + acc;
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            stmt.setDouble(1, (acc.getBalance()));
+            stmt.setInt(2, acc.getAccountID());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Fetches all account balances and updates the balance of the accountId that user chooses
+     * @param acc account to search for balances from.
+     */
+    public static void updateDeposits(Connection conn, Account acc) {
+        try {
+            String strSelect = "update account set balance = ? where idAccount =" + acc;
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            stmt.setDouble(1, (acc.getBalance()));
+            stmt.setInt(2, acc.getAccountID());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
