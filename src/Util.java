@@ -1,7 +1,10 @@
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.Scanner;
 
 // Java Class containing all event/error handlers to call in main file
-public class Utils {
+public class Util {
 
     public void checkNumbers(){
         // todo: all error handler to check for numbers only
@@ -67,7 +70,7 @@ public class Utils {
      */
     public static Account getThirdPartyTransferAccount(Bank theBank, Scanner sc){
         //get accountID to transfer to
-        String toAcctIDInput;
+        int toAcctIDInput;
         int toAcctID;
         Account toAcct;
         boolean accountExists = false;
@@ -75,7 +78,7 @@ public class Utils {
             System.out.println("Enter the account number of the account to " +
                     "transfer to: ");
             sc.nextLine();
-            toAcctIDInput = sc.nextLine();
+            toAcctIDInput = sc.nextInt();
             toAcctID = theBank.getAccountIndex(toAcctIDInput);
             if (toAcctID != -1){
                 accountExists = true;
@@ -87,6 +90,17 @@ public class Utils {
         // get account to transfer to with accountID
         toAcct = theBank.getAccount(toAcctID);
         return toAcct;
+    }
+
+    public static String hash(String pin){
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            return String.format("%032X", new BigInteger(1,md.digest(pin.getBytes())));
+        } catch (Exception e) {
+            System.err.println("error, caught exeption : " + e.getMessage());
+            System.exit(1);
+            return null;
+        }
     }
 }
 

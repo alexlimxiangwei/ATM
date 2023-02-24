@@ -21,12 +21,12 @@ public class User extends CLITools{
     /**
      * The ID number of the user.
      */
-    private String uuid;
+    private int uuid;
 
     /**
-     * The hash of the user's pin number.
+     * The hash of the user's.
      */
-    private byte pinHash[];
+    private String pinHash;
 
     public String getTempPin() {
         return tempPin;
@@ -58,7 +58,7 @@ public class User extends CLITools{
      * Create new user
      * @param firstName	the user's first name
      * @param lastName	the user's last name
-     * @param pin				the user's account pin number (as a String)
+     * @param pin				the user's account pin (as a String)
      * @param theBank		the bank that the User is a customer of
      */
     public User (String firstName, String lastName, String pin, Bank theBank) {
@@ -69,35 +69,43 @@ public class User extends CLITools{
 
         // store the pin's MD5 hash, rather than the original value, for
         // security reasons
-        this.pinHash = convertToBytes(pin);
-
+        this.pinHash = pin;
         // get a new, unique universal unique ID for the user
         this.uuid = theBank.getNewUserUUID();
 
         // create empty list of accounts
-        this.accounts = new ArrayList<Account>();
+        this.accounts = new ArrayList<>();
 
         // print log message
         System.out.printf("New user %s, %s with ID %s created.\n",
                 lastName, firstName, this.uuid);
 
     }
-    public byte[] convertToBytes(String pin){ // maybe move to util.java or something
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            return md.digest(pin.getBytes());
-        } catch (Exception e) {
-            System.err.println("error, caught exeption : " + e.getMessage());
-            System.exit(1);
-            return null;
-        }
+
+    public User (int uuid, String firstName, String lastName, String pin, Bank theBank) {
+        this.uuid = uuid;
+        // set user's name
+        this.firstName = firstName;
+        this.lastName = lastName;
+
+        // store the pin's MD5 hash, rather than the original value, for
+        // security reasons
+        this.pinHash = pin;
+
+        // create empty list of accounts
+        this.accounts = new ArrayList<>();
+
+        // print log message
+        System.out.printf("New user %s, %s with ID %s created.\n",
+                lastName, firstName, this.uuid);
+
     }
 
     /**
      * Get the user ID number
      * @return	the uuid
      */
-    public String getUUID() {
+    public int getUUID() {
         return this.uuid;
     }
 
@@ -130,10 +138,11 @@ public class User extends CLITools{
 
     /**
      * Get the UUID of a particular account.
-     * @param acctIdx	the index of the account to use
-     * @return			the UUID of the account
+     *
+     * @param acctIdx the index of the account to use
+     * @return the UUID of the account
      */
-    public String getAcctUUID(int acctIdx) {
+    public int getAcctUUID(int acctIdx) {
         return this.accounts.get(acctIdx).getAccountID();
     }
     /**
@@ -160,25 +169,16 @@ public class User extends CLITools{
      * @return		whether the pin is valid or not
      */
     public boolean validatePin(String aPin) {
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            return MessageDigest.isEqual(md.digest(aPin.getBytes()),
-                    this.pinHash);
-        } catch (Exception e) {
-            System.err.println("error, caught exeption : " + e.getMessage());
-            System.exit(1);
-        }
-
-        return false;
+        return Util.hash(aPin).equals(this.pinHash);
     }
+
     // set pin
     public void setPin(String newPin) {
-        this.pinHash = convertToBytes(newPin);
+        this.pinHash = Util.hash(newPin);
     }
 
     public String getPin(){
-        return Arrays.toString(pinHash);
+        return pinHash;
     }
 
     // Get first name for new acc
@@ -240,6 +240,9 @@ public class User extends CLITools{
         System.out.println("╚════════════════════╩════════════════════╩════════════════════╝\n");
     }
 
+    public ArrayList<Account> getAccounts() {
+        return accounts;
+    }
 }
 
 

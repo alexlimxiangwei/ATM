@@ -1,64 +1,80 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.sql.*;
 public class ATM {
 
 
     public static void main(String[] args) {
 
+        // init database
+        Connection conn = null;
+        try {
+            // Step 1: Construct a database 'Connection' object called 'conn'
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
+                    "root", "password");   // For MySQL only
+            // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+        ArrayList<Bank> bankList = DB_Util.fetchBanks(conn); // gets all banks from database and stores it in an array
+
         // init Scanner
         Scanner sc = new Scanner(System.in);
-
-        //TODO: accounts, transactions and bank data should be stored in database,
-        // and main should get previous data from database
-        // all new accounts and transaction data should be written into database
-        // store list of banks into the array list below next time
-        ArrayList<Bank> bankList = new ArrayList<>();
-
 
         //TODO: delete all the setting up below after integrating with database
 
         //init Bank
-        Bank theBank = new Bank("Bank of Drausin");
-
+        Bank currentBank = bankList.get(0); // for creating accounts in first bank, will be removed next time after testing
         // add a user, which also creates a Savings account
-        User aUser = theBank.addUser("John", "Doe", "1234");
-        theBank.addUser("Legoland", "Puteri", "123");
+        User aUser = currentBank.addUser("John", "Doe", Util.hash("1234"));
+//        theBank.addUser("Legoland", "Puteri", "123");
         System.out.println();
 
         // add a checking account for our user
-        Account newAccount = new Account("Checking", aUser, theBank, 500.00);
+        Account newAccount = new Account("Checking", aUser, currentBank, 500.00);
 
         aUser.addAccount(newAccount);
-        theBank.addAccount(newAccount);
-
+        currentBank.addAccount(newAccount);
 
         User curUser;
 
 
         // continue looping forever
         while (true) {
-            System.out.print("Please press 1 to login or 2 to to sign up ");
+            System.out.println("Please select the bank you would like to use");
+            for (int i = 0; i < bankList.size() ; i++){
+                System.out.printf("  %d) %s\n", i + 1, bankList.get(i).getName());
+            }
+            System.out.print("Enter choice: ");
+            int userInput = sc.nextInt();
+            sc.nextLine();
+            currentBank = bankList.get(userInput - 1);
+
+            System.out.printf("\nWelcome to %s !\n", currentBank.getName());
+
             System.out.println("What would you like to do?");
             System.out.println("  1) Log In");
             System.out.println("  2) Sign Up");
             System.out.print("Enter choice: ");
 
             // stay in login prompt until successful login
-            int userInput = sc.nextInt();
+            userInput = sc.nextInt();
             sc.nextLine();
 
             if (userInput == 1){
                 // stay in login prompt until successful login
-                curUser = ATM.mainMenuPrompt(theBank, sc);
+                curUser = ATM.mainMenuPrompt(conn, currentBank, sc);
 
                 // stay in main menu until user quits
-                ATM.printUserMenu(curUser, theBank, sc);
+                ATM.printUserMenu(curUser, currentBank, sc);
                 // stay in main menu until user quits
-                ATM.printUserMenu(curUser, theBank, sc);
+                ATM.printUserMenu(curUser, currentBank, sc);
             } else if (userInput == 2) {
 
-                System.out.println("Welcome to Bank of Drausin Sign Up");
+                System.out.printf("Welcome to %s's sign up\n", currentBank.getName());
 
                 // init class
                 User newUser = new User();
@@ -75,24 +91,25 @@ public class ATM {
                 //sc.nextLine();  // Consume newline left-over
 
                 System.out.print("Enter pin: ");
-                String newPin = sc.nextLine();
-                //sc.nextLine();  // Consume newline left-over
+
+                String newPin = Util.hash(sc.nextLine()); //hash it immediately so we don't store the password at all
 
 
+                // TODO: sql-ize the below
                 // Creates a new user account based on user input
-                User createNewUser = theBank.addUser(fname,lname,newPin);
-                Account createNewAccount = new Account("Checking", createNewUser, theBank, 0.0);
+                User createNewUser = currentBank.addUser(fname,lname,newPin);
+                Account createNewAccount = new Account("Checking", createNewUser, currentBank, 0.0);
                 createNewUser.addAccount(createNewAccount);
-                theBank.addAccount(createNewAccount);
+                currentBank.addAccount(createNewAccount);
 
                 System.out.println("Account successfully created.");
 
-                System.out.println("Welcome to bank of Drausin Sign up page");
+                System.out.println("You are on sign up landing");
 
-            } else {
+            }
+        else {
                 System.out.println("You have entered invalid number");
             }
-
 
         }
 
@@ -103,27 +120,24 @@ public class ATM {
      * @param theBank	the Bank object whose accounts to use
      * @param sc		the Scanner objec to use for user input
      */
-    public static User mainMenuPrompt(Bank theBank, Scanner sc) {
+    public static User mainMenuPrompt(Connection conn, Bank theBank, Scanner sc) {
 
         // inits
         // test
-        String userID;
+        int userID;
         String pin;
         User authUser;
 
         // prompt user for user ID/pin combo until a correct one is reached
         do {
-
-            System.out.printf("\n\nWelcome to %s\n\n", theBank.getName()); //TODO: maybe we can have multiple banks
             System.out.print("Enter user ID: ");
-            userID = sc.nextLine();
-
+            userID = sc.nextInt();
+            sc.nextLine();
 
             System.out.print("Enter pin: ");
             pin = sc.nextLine();
-
             // try to get user object corresponding to ID and pin combo
-            authUser = theBank.userLogin(userID, pin);
+            authUser = theBank.userLogin(conn, userID, pin);
             if (authUser == null) {
                 System.out.println("Incorrect user ID/pin combination. " +
                         "Please try again");
@@ -191,9 +205,8 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner object used for user input
      */
+
     public static void transferFunds(User theUser,Bank theBank, Scanner sc) {
-        // TODO: fundamental feature : inter account transfer / third-party transfer
-        //TODO: seems to only have inter account transfer for now, cant xfer to other users
         Account fromAcct;
         Account toAcct;
         double amount;
@@ -208,27 +221,27 @@ public class ATM {
 
         } while(choice < 0 || choice > 2);
         // get account to transfer from
-        fromAcct = Utils.getInternalTransferAccount(theUser, "transfer from", sc);
+        fromAcct = Util.getInternalTransferAccount(theUser, "transfer from", sc);
         transferLimit = fromAcct.getBalance();
 
         if (choice == 1){
             // get internal account to transfer to
-            toAcct = Utils.getInternalTransferAccount(theUser, "transfer to", sc);
+            toAcct = Util.getInternalTransferAccount(theUser, "transfer to", sc);
 
         }
         else{
             //get third party account to transfer to
-            toAcct = Utils.getThirdPartyTransferAccount(theBank, sc);
+            toAcct = Util.getThirdPartyTransferAccount(theBank, sc);
         }
         // get amount to transfer
-        amount = Utils.getTransferAmount(transferLimit, sc);
+        amount = Util.getTransferAmount(transferLimit, sc);
 
         // finally, do the transfer
-        Utils.addAcctTransaction(fromAcct, -1*amount, String.format(
+        Util.addAcctTransaction(fromAcct, -1*amount, String.format(
                 "Transfer to account %s", fromAcct.getAccountID()));
         fromAcct.addBalance(-amount);
 
-        Utils.addAcctTransaction(toAcct, amount, String.format(
+        Util.addAcctTransaction(toAcct, amount, String.format(
                 "Transfer from account %s", toAcct));
         fromAcct.addBalance(amount);
     }
@@ -246,11 +259,11 @@ public class ATM {
         String memo;
 
         // get account to withdraw from
-        fromAcct = Utils.getInternalTransferAccount(theUser, "withdraw from", sc);
+        fromAcct = Util.getInternalTransferAccount(theUser, "withdraw from", sc);
         withdrawLimit = fromAcct.getBalance();
 
         // get amount to transfer
-        amount = Utils.getTransferAmount(withdrawLimit, sc);
+        amount = Util.getTransferAmount(withdrawLimit, sc);
 
         // gobble up rest of previous input
         sc.nextLine();
@@ -260,7 +273,7 @@ public class ATM {
         memo = sc.nextLine();
 
         // do the withdrawal
-        Utils.addAcctTransaction(fromAcct, -1*amount, memo);
+        Util.addAcctTransaction(fromAcct, -1*amount, memo);
         fromAcct.addBalance(-amount);
     }
 
@@ -276,10 +289,10 @@ public class ATM {
         String memo;
 
         // get account to deposit from
-        toAcct = Utils.getInternalTransferAccount(theUser, "deposit to", sc);
+        toAcct = Util.getInternalTransferAccount(theUser, "deposit to", sc);
 
         // get amount to transfer
-        amount = Utils.getTransferAmount(-1, sc);
+        amount = Util.getTransferAmount(-1, sc);
 
         // gobble up rest of previous input
         sc.nextLine();
@@ -289,7 +302,7 @@ public class ATM {
         memo = sc.nextLine();
 
         // do the deposit
-        Utils.addAcctTransaction(toAcct, amount, memo);
+        Util.addAcctTransaction(toAcct, amount, memo);
         toAcct.addBalance(amount);
     }
 

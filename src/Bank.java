@@ -1,15 +1,25 @@
 
 //TODO: we need to have multiple banks
-
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class Bank {
+    /**
+     * The id of the bank.
+     */
+    private int bankID;
 
     /**
      * The name of the bank.
      */
     private String name;
+
+    /**
+     * Whether the bank is local or overseas
+     */
+    private boolean local;
 
     /**
      * The account holders of the bank.
@@ -24,10 +34,10 @@ public class Bank {
     /**
      * Create a new Bank object with empty lists of users and accounts.
      */
-    public Bank(String name) {
-
+    public Bank(int bankID, String name, boolean local) {
+        this.bankID = bankID;
         this.name = name;
-
+        this.local = local;
         // init users and accounts
         users = new ArrayList<User>();
         accounts = new ArrayList<Account>();
@@ -38,7 +48,7 @@ public class Bank {
      * Generate a new universally unique ID for a user.
      * @return	the uuid
      */
-    public String getNewUserUUID() {
+    public int getNewUserUUID() {
 
         // inits
         String uuid;
@@ -58,7 +68,7 @@ public class Bank {
             // check to make sure it's unique
             nonUnique = false;
             for (User u : this.users) {
-                if (uuid.compareTo(u.getUUID()) == 0) {
+                if (uuid.compareTo(String.valueOf(u.getUUID())) == 0) {
                     nonUnique = true;
                     break;
                 }
@@ -66,17 +76,17 @@ public class Bank {
 
         } while (nonUnique);
 
-        return uuid;
+        return Integer.parseInt(uuid);
     }
 
     /**
      * Generate a new universally unique ID for an account.
      * @return	the uuid
      */
-    public String getNewAccountID() {
+    public int getNewAccountID() { //TODO: maybe static this or move to util
 
         // inits
-        String id;
+        int id;
         Random rng = new Random();
         int len = 10;
         boolean nonUnique = false;
@@ -85,14 +95,14 @@ public class Bank {
         do {
 
             // generate the number
-            id = "";
+            id = 0;
             for (int c = 0; c < len; c++) {
-                id += ((Integer)rng.nextInt(10)).toString();
+                id += ((Integer)rng.nextInt(10));
             }
 
             // check to make sure it's unique
             for (Account a : this.accounts) {
-                if (id.compareTo(a.getAccountID()) == 0) {
+                if (id == a.getAccountID()) {
                     nonUnique = true;
                     break;
                 }
@@ -125,6 +135,28 @@ public class Bank {
         return newUser;
 
     }
+    /**
+     * Adds an existing user (in sql but not in local mem) and his accounts to bank.
+     * @param idCustomer Users id
+     * @param firstName first name of user to add to the bank
+     * @param lastName last name of user to add to the bank
+     * @param pin hashed pin of the user
+     * @return the created User object
+     */
+    public User addExistingUser(Connection conn, int idCustomer, String firstName, String lastName, String pin) {
+
+        User existingUser = new User(idCustomer, firstName, lastName, pin, this);
+
+        // adds user to banks list of users
+        this.users.add(existingUser);
+
+        //fetches all accounts and transactions belonging to user from sql
+        DB_Util.addAccountsToUser(conn, existingUser, this);
+        // adds all users accounts to banks list of accounts
+        this.accounts.addAll(existingUser.getAccounts());
+        return existingUser;
+
+    }
 
     /**
      * Add an existing account for a particular User.
@@ -142,17 +174,28 @@ public class Bank {
      * @return			the User object, if login is successfull, or null, if
      * 					it is not
      */
-    public User userLogin(String userID, String pin) {
+    public User userLogin(Connection conn, int userID, String pin) {
 
         // search through list of users
         for (User u : this.users) {
 
             // if we find the user, and the pin is correct, return User object
-            if (u.getUUID().compareTo(userID) == 0 && u.validatePin(pin)) {
-                return u;
+            if (u.getUUID() == userID)
+            {
+                if (u.validatePin(pin)){
+                    return u;
+                }
+                else {
+                    return null;
+                }
             }
         }
-
+        //If userId isnt found locally, search sql database
+        System.out.println("User not found, attempting to fetch user from database...");
+        User u = DB_Util.findUser(conn, this, userID);
+        if (u != null && u.getUUID() == userID && u.getPin().equalsIgnoreCase(Util.hash(pin))) {
+            return u;
+        }
         // if we haven't found the user or have an incorrect pin, return null
         return null;
 
@@ -167,13 +210,13 @@ public class Bank {
     }
 
     /**
-     * Gets an Account's index in this.accounts by searching accountID
+     * Gets an Account's index in accounts by searching accountID
      *
      * @return index of found account or -1 if not found
      */
-    public int getAccountIndex(String accountID){
+    public int getAccountIndex(int accountID){
         for (int i = 0 ; i < this.accounts.size(); i++){
-            if (accounts.get(i).getAccountID().equals(accountID)){
+            if (accounts.get(i).getAccountID() == accountID){
                 return i;
             }
         }
@@ -189,4 +232,7 @@ public class Bank {
         return accounts.get(index);
     }
 
+    public int getBankID() {
+        return bankID;
+    }
 }

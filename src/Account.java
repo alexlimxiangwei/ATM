@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Account {
@@ -12,7 +13,7 @@ public class Account {
     /**
      * The account ID number.
      */
-    private String accountID;
+    private int accountID;
 
     /**
      * The User object that owns this account.
@@ -38,7 +39,7 @@ public class Account {
 
 
     /**
-     * Create new Account instance
+     * Create new Account instance, generate ID
      * @param name		the name of the account
      * @param holder	the User object that holds this account
      * @param theBank	the bank that issues the account
@@ -57,12 +58,30 @@ public class Account {
 
         this.balance = balance;
     }
+    /**
+     * Create new Account instance, with existing id
+     * @param accountID existing accountID from sql
+     * @param name		the name of the account
+     * @param holder	the User object that holds this account
+     * @param balance starting balance
+     */
+    public Account(int accountID,String name, User holder, Double balance) {
 
+        // set the accountid, name and holder
+        this.accountID = accountID;
+        this.name = name;
+        this.holder = holder;
+
+        // init transactions
+        this.transactions = new ArrayList<Transaction>();
+
+        this.balance = balance;
+    }
     /**
      * Get the account number.
      * @return	the accountID
      */
-    public String getAccountID() {
+    public int getAccountID() {
         return this.accountID;
     }
 
@@ -89,7 +108,7 @@ public class Account {
     public void addTransaction(double amount) {
 
         // create new transaction and add it to our list
-        Transaction newTrans = new Transaction(amount, this);
+        Transaction newTrans = new Transaction(amount, this.getAccountID());
         this.transactions.add(newTrans);
 
     }
@@ -102,11 +121,17 @@ public class Account {
     public void addTransaction(double amount, String memo) {
 
         // create new transaction and add it to our list
-        Transaction newTrans = new Transaction(amount, memo, this);
+        Transaction newTrans = new Transaction(amount, memo, this.getAccountID()); // TODO: this is fucked, method should take in receiverID and pass it
         this.transactions.add(newTrans);
 
     }
+    public void addExistingTransaction(int transactionID, int receiverID, double amount, Date timestamp, String memo) {
 
+        // create new transaction and add it to our list
+        Transaction newTrans = new Transaction(transactionID, receiverID, amount, timestamp, memo);
+        this.transactions.add(newTrans);
+
+    }
 
     /**
      * Get summary line for account
@@ -122,7 +147,7 @@ public class Account {
         // format summary line depending on whether balance is negative
 
             val.put("balance", String.format("%.2f", balance));
-            val.put("uuid", this.accountID);
+            val.put("uuid", String.valueOf(this.accountID));
             val.put("name", this.name);
 
             return val;
