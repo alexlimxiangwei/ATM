@@ -94,10 +94,10 @@ public class Util {
 
     public static String hash(String pin){
         try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            return String.format("%032X", new BigInteger(1,md.digest(pin.getBytes())));
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            return String.format("%064X", new BigInteger(1,md.digest(pin.getBytes())));
         } catch (Exception e) {
-            System.err.println("error, caught exeption : " + e.getMessage());
+            System.err.println("error, caught exception : " + e.getMessage());
             System.exit(1);
             return null;
         }
