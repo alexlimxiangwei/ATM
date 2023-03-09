@@ -1,5 +1,12 @@
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.security.MessageDigest;
+import java.math.BigInteger;
+
+
 
 public class DB_Util {
 
@@ -204,6 +211,29 @@ public class DB_Util {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Changes users password
+     * @param pin pin of account to update to
+     */
+    public static void changePassword(String pin , int uuid){
+        try {
+            // Hash the password using SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(pin.getBytes());
+            String hashedPassword = Base64.getEncoder().encodeToString(hash);
+
+            String strSelect = "update customer set hashedPin = ? where idCustomer = ?";
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
+            stmt.setString(1,hashedPassword);
+            stmt.setInt(2, uuid );
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 

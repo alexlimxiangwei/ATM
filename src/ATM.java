@@ -359,6 +359,9 @@ public class ATM {
         theUser.setPin(pin);
         System.out.println("Password successfully changed.");
 
+        // Update password on SQL
+        DB_Util.changePassword(pin,theUser.getUUID());
+
 
     }
     //TODO: add unit testing function(s)

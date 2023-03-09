@@ -26,19 +26,6 @@ public class User extends CLITools{
      */
     private String pinHash;
 
-    public String getTempPin() {
-        return tempPin;
-    }
-
-    public void setTempPin(String tempPin) {
-        this.tempPin = tempPin;
-    }
-
-    /**
-     * Temp pin as i dk how pinHash...
-     */
-    private String tempPin;
-
     /**
      * The list of accounts for this user.
      */
