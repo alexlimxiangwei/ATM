@@ -1,4 +1,5 @@
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -101,31 +102,22 @@ public class Account {
         this.balance += amount;
     }
 
-    /**
-     * Add a new transaction in this account.
-     * @param amount the amount transacted
-     */
-    public void addTransaction(double amount) {
-
-        // create new transaction and add it to our list
-        Transaction newTrans = new Transaction(amount, this.getAccountID());
-        this.transactions.add(newTrans);
-
-    }
 
     /**
      * Add a new transaction in this account.
      * @param amount	the amount transacted
      * @param memo		the transaction memo
      */
-    public void addTransaction(double amount, String memo) {
+    public void addTransaction(double amount, int receiverID, String memo, Connection conn) {
 
         // create new transaction and add it to our list
-        Transaction newTrans = new Transaction(amount, memo, this.getAccountID()); // TODO: this is fucked, method should take in receiverID and pass it
+        Transaction newTrans = new Transaction(amount, this.accountID, receiverID, memo, conn); // TODO: this is fucked, method should take in receiverID and pass it
         this.transactions.add(newTrans);
 
     }
-    public void addExistingTransaction(int transactionID, int receiverID, double amount, Date timestamp, String memo) {
+
+
+    public void addExistingTransaction(int transactionID, int receiverID, double amount, java.sql.Date timestamp, String memo) {
 
         // create new transaction and add it to our list
         Transaction newTrans = new Transaction(transactionID, receiverID, amount, timestamp, memo);

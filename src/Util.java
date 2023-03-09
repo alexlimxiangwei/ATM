@@ -9,15 +9,7 @@ public class Util {
     public void checkNumbers(){
         // todo: all error handler to check for numbers only
     }
-    /**
-     * Adds a transaction to a given account
-     * @param acc	    the account to add transaction to
-     * @param amount    the $ amount of transaction
-     * @param memo      memo of transaction
-     */
-    public static void addAcctTransaction(Account acc, double amount, String memo) {
-        acc.addTransaction(amount, memo);
-    }
+
     /**
      * Gets an internal account of a user for transferring purposes
      * by asking for user input
@@ -51,8 +43,13 @@ public class Util {
     public static double getTransferAmount(double limit, Scanner sc){
         double amount;
         do {
-            System.out.printf("Enter the amount to transfer (max $%.02f): $",
-                    limit);
+            if (limit == -1){
+                System.out.print("Enter the amount to transfer: $");
+            }
+            else{
+                System.out.printf("Enter the amount to transfer (max $%.02f): $",
+                        limit);
+            }
             amount = sc.nextDouble();
             if (amount < 0) {
                 System.out.println("Amount must be greater than zero.");
@@ -60,7 +57,7 @@ public class Util {
                 System.out.printf("Amount must not be greater than balance " +
                         "of $%.02f.\n", limit);
             }
-        } while (amount < 0 || amount > limit);
+        } while (amount < 0 || (limit != -1 && amount > limit));
         return amount;
     }
     /**

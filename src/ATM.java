@@ -69,9 +69,8 @@ public class ATM {
                 curUser = ATM.mainMenuPrompt(conn, currentBank, sc);
 
                 // stay in main menu until user quits
-                ATM.printUserMenu(curUser, currentBank, sc);
-                // stay in main menu until user quits
-                ATM.printUserMenu(curUser, currentBank, sc);
+                ATM.printUserMenu(curUser, currentBank, sc, conn);
+
             } else if (userInput == 2) {
 
                 System.out.printf("Welcome to %s's sign up\n", currentBank.getName());
@@ -148,7 +147,7 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner objec to use for user input
      */
-    public static void printUserMenu(User theUser, Bank theBank, Scanner sc) {
+    public static void printUserMenu(User theUser, Bank theBank, Scanner sc, Connection conn) {
 
         // print a summary of the user's accounts
         theUser.printAccountsSummary();
@@ -179,33 +178,34 @@ public class ATM {
         // process the choice
         switch (choice) {
             case 1 -> ATM.showTransHistory(theUser, sc);
-            case 2 -> ATM.withdrawFunds(theUser, sc);
-            case 3 -> ATM.depositFunds(theUser, sc);
-            case 4 -> ATM.transferFunds(theUser,theBank, sc);
+            case 2 -> ATM.withdrawFunds(theUser, sc, conn);
+            case 3 -> ATM.depositFunds(theUser, sc, conn);
+            case 4 -> ATM.transferFunds(theUser,theBank, sc, conn);
             case 5 -> ATM.changePassword(theUser, sc);
             case 6 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
         if (choice != 6) {
-            ATM.printUserMenu(theUser,theBank, sc);
+            ATM.printUserMenu(theUser,theBank, sc, conn);
         }
 
     }
 
     /**
      * Process transferring funds from one account to another.
-     * @param theUser	the logged-in User object
-     * @param sc		the Scanner object used for user input
+     *
+     * @param theUser the logged-in User object
+     * @param sc      the Scanner object used for user input
      */
 
-    public static void transferFunds(User theUser,Bank theBank, Scanner sc) {
+    public static void transferFunds(User theUser, Bank theBank, Scanner sc, Connection conn) {
         Account fromAcct;
         Account toAcct;
         double amount;
         double transferLimit;
 
-        int choice = 1;
+        int choice;
         do {
             System.out.println("Enter a choice below: ");
             System.out.println("1) Inter-account transfer");
@@ -230,13 +230,13 @@ public class ATM {
         amount = Util.getTransferAmount(transferLimit, sc);
 
         // finally, do the transfer
-        Util.addAcctTransaction(fromAcct, -1*amount, String.format(
-                "Transfer to account %s", fromAcct.getAccountID()));
-        fromAcct.addBalance(-amount);
-
-        Util.addAcctTransaction(toAcct, amount, String.format(
-                "Transfer from account %s", toAcct));
-        fromAcct.addBalance(amount);
+//        fromAcct.addTransaction(-1*amount, String.format(
+//                "Transfer to account %s", fromAcct.getAccountID()));
+//        fromAcct.addBalance(-amount);
+//
+//        toAcct.addTransaction(amount, String.format(
+//                "Transfer from account %s", toAcct));
+//        fromAcct.addBalance(amount);
     }
 
     /**
@@ -244,7 +244,7 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner object used for user input
      */
-    public static void withdrawFunds(User theUser, Scanner sc) {
+    public static void withdrawFunds(User theUser, Scanner sc, Connection conn) {
 
         Account fromAcct;
         double amount;
@@ -266,7 +266,8 @@ public class ATM {
         memo = sc.nextLine();
 
         // do the withdrawal
-        Util.addAcctTransaction(fromAcct, -1*amount, memo);
+        // receiverID is -1 when its an internal transaction (deposit/withdrawal)
+        fromAcct.addTransaction(-1*amount, -1, memo, conn);
         fromAcct.addBalance(-amount);
     }
 
@@ -275,7 +276,7 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner object used for user input
      */
-    public static void depositFunds(User theUser, Scanner sc) {
+    public static void depositFunds(User theUser, Scanner sc, Connection conn) {
 
         Account toAcct;
         double amount;
@@ -295,7 +296,7 @@ public class ATM {
         memo = sc.nextLine();
 
         // do the deposit
-        Util.addAcctTransaction(toAcct, amount, memo);
+        toAcct.addTransaction(amount,-1, memo, conn);
         toAcct.addBalance(amount);
     }
 

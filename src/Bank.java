@@ -136,7 +136,7 @@ public class Bank {
 
     }
     /**
-     * Adds an existing user (in sql but not in local mem) and his accounts to bank.
+     * Adds an existing user (that exists in sql but not in local mem) and his accounts to bank.
      * @param idCustomer Users id
      * @param firstName first name of user to add to the bank
      * @param lastName last name of user to add to the bank
@@ -182,6 +182,8 @@ public class Bank {
             // if we find the user, and the pin is correct, return User object
             if (u.getUUID() == userID)
             {
+                // TODO: delete below
+                System.out.println(u.getPin());
                 if (u.validatePin(pin)){
                     return u;
                 }

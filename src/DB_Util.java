@@ -2,6 +2,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DB_Util {
+
+    /**
+     * Fetches banks from SQL database and adds them to a list of Bank objects
+     * @return ArrayList of Banks
+     */
     public static ArrayList<Bank> fetchBanks(Connection conn){
         ArrayList<Bank> banks = new ArrayList<>();
 
@@ -36,7 +41,13 @@ public class DB_Util {
         }
         return banks;
     }
-
+    /**
+     * Searches SQL database for a particular customerID and bank
+     * also adds found user and all of its accounts and transactions to bank
+     * @param bank bank to search from
+     * @param idCustomer customer ID to search for
+     * @return found User object or null
+     */
     public static User findUser(Connection conn, Bank bank, int idCustomer){
         User user = null;
         try {
@@ -61,8 +72,9 @@ public class DB_Util {
     }
     /**
      * Fetches all existing accounts from sql for a particular user/customer and bank, and adds it to the bank
+     * Called when user is found in DB_Util.findUser()
      * @param user user to search for accounts from.
-     * @param bank bank to search for accounts from
+     * @param bank bank to search for accounts from.
      */
     public static void addAccountsToUser(Connection conn, User user, Bank bank) {
         try {
@@ -79,7 +91,7 @@ public class DB_Util {
                 Account newAccount = new Account(idAccount, name, user, balance);
                 // fetch and add all transactions for the account from sql
                 //here
-                DB_Util.addTransactionsToAccount(conn, newAccount);
+                DB_Util.addAllTransactionsToAccount(conn, newAccount);
                 user.addAccount(newAccount);
             }
         } catch (SQLException e) {
@@ -87,11 +99,29 @@ public class DB_Util {
         }
 
     }
+
+    /**
+     * Gets the biggest transaction number from SQL server, and returns +1 of it
+     */
+    public static int generateTransactionID(Connection conn){
+        int max_id = 0;
+        try {
+            String strSelect = "select idTransaction from Transaction order by idTransaction desc limit 1;";
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            ResultSet rset = stmt.executeQuery(strSelect);
+            rset.next();
+            max_id = rset.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return max_id + 1;
+    }
+
     /**
      * Fetches all existing transactions from sql for a particular account, and adds it to the account
      * @param acc account to search for transactions from.
      */
-    public static void addTransactionsToAccount(Connection conn, Account acc){
+    public static void addAllTransactionsToAccount(Connection conn, Account acc){
         try {
             Statement stmt = conn.createStatement();
             int id = acc.getAccountID();
@@ -118,6 +148,25 @@ public class DB_Util {
             e.printStackTrace();
         }
     }
+
+    public static void addTransactionToSQL(Connection conn, Transaction txn) {
+        try {
+            String strSelect = "insert into Transaction values(?, ?, ?, ? , ? , ?)";
+
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            stmt.setInt(1, txn.getTransactionID());
+            stmt.setInt(2, txn.getAccountID());
+            stmt.setDouble(3,txn.getAmount());
+            stmt.setDate(4, (Date) txn.getTimestamp());
+            stmt.setInt(5, txn.getReceiverID());
+            stmt.setString(6, txn.getMemo());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Fetches all account balances and updates the balance of the accountId that user chooses
@@ -150,4 +199,5 @@ public class DB_Util {
             e.printStackTrace();
         }
     }
+
 }
