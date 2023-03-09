@@ -7,12 +7,12 @@ public class DB_Util {
      * Fetches banks from SQL database and adds them to a list of Bank objects
      * @return ArrayList of Banks
      */
-    public static ArrayList<Bank> fetchBanks(Connection conn){
+    public static ArrayList<Bank> fetchBanks(){
         ArrayList<Bank> banks = new ArrayList<>();
 
         try {
 //         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
-            Statement stmt = conn.createStatement();
+            Statement stmt = ATM.conn.createStatement();
 
             String strSelect = "select * from bank";
 //            System.out.println("The SQL statement is: " + strSelect + "\n"); // Echo For debugging
@@ -48,11 +48,11 @@ public class DB_Util {
      * @param idCustomer customer ID to search for
      * @return found User object or null
      */
-    public static User addExistingUser(Connection conn, Bank bank, int idCustomer){
+    public static User addExistingUser(Bank bank, int idCustomer){
         User user = null;
         try {
 //         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
-            Statement stmt = conn.createStatement();
+            Statement stmt = ATM.conn.createStatement();
 
             String strSelect = "select * from customer where idCustomer = " + idCustomer;
             ResultSet rset = stmt.executeQuery(strSelect);
@@ -61,7 +61,7 @@ public class DB_Util {
                 String firstName = rset.getString("firstName");  // retrieve a 'double'-cell in the row
                 String lastName= rset.getString("lastName");
                 String hashedPin = rset.getString("hashedPin");
-                user = bank.addExistingUser(conn, idCustomer, firstName, lastName, hashedPin);
+                user = bank.addExistingUser(idCustomer, firstName, lastName, hashedPin);
             }
         }
         catch(SQLException ex) {
@@ -74,9 +74,9 @@ public class DB_Util {
      * @param idAccount account ID to search for
      * @return true if Account exists, false otherwise
      */
-    public static boolean isAccount(Connection conn, int idAccount){
+    public static boolean isAccount(int idAccount){
         try {
-            Statement stmt = conn.createStatement();
+            Statement stmt = ATM.conn.createStatement();
 
             String strSelect = "select * from Account where idAccount = " + idAccount;
             ResultSet rset = stmt.executeQuery(strSelect);
@@ -98,9 +98,9 @@ public class DB_Util {
      * @param user user to search for accounts from.
      * @param bank bank to search for accounts from.
      */
-    public static void addAccountsToUser(Connection conn, User user, Bank bank) {
+    public static void addAccountsToUser(User user, Bank bank) {
         try {
-            Statement stmt = conn.createStatement();
+            Statement stmt = ATM.conn.createStatement();
             String strSelect = String.format("select idAccount,name,balance from Account where Customer_idCustomer = %d and Bank_idBank = %d;",user.getUUID(), bank.getBankID());
             System.out.println(strSelect);
 
@@ -113,7 +113,7 @@ public class DB_Util {
                 Account newAccount = new Account(idAccount, name, user, balance);
                 // fetch and add all transactions for the account from sql
                 //here
-                DB_Util.addAllTransactionsToAccount(conn, newAccount);
+                DB_Util.addAllTransactionsToAccount(newAccount);
                 user.addAccount(newAccount);
             }
         } catch (SQLException e) {
@@ -125,11 +125,11 @@ public class DB_Util {
     /**
      * Gets the biggest transaction number from SQL server, and returns +1 of it
      */
-    public static int generateTransactionID(Connection conn){
+    public static int generateTransactionID(){
         int max_id = 0;
         try {
             String strSelect = "select idTransaction from Transaction order by idTransaction desc limit 1;";
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
             ResultSet rset = stmt.executeQuery(strSelect);
             rset.next();
             max_id = rset.getInt(1);
@@ -143,9 +143,9 @@ public class DB_Util {
      * Fetches all existing transactions from sql for a particular account, and adds it to the account
      * @param acc account to search for transactions from.
      */
-    public static void addAllTransactionsToAccount(Connection conn, Account acc){
+    public static void addAllTransactionsToAccount(Account acc){
         try {
-            Statement stmt = conn.createStatement();
+            Statement stmt = ATM.conn.createStatement();
             int id = acc.getAccountID();
             String strSelect = String.format("select * from Transaction where Account_idAccount =" +
                             " %d or receiverID = %d order by idTransaction;", id, id);
@@ -171,11 +171,11 @@ public class DB_Util {
         }
     }
 
-    public static void addTransactionToSQL(Connection conn, Transaction txn) {
+    public static void addTransactionToSQL(Transaction txn) {
         try {
             String strSelect = "insert into Transaction values(?, ?, ?, ? , ? , ?)";
 
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
             stmt.setInt(1, txn.getTransactionID());
             stmt.setInt(2, txn.getAccountID());
             stmt.setDouble(3,txn.getAmount());
@@ -195,10 +195,10 @@ public class DB_Util {
      * @param amount amount to set balance of account to
      * @param AcctID ID of account to update balance of
      */
-    public static void updateSQLBalance(Connection conn, double amount, int AcctID) {
+    public static void updateSQLBalance(double amount, int AcctID) {
         try {
             String strSelect = "update account set balance = ? where idAccount = ?";
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
             stmt.setDouble(1, amount);
             stmt.setInt(2, AcctID);
             stmt.executeUpdate();

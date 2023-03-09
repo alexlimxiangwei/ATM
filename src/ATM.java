@@ -6,7 +6,7 @@ public class ATM {
     static final int DEPOSIT = 1;
     static final int WITHDRAW = -1;
 
-    static Connection conn;
+    public static Connection conn;
 
     public static void main(String[] args) {
 
@@ -23,7 +23,7 @@ public class ATM {
             ex.printStackTrace();
             System.exit(1);
         }
-        ArrayList<Bank> bankList = DB_Util.fetchBanks(conn); // gets all banks from database and stores it in an array
+        ArrayList<Bank> bankList = DB_Util.fetchBanks(); // gets all banks from database and stores it in an array
 
         // init Scanner
         Scanner sc = new Scanner(System.in);
@@ -133,7 +133,7 @@ public class ATM {
             System.out.print("Enter pin: ");
             pin = sc.nextLine();
             // try to get user object corresponding to ID and pin combo
-            authUser = theBank.userLogin(conn, userID, pin);
+            authUser = theBank.userLogin(userID, pin);
             if (authUser == null) {
                 System.out.println("Incorrect user ID/pin combination. " +
                         "Please try again");
@@ -228,7 +228,7 @@ public class ATM {
         }
         else{
             //get third party account to transfer to
-            accountInfo = Util.getThirdPartyTransferAccount(banks, sc, conn);
+            accountInfo = Util.getThirdPartyTransferAccount(banks, sc);
             toAcctID = accountInfo[0];
             int bankID = accountInfo[1];
             if (bankID != -1){ // if account exists locally
@@ -243,22 +243,22 @@ public class ATM {
         String memo = sc.nextLine();
 
         // add transaction and update balance of fromAcct
-        fromAcct.addTransaction(-amount, toAcctID, memo, conn);
+        fromAcct.addTransaction(-amount, toAcctID, memo);
         fromAcct.addBalance(-amount);
 
         // if toAcct exists locally, add transaction locally + on sql, and update balance locally,
         if (toAcct != null) {
-            toAcct.addTransaction(amount, fromAcct.getAccountID(), memo, conn);
+            toAcct.addTransaction(amount, fromAcct.getAccountID(), memo);
             toAcct.addBalance(amount);
         }
         else{ // if toAcct doesnt exist locally, only add transaction only on sql
-            Transaction newTrans = new Transaction(amount, toAcctID, fromAcct.getAccountID(), memo, conn);
-            DB_Util.addTransactionToSQL(conn, newTrans);
+            Transaction newTrans = new Transaction(amount, toAcctID, fromAcct.getAccountID(), memo);
+            DB_Util.addTransactionToSQL(newTrans);
         }
 
         //update balance on SQL for both accounts
-        DB_Util.updateSQLBalance(conn, -amount, fromAcct.getAccountID());
-        DB_Util.updateSQLBalance(conn, amount, toAcctID);
+        DB_Util.updateSQLBalance(-amount, fromAcct.getAccountID());
+        DB_Util.updateSQLBalance(amount, toAcctID);
     }
 
     /**
@@ -300,10 +300,10 @@ public class ATM {
 
         // do the withdrawal
         // receiverID is -1 when its an internal transaction (deposit/withdrawal)
-        fromAcct.addTransaction(amount, -1, memo, conn);
+        fromAcct.addTransaction(amount, -1, memo);
         fromAcct.addBalance(amount);
         // update balance on SQL
-        DB_Util.updateSQLBalance(conn, fromAcct.getBalance(),fromAcct.getAccountID());
+        DB_Util.updateSQLBalance(fromAcct.getBalance(),fromAcct.getAccountID());
     }
 
     /**

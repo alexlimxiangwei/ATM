@@ -1,6 +1,4 @@
 
-//TODO: we need to have multiple banks
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -142,7 +140,7 @@ public class Bank {
      * @param pin hashed pin of the user
      * @return the created User object
      */
-    public User addExistingUser(Connection conn, int idCustomer, String firstName, String lastName, String pin) {
+    public User addExistingUser(int idCustomer, String firstName, String lastName, String pin) {
 
         User existingUser = new User(idCustomer, firstName, lastName, pin, this);
 
@@ -150,7 +148,7 @@ public class Bank {
         this.users.add(existingUser);
 
         //fetches all accounts and transactions belonging to user from sql
-        DB_Util.addAccountsToUser(conn, existingUser, this);
+        DB_Util.addAccountsToUser(existingUser, this);
         // adds all users accounts to banks list of accounts
         this.accounts.addAll(existingUser.getAccounts());
         return existingUser;
@@ -173,7 +171,7 @@ public class Bank {
      * @return			the User object, if login is successfull, or null, if
      * 					it is not
      */
-    public User userLogin(Connection conn, int userID, String pin) {
+    public User userLogin(int userID, String pin) {
 
         // search through list of users
         for (User u : this.users) {
@@ -191,7 +189,7 @@ public class Bank {
         }
         //If userId isnt found locally, search sql database
         System.out.println("User not found, attempting to fetch user from database...");
-        User u = DB_Util.addExistingUser(conn, this, userID);
+        User u = DB_Util.addExistingUser(this, userID);
         if (u != null && u.getUUID() == userID && u.getPin().equalsIgnoreCase(Util.hash(pin))) {
             return u;
         }

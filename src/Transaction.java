@@ -1,4 +1,3 @@
-import java.sql.Connection;
 import java.util.Date;
 
 public class Transaction {
@@ -60,14 +59,14 @@ public class Transaction {
      * @param memo          deposit/withdraw
      */
 
-    public Transaction(double amount, int accountID, int receiverID, String memo, Connection conn){
+    public Transaction(double amount, int accountID, int receiverID, String memo){
         this.amount = amount;
         this.timestamp = new java.sql.Date(new java.util.Date().getTime());
         this.accountID = accountID;
         // if it's a deposit/ withdrawal, no receiverID
         this.receiverID = receiverID;
         this.memo = memo;
-        this.transactionID = DB_Util.generateTransactionID(conn);
+        this.transactionID = DB_Util.generateTransactionID();
 
 
     }

@@ -1,8 +1,6 @@
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 // Java Class containing all event/error handlers to call in main file
@@ -16,7 +14,7 @@ public class Util {
      * Gets an internal account of a user for transferring purposes
      * by asking for user input
      * @param theUser	the user to loop through his accounts
-     * @param direction direction of transfer, e.g. : transfer to / withdraw from
+     * @param directionString direction of transfer, e.g. : transfer to / withdraw from
      * @return Account object for transferring of $
      */
     public static Account getInternalTransferAccount(User theUser, String directionString, Scanner sc){
@@ -67,7 +65,7 @@ public class Util {
      * @param banks ArrayList of banks to loop through to look for an account
      * @return found accountid and found bankID, bankID is -1 if not in local memory
      */
-    public static int[] getThirdPartyTransferAccount(ArrayList<Bank> banks, Scanner sc, Connection conn){
+    public static int[] getThirdPartyTransferAccount(ArrayList<Bank> banks, Scanner sc){
         //get accountID to transfer to
         int toAcctIDInput;
         int toAcctID;
@@ -89,7 +87,7 @@ public class Util {
             }
 
             // if account doesnt exist in local memory, as well as in sql database,
-            if (!accountExists && !DB_Util.isAccount(conn, toAcctIDInput)) {
+            if (!accountExists && !DB_Util.isAccount(toAcctIDInput)) {
                 // invalid account
                 System.out.println("Invalid account. Please try again.");
             }

@@ -1,7 +1,5 @@
 
-import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class Account {
@@ -108,12 +106,12 @@ public class Account {
      * @param amount	the amount transacted
      * @param memo		the transaction memo
      */
-    public void addTransaction(double amount, int receiverID, String memo, Connection conn) {
+    public void addTransaction(double amount, int receiverID, String memo) {
 
         // create new transaction and add it to our list
-        Transaction newTrans = new Transaction(amount, this.accountID, receiverID, memo, conn);
+        Transaction newTrans = new Transaction(amount, this.accountID, receiverID, memo);
         // add transaction to SQL database too
-        DB_Util.addTransactionToSQL(conn, newTrans);
+        DB_Util.addTransactionToSQL(newTrans);
         this.transactions.add(newTrans);
 
     }
