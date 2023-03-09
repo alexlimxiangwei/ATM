@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="Added 2 functions in Bank to get account by searching an id, so we can make third party transfers">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;removed redundant Util.addAccountTransaction function&#10;added Account.addInternalTransaction() this is for withdrawals and deposits&#10;&#10;added DB_Util.generateTransactionID to generate a new txn id when creating a new txn&#10;&#10;Updated Transaction constructors : theres 2, 1 for new i transactions, 1 for existing transactions that is only used when we import transactiosn from sql.&#10;NOTE: receiverID field is -1 if it is an internal transaction such as deposit/withdrawal&#10;&#10;Updated database schema to change hashedPin to char(64), previously 45 couldnt fit SHA256.&#10;Updated customers.csv to reflect new SHA256 hash&#10;yall need to re import everyth..&#10;&#10;withdrawals and deposits will now update SQL transaction!!&#10;&#10;NOT WORKING:&#10;external transfer , i havent do i commented them out for now">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/atm_model_updated.mwb" beforeDir="false" afterPath="$PROJECT_DIR$/db/atm_model_updated.mwb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/customers.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/customers.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ATM.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Bank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Bank.java" afterDir="false" />
@@ -136,7 +134,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676654966271</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="DONE:&#10;removed redundant Util.addAccountTransaction function&#10;added Account.addInternalTransaction() this is for withdrawals and deposits&#10;&#10;added DB_Util.generateTransactionID to generate a new txn id when creating a new txn&#10;&#10;Updated Transaction constructors : theres 2, 1 for new i transactions, 1 for existing transactions that is only used when we import transactiosn from sql.&#10;NOTE: receiverID field is -1 if it is an internal transaction such as deposit/withdrawal&#10;&#10;Updated database schema to change hashedPin to char(64), previously 45 couldnt fit SHA256.&#10;Updated customers.csv to reflect new SHA256 hash&#10;yall need to re import everyth..&#10;&#10;withdrawals and deposits will now update SQL transaction!!&#10;&#10;NOT WORKING:&#10;external transfer , i havent do i commented them out for now">
+      <created>1678364271719</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1678364271719</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -159,6 +164,7 @@
     <MESSAGE value="Changes:&#10;1)&#10;shortened a lot of code for withdraw/transfer/deposit&#10;by converting repeated code into Utils.java functions&#10;2)&#10;added 'balance' attribute to Account class&#10;no longer need to loop through all transactions everytime we want to get an account balance (more efficient)" />
     <MESSAGE value="fixed nextLine issues with logging in" />
     <MESSAGE value="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use." />
-    <option name="LAST_COMMIT_MESSAGE" value="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use." />
+    <MESSAGE value="DONE:&#10;removed redundant Util.addAccountTransaction function&#10;added Account.addInternalTransaction() this is for withdrawals and deposits&#10;&#10;added DB_Util.generateTransactionID to generate a new txn id when creating a new txn&#10;&#10;Updated Transaction constructors : theres 2, 1 for new i transactions, 1 for existing transactions that is only used when we import transactiosn from sql.&#10;NOTE: receiverID field is -1 if it is an internal transaction such as deposit/withdrawal&#10;&#10;Updated database schema to change hashedPin to char(64), previously 45 couldnt fit SHA256.&#10;Updated customers.csv to reflect new SHA256 hash&#10;yall need to re import everyth..&#10;&#10;withdrawals and deposits will now update SQL transaction!!&#10;&#10;NOT WORKING:&#10;external transfer , i havent do i commented them out for now" />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;removed redundant Util.addAccountTransaction function&#10;added Account.addInternalTransaction() this is for withdrawals and deposits&#10;&#10;added DB_Util.generateTransactionID to generate a new txn id when creating a new txn&#10;&#10;Updated Transaction constructors : theres 2, 1 for new i transactions, 1 for existing transactions that is only used when we import transactiosn from sql.&#10;NOTE: receiverID field is -1 if it is an internal transaction such as deposit/withdrawal&#10;&#10;Updated database schema to change hashedPin to char(64), previously 45 couldnt fit SHA256.&#10;Updated customers.csv to reflect new SHA256 hash&#10;yall need to re import everyth..&#10;&#10;withdrawals and deposits will now update SQL transaction!!&#10;&#10;NOT WORKING:&#10;external transfer , i havent do i commented them out for now" />
   </component>
 </project>

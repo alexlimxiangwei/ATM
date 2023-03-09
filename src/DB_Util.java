@@ -48,7 +48,7 @@ public class DB_Util {
      * @param idCustomer customer ID to search for
      * @return found User object or null
      */
-    public static User findUser(Connection conn, Bank bank, int idCustomer){
+    public static User addExistingUser(Connection conn, Bank bank, int idCustomer){
         User user = null;
         try {
 //         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
@@ -56,7 +56,6 @@ public class DB_Util {
 
             String strSelect = "select * from customer where idCustomer = " + idCustomer;
             ResultSet rset = stmt.executeQuery(strSelect);
-
 
             if (rset.next()) {   // Repeatedly process each row
                 String firstName = rset.getString("firstName");  // retrieve a 'double'-cell in the row
@@ -70,6 +69,29 @@ public class DB_Util {
         }
         return user;
     }
+    /**
+     * Searches SQL database for a particular account using its id
+     * @param idAccount account ID to search for
+     * @return true if Account exists, false otherwise
+     */
+    public static boolean isAccount(Connection conn, int idAccount){
+        try {
+            Statement stmt = conn.createStatement();
+
+            String strSelect = "select * from Account where idAccount = " + idAccount;
+            ResultSet rset = stmt.executeQuery(strSelect);
+
+
+            if (rset.next()) {   // if there is a next row, the account exists
+                return true;
+            }
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
     /**
      * Fetches all existing accounts from sql for a particular user/customer and bank, and adds it to the bank
      * Called when user is found in DB_Util.findUser()
@@ -170,34 +192,20 @@ public class DB_Util {
 
     /**
      * Fetches all account balances and updates the balance of the accountId that user chooses
-     * @param acc account to search for balances from.
+     * @param amount amount to set balance of account to
+     * @param AcctID ID of account to update balance of
      */
-    public static void updateWithdrawals(Connection conn, Account acc) {
+    public static void updateSQLBalance(Connection conn, double amount, int AcctID) {
         try {
             String strSelect = "update account set balance = ? where idAccount = ?";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
-            stmt.setDouble(1, (acc.getBalance()));
-            stmt.setInt(2, acc.getAccountID());
+            stmt.setDouble(1, amount);
+            stmt.setInt(2, AcctID);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Fetches all account balances and updates the balance of the accountId that user chooses
-     * @param acc account to search for balances from.
-     */
-    public static void updateDeposits(Connection conn, Account acc) {
-        try {
-            String strSelect = "update account set balance = ? where idAccount = ?";
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
-            stmt.setDouble(1, (acc.getBalance()));
-            stmt.setInt(2, acc.getAccountID());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

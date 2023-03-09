@@ -68,7 +68,7 @@ public class Transaction {
         this.receiverID = receiverID;
         this.memo = memo;
         this.transactionID = DB_Util.generateTransactionID(conn);
-        DB_Util.addTransactionToSQL(conn, this);
+
 
     }
     /**

@@ -111,7 +111,9 @@ public class Account {
     public void addTransaction(double amount, int receiverID, String memo, Connection conn) {
 
         // create new transaction and add it to our list
-        Transaction newTrans = new Transaction(amount, this.accountID, receiverID, memo, conn); // TODO: this is fucked, method should take in receiverID and pass it
+        Transaction newTrans = new Transaction(amount, this.accountID, receiverID, memo, conn);
+        // add transaction to SQL database too
+        DB_Util.addTransactionToSQL(conn, newTrans);
         this.transactions.add(newTrans);
 
     }

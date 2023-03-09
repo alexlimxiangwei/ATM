@@ -2,7 +2,6 @@
 //TODO: we need to have multiple banks
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
 public class Bank {
@@ -182,8 +181,6 @@ public class Bank {
             // if we find the user, and the pin is correct, return User object
             if (u.getUUID() == userID)
             {
-                // TODO: delete below
-                System.out.println(u.getPin());
                 if (u.validatePin(pin)){
                     return u;
                 }
@@ -194,7 +191,7 @@ public class Bank {
         }
         //If userId isnt found locally, search sql database
         System.out.println("User not found, attempting to fetch user from database...");
-        User u = DB_Util.findUser(conn, this, userID);
+        User u = DB_Util.addExistingUser(conn, this, userID);
         if (u != null && u.getUUID() == userID && u.getPin().equalsIgnoreCase(Util.hash(pin))) {
             return u;
         }

@@ -1,5 +1,7 @@
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -17,11 +19,11 @@ public class Util {
      * @param direction direction of transfer, e.g. : transfer to / withdraw from
      * @return Account object for transferring of $
      */
-    public static Account getInternalTransferAccount(User theUser, String direction, Scanner sc){
+    public static Account getInternalTransferAccount(User theUser, String directionString, Scanner sc){
         int fromAcctIndex;
         int printSumFlag = 0;
         do {
-            System.out.printf("Enter the number (1-%d) of the account to %s: ", theUser.numAccounts(), direction);
+            System.out.printf("Enter the number (1-%d) of the account to %s: ", theUser.numAccounts(), directionString);
             while (printSumFlag != 1){
                 theUser.printAccountsSummarySimp();
                 printSumFlag +=1;
@@ -62,31 +64,38 @@ public class Util {
     }
     /**
      * Gets an account by asking user for an account ID
-     * @param theBank bank to loop through to look for an account
-     * @return Account object
+     * @param banks ArrayList of banks to loop through to look for an account
+     * @return found accountid and found bankID, bankID is -1 if not in local memory
      */
-    public static Account getThirdPartyTransferAccount(Bank theBank, Scanner sc){
+    public static int[] getThirdPartyTransferAccount(ArrayList<Bank> banks, Scanner sc, Connection conn){
         //get accountID to transfer to
         int toAcctIDInput;
         int toAcctID;
-        Account toAcct;
         boolean accountExists = false;
+        int bankID = -1;
         do {
             System.out.println("Enter the account number of the account to " +
                     "transfer to: ");
             sc.nextLine();
             toAcctIDInput = sc.nextInt();
-            toAcctID = theBank.getAccountIndex(toAcctIDInput);
-            if (toAcctID != -1){
-                accountExists = true;
+            //look in every bank to find the account
+            for (int i = 0; i < banks.size() ; i++) {
+                toAcctID = banks.get(i).getAccountIndex(toAcctIDInput);
+                if (toAcctID != -1){ // if account is found:
+                    accountExists = true;
+                    bankID = i;
+                    break;
+                }
             }
-            if (!accountExists) {
+
+            // if account doesnt exist in local memory, as well as in sql database,
+            if (!accountExists && !DB_Util.isAccount(conn, toAcctIDInput)) {
+                // invalid account
                 System.out.println("Invalid account. Please try again.");
             }
         } while (!accountExists);
-        // get account to transfer to with accountID
-        toAcct = theBank.getAccount(toAcctID);
-        return toAcct;
+        // get accountId and which bank it belongs to if it exists in local mem
+        return new int[] {toAcctIDInput, bankID};
     }
 
     public static String hash(String pin){
