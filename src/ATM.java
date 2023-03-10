@@ -170,7 +170,7 @@ public class ATM {
             System.out.println("  3) Deposit");
             System.out.println("  4) Transfer");
             System.out.println("  5) Change Password");
-            System.out.println("  6) Change account name");
+            System.out.println("  6) Add new account");
             System.out.println("  7) Quit"); // TODO: Account balance check, password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
@@ -189,7 +189,7 @@ public class ATM {
             case 3 -> ATM.updateFunds(theUser, sc, DEPOSIT);
             case 4 -> ATM.transferFunds(theUser,bankList, sc);
             case 5 -> ATM.changePassword(theUser, sc);
-            case 6 -> ATM.changeAccountName(theUser, sc);
+            case 6 -> ATM.addAccount(theUser, sc);
             case 7 -> sc.nextLine(); // gobble up rest of previous input
         }
 
@@ -387,10 +387,22 @@ public class ATM {
             //acc.setName(newName);
         }
 
-
-
-
         System.out.println("Account name successfully changed. ");
+    }
+
+    public static void addAccount(User theUser, Scanner sc){
+        System.out.println("Enter your new account name: ");
+        sc.nextLine();
+        String newAcc = sc.nextLine();
+
+        ArrayList<Bank> bankList = DB_Util.fetchBanks();
+        Bank currentBank = bankList.get(0);
+        Account newAccount = new Account(newAcc, theUser, currentBank, 0.00);
+        theUser.addAccount(newAccount);
+    }
+
+    public static void deleteAccount(){
+
     }
     //TODO: add unit testing function(s)
 
