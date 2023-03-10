@@ -57,6 +57,9 @@ public class Account {
 
         this.balance = balance;
     }
+
+
+
     /**
      * Create new Account instance, with existing id
      * @param accountID existing accountID from sql
@@ -91,6 +94,14 @@ public class Account {
 
     public Double getBalance() {
         return balance;
+    }
+
+    /**
+     * Allow user to change account name
+     *
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setBalance(Double balance) {

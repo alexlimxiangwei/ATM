@@ -228,6 +228,7 @@ public class User extends CLITools{
     public ArrayList<Account> getAccounts() {
         return accounts;
     }
+
 }
 
 

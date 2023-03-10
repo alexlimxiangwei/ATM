@@ -170,16 +170,17 @@ public class ATM {
             System.out.println("  3) Deposit");
             System.out.println("  4) Transfer");
             System.out.println("  5) Change Password");
-            System.out.println("  6) Quit"); // TODO: Account balance check, password change/reset, settings
+            System.out.println("  6) Change account name");
+            System.out.println("  7) Quit"); // TODO: Account balance check, password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
 
-            if (choice < 1 || choice > 6) {
-                System.out.println("Invalid choice. Please choose 1-5.");
+            if (choice < 1 || choice > 7) {
+                System.out.println("Invalid choice. Please choose 1-7.");
             }
 
-        } while (choice < 1 || choice > 6);
+        } while (choice < 1 || choice > 7);
 
         // process the choice
         switch (choice) {
@@ -188,11 +189,12 @@ public class ATM {
             case 3 -> ATM.updateFunds(theUser, sc, DEPOSIT);
             case 4 -> ATM.transferFunds(theUser,bankList, sc);
             case 5 -> ATM.changePassword(theUser, sc);
-            case 6 -> sc.nextLine(); // gobble up rest of previous input
+            case 6 -> ATM.changeAccountName(theUser, sc);
+            case 7 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
-        if (choice != 6) {
+        if (choice != 7) {
             ATM.printUserMenu(bankList, theUser,theBank, sc);
         }
 
@@ -365,8 +367,30 @@ public class ATM {
 
         // Update password on SQL
         DB_Util.changePassword(pin,theUser.getUUID());
+    }
+
+    /**
+     * Change user account name.
+     * @param theUser	the logged-in User object
+     * @param sc		the Scanner object used for user input
+     */
+    public static void changeAccountName(User theUser, Scanner sc) { // Account acc
+        System.out.print("Enter the accountNo which you would like to change the name: ");
+        int usrChoice = sc.nextInt();
+        theUser.getAcctUUID(usrChoice);
 
 
+        if (usrChoice == theUser.getAcctUUID(usrChoice)){
+            System.out.println("Enter new account name: ");
+            System.out.println(theUser.getAccounts());
+            String newName = sc.nextLine();
+            //acc.setName(newName);
+        }
+
+
+
+
+        System.out.println("Account name successfully changed. ");
     }
     //TODO: add unit testing function(s)
 
