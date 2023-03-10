@@ -405,7 +405,7 @@ public class ATM {
         theUser.addAccount(newAccount);
 
         // add account into sql
-//        DB_Util.addAccount(theUser.getUUID(),theUser.getUUID(),currentBank.getBankID(), newAcc);
+        DB_Util.addAccount(newAccount.getAccountID(),theUser.getUUID(),currentBank.getBankID(), newAcc, 0.00);
         // theUser.getAcctUUID();
     }
 
