@@ -192,7 +192,7 @@ public class ATM {
             case 3 -> ATM.updateFunds(theUser, sc, DEPOSIT);
             case 4 -> ATM.transferFunds(theUser,bankList, sc);
             case 5 -> ATM.changePassword(theUser, sc);
-            case 6 -> ATM.addAccount(theUser, sc);
+            case 6 -> ATM.addAccount(theUser, sc, theBank);
             case 7 -> ATM.changeAccountName(theUser,sc); // Not complete
             case 8 -> ATM.deleteAccount(theUser,sc); // Not complete
             case 9 -> sc.nextLine(); // gobble up rest of previous input
@@ -395,13 +395,11 @@ public class ATM {
         System.out.println("Account name successfully changed. ");
     }
 
-    public static void addAccount(User theUser, Scanner sc){
+    public static void addAccount(User theUser, Scanner sc, Bank currentBank){
         System.out.println("Enter your new account name: ");
         sc.nextLine();
         String newAcc = sc.nextLine();
 
-        ArrayList<Bank> bankList = DB_Util.fetchBanks();
-        Bank currentBank = bankList.get(0);
         Account newAccount = new Account(newAcc, theUser, currentBank, 0.00);
         theUser.addAccount(newAccount);
 
