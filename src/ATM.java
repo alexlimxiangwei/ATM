@@ -382,21 +382,12 @@ public class ATM {
     public static void changeAccountName(User theUser, Scanner sc, Bank currentBank) { // Account acc
         System.out.print("Enter the accountNo which you would like to change the name: ");
         int usrChoice = sc.nextInt();
-        theUser.getAcctUUID(usrChoice);
-        System.out.println();
-
-        ArrayList<Account> accountsList = theUser.getAccounts();
-
         System.out.println("Enter new account name: ");
         sc.nextLine();
         String newName = sc.nextLine();
-        Account newAcc = new Account(newName,theUser,currentBank,theUser.getAcctBalance(usrChoice));
-        accountsList.set(usrChoice,newAcc);
 
+        theUser.changeAccountName(usrChoice,newName);
 
-//        if (usrChoice == theUser.getAcctUUID(usrChoice)){
-//
-//        }
 
         System.out.println("Account name successfully changed. ");
     }

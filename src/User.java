@@ -229,6 +229,11 @@ public class User extends CLITools{
         return accounts;
     }
 
+    public void changeAccountName(int acctIdx, String name) {
+        Account account = this.accounts.get(acctIdx);
+        account.setName(name);
+    }
+
 
 
 }
