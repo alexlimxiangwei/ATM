@@ -52,7 +52,7 @@ public class User extends CLITools{
         this.firstName = firstName;
         this.lastName = lastName;
 
-        // store the pin's MD5 hash, rather than the original value, for
+        // store the pin's SHA-256 hash, rather than the original value, for
         // security reasons
         this.pinHash = pin;
         // get a new, unique universal unique ID for the user

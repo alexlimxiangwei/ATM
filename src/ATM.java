@@ -100,8 +100,10 @@ public class ATM {
                 createNewUser.addAccount(createNewAccount);
                 currentBank.addAccount(createNewAccount);
 
+
                 System.out.println("Account successfully created.");
                 System.out.println("You are on sign up landing");
+                DB_Util.addNewUser(createNewUser.getUUID(),fname,lname,newPin);
 
             } else {
                 System.out.println("You have entered invalid number");
@@ -332,7 +334,7 @@ public class ATM {
 
     }
     //change passwords
-    public static void changePassword(User theUser, Scanner sc) { // TODO: sql-ize this
+    public static void changePassword(User theUser, Scanner sc) {
         String pin;
         boolean is_validated;
         sc.nextLine(); // remove empty line first

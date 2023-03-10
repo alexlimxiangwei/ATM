@@ -222,8 +222,11 @@ public class DB_Util {
         try {
             // Hash the password using SHA-256
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(pin.getBytes());
-            String hashedPassword = Base64.getEncoder().encodeToString(hash);
+//            byte[] hash = md.digest(pin.getBytes());
+            String hashedPassword = String.format("%064X", new BigInteger(1,md.digest(pin.getBytes())));
+            //String hashedPassword = Base64.getEncoder().encodeToString(hash);
+
+
 
             String strSelect = "update customer set hashedPin = ? where idCustomer = ?";
             PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
@@ -237,5 +240,26 @@ public class DB_Util {
         }
     }
 
+    public static void addNewUser(int uuid, String fname,String lname, String pin) {
+        try {
+            // Hash the password using SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            String hashedPassword = String.format("%064X", new BigInteger(1,md.digest(pin.getBytes())));
+            //03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4
+            //5994471ABB01112AFCC18159F6CC74B4F511B99806DA59B3CAF5A9C173CACFC5
 
+
+            String strSelect = "insert into customer values(?, ?, ?, ? )";
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
+            stmt.setInt(1, uuid);
+            stmt.setString(2, fname);
+            stmt.setString(3, lname);
+            stmt.setString(4, hashedPassword);
+            stmt.executeUpdate();
+
+        } catch (SQLException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
