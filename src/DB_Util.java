@@ -241,7 +241,7 @@ public class DB_Util {
      * @param pin creates new account with pin
      */
 
-    public static void addNewUser(int uuid, String fname,String lname, String pin) {
+    public static void addNewUser(int uuid, String fname, String lname, String pin) {
         try {
             String strSelect = "insert into customer values(?, ?, ?, ? )";
             PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
@@ -254,6 +254,27 @@ public class DB_Util {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Add new account to sql database
+     * @param idAcc creates new account with uuid
+     * @param cust_has_id_customer creates new account with fname
+     * @param bank_id_bank creates new account with lname
+     * @param name creates new account with pin
+     */
+    public static void addAccount(int idAcc, int cust_has_id_customer, int bank_id_bank, String name) {
+        try {
+            String strSelect = "insert into account values(?, ?, ?, ?)";
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
+            stmt.setInt(1, idAcc);
+            stmt.setInt(2, cust_has_id_customer);
+            stmt.setInt(3, bank_id_bank);
+            stmt.setString(4, name);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

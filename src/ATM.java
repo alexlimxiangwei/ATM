@@ -171,16 +171,18 @@ public class ATM {
             System.out.println("  4) Transfer");
             System.out.println("  5) Change Password");
             System.out.println("  6) Add new account");
-            System.out.println("  7) Quit"); // TODO: Account balance check, password change/reset, settings
+            System.out.println("  7) Change account name");
+            System.out.println("  8) Delete account");
+            System.out.println("  9) Quit"); // TODO: Account balance check, password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
 
-            if (choice < 1 || choice > 7) {
-                System.out.println("Invalid choice. Please choose 1-7.");
+            if (choice < 1 || choice > 9) {
+                System.out.println("Invalid choice. Please choose 1-9.");
             }
 
-        } while (choice < 1 || choice > 7);
+        } while (choice < 1 || choice > 9);
 
         // process the choice
         switch (choice) {
@@ -190,11 +192,13 @@ public class ATM {
             case 4 -> ATM.transferFunds(theUser,bankList, sc);
             case 5 -> ATM.changePassword(theUser, sc);
             case 6 -> ATM.addAccount(theUser, sc);
-            case 7 -> sc.nextLine(); // gobble up rest of previous input
+            case 7 -> ATM.changeAccountName(theUser,sc); // Not complete
+            case 8 -> ATM.deleteAccount(theUser,sc); // Not complete
+            case 9 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
-        if (choice != 7) {
+        if (choice != 9) {
             ATM.printUserMenu(bankList, theUser,theBank, sc);
         }
 
@@ -399,11 +403,27 @@ public class ATM {
         Bank currentBank = bankList.get(0);
         Account newAccount = new Account(newAcc, theUser, currentBank, 0.00);
         theUser.addAccount(newAccount);
+
+        // add account into sql
+//        DB_Util.addAccount(theUser.getUUID(),theUser.getUUID(),currentBank.getBankID(), newAcc);
+        // theUser.getAcctUUID();
     }
 
-    public static void deleteAccount(){
+    public static void deleteAccount(User theUser, Scanner sc){
+        // Get the specific user account
+        // Get the account arraylist
+        // Delete the account the user want to delete
+
+        System.out.println("Enter account to delete: ");
+        sc.nextLine();
+        String newAcc = sc.nextLine();
+
+        ArrayList<Bank> bankList = DB_Util.fetchBanks();
+        Bank currentBank = bankList.get(0);
 
     }
+
+
     //TODO: add unit testing function(s)
 
 }

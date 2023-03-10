@@ -229,6 +229,7 @@ public class User extends CLITools{
         return accounts;
     }
 
+
 //    public static void addAccount(ArrayList<Account> arrayList, String accName){
 //        arrayList.add(accName);
 //    }
