@@ -103,6 +103,8 @@ public class ATM {
 
                 System.out.println("Account successfully created.");
                 System.out.println("You are on sign up landing");
+
+                // Add new user to SQL
                 DB_Util.addNewUser(createNewUser.getUUID(),fname,lname,newPin);
 
             } else {

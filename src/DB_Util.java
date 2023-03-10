@@ -217,17 +217,12 @@ public class DB_Util {
     /**
      * Changes users password
      * @param pin pin of account to update to
+     * @param uuid uuid of account to update to
      */
     public static void changePassword(String pin , int uuid){
         try {
-            // Hash the password using SHA-256
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-//            byte[] hash = md.digest(pin.getBytes());
-            String hashedPassword = String.format("%064X", new BigInteger(1,md.digest(pin.getBytes())));
-            //String hashedPassword = Base64.getEncoder().encodeToString(hash);
 
-
-
+            String hashedPassword = Util.hash(pin);
             String strSelect = "update customer set hashedPin = ? where idCustomer = ?";
             PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
             stmt.setString(1,hashedPassword);
@@ -235,29 +230,28 @@ public class DB_Util {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Add new user to sql database
+     * @param uuid creates new account with uuid
+     * @param fname creates new account with fname
+     * @param lname creates new account with lname
+     * @param pin creates new account with pin
+     */
+
     public static void addNewUser(int uuid, String fname,String lname, String pin) {
         try {
-            // Hash the password using SHA-256
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            String hashedPassword = String.format("%064X", new BigInteger(1,md.digest(pin.getBytes())));
-            //03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4
-            //5994471ABB01112AFCC18159F6CC74B4F511B99806DA59B3CAF5A9C173CACFC5
-
-
             String strSelect = "insert into customer values(?, ?, ?, ? )";
             PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
             stmt.setInt(1, uuid);
             stmt.setString(2, fname);
             stmt.setString(3, lname);
-            stmt.setString(4, hashedPassword);
+            stmt.setString(4, pin);
             stmt.executeUpdate();
 
-        } catch (SQLException | NoSuchAlgorithmException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
