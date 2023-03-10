@@ -106,6 +106,7 @@ public class ATM {
 
                 // Add new user to SQL
                 DB_Util.addNewUser(createNewUser.getUUID(),fname,lname,newPin);
+                DB_Util.addAccount(newAccount.getAccountID(),createNewUser.getUUID(),currentBank.getBankID(),"Savings",0.00);
 
             } else {
                 System.out.println("You have entered invalid number");
