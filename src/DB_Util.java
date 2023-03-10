@@ -254,21 +254,6 @@ public class DB_Util {
         }
     }
 
-    public static void createAccforNewUser(int idAcc, int cust_has_id_customer, int bank_id_bank, String name, double bal){
-        try {
-            String strSelect = "insert into account values(?, ?, ?, ?, ?)";
-            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
-            stmt.setInt(1, idAcc);
-            stmt.setInt(2, cust_has_id_customer);
-            stmt.setInt(3, bank_id_bank);
-            stmt.setString(4, name);
-            stmt.setDouble(5,0.00);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Add new account to sql database

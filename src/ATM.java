@@ -93,7 +93,7 @@ public class ATM {
                 System.out.print("Enter pin: ");
                 String newPin = Util.hash(sc.nextLine()); //hash it immediately so we don't store the password at all
 
-                // TODO: sql-ize the below
+
                 // Creates a new user account based on user input
                 User createNewUser = currentBank.addUser(fname,lname,newPin);
                 Account createNewAccount = new Account("Checking", createNewUser, currentBank, 0.0);
@@ -174,7 +174,7 @@ public class ATM {
             System.out.println("  6) Add new account");
             System.out.println("  7) Change account name");
             System.out.println("  8) Delete account");
-            System.out.println("  9) Quit"); // TODO: Account balance check, password change/reset, settings
+            System.out.println("  9) Quit"); // TODO: password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
@@ -193,7 +193,7 @@ public class ATM {
             case 4 -> ATM.transferFunds(theUser,bankList, sc);
             case 5 -> ATM.changePassword(theUser, sc);
             case 6 -> ATM.addAccount(theUser, sc, theBank);
-            case 7 -> ATM.changeAccountName(theUser,sc); // Not complete
+            case 7 -> ATM.changeAccountName(theUser,sc, theBank); // Not complete
             case 8 -> ATM.deleteAccount(theUser,sc); // Not complete
             case 9 -> sc.nextLine(); // gobble up rest of previous input
         }
@@ -379,18 +379,24 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner object used for user input
      */
-    public static void changeAccountName(User theUser, Scanner sc) { // Account acc
+    public static void changeAccountName(User theUser, Scanner sc, Bank currentBank) { // Account acc
         System.out.print("Enter the accountNo which you would like to change the name: ");
         int usrChoice = sc.nextInt();
         theUser.getAcctUUID(usrChoice);
+        System.out.println();
+
+        ArrayList<Account> accountsList = theUser.getAccounts();
+
+        System.out.println("Enter new account name: ");
+        sc.nextLine();
+        String newName = sc.nextLine();
+        Account newAcc = new Account(newName,theUser,currentBank,theUser.getAcctBalance(usrChoice));
+        accountsList.set(usrChoice,newAcc);
 
 
-        if (usrChoice == theUser.getAcctUUID(usrChoice)){
-            System.out.println("Enter new account name: ");
-            System.out.println(theUser.getAccounts());
-            String newName = sc.nextLine();
-            //acc.setName(newName);
-        }
+//        if (usrChoice == theUser.getAcctUUID(usrChoice)){
+//
+//        }
 
         System.out.println("Account name successfully changed. ");
     }

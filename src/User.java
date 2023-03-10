@@ -230,9 +230,6 @@ public class User extends CLITools{
     }
 
 
-//    public static void addAccount(ArrayList<Account> arrayList, String accName){
-//        arrayList.add(accName);
-//    }
 
 }
 
