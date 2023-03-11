@@ -421,19 +421,18 @@ public class ATM {
      * @param sc		the Scanner object used for user input
      */
     public static void deleteAccount(User theUser, Scanner sc){
-        System.out.println("Enter account to delete: ");
-        sc.nextLine();
-        int usrChoice = sc.nextInt();
-        if(theUser.getAcctBalance(usrChoice) > 0 ){
+        Account acc_to_delete = Util.getInternalTransferAccount(theUser, "delete", sc);
+
+        if(acc_to_delete.getBalance() > 0 ){
             System.out.println("Please make sure that your balance is 0 before deleting! ");
         }
         else {
             System.out.println("Account successfully deleted. ");
-            theUser.deleteAccount(usrChoice);
+            theUser.deleteAccount(acc_to_delete);
         }
 
         // Update deleted account on sql
-        DB_Util.deleteAccount(theUser.getAcctUUID(usrChoice)); //theUser.getUUID()
+        DB_Util.deleteAccount(acc_to_delete.getAccountID()); //theUser.getUUID()
 
 
     }
