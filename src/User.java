@@ -229,9 +229,25 @@ public class User extends CLITools{
         return accounts;
     }
 
+
+    /**
+     * Allow user to change account name
+     * @param acctIdx get the acctid
+     * @param name name that user want to change the account to
+     */
     public void changeAccountName(int acctIdx, String name) {
         Account account = this.accounts.get(acctIdx);
         account.setName(name);
+    }
+
+    /**
+     * Allow user to change account name
+     * @param acctIdx get the acctid
+     *
+     */
+    public void deleteAccount(int acctIdx) {
+        Account account = this.accounts.get(acctIdx);
+        accounts.remove(acctIdx);
     }
 
 

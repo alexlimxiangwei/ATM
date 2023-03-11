@@ -193,7 +193,7 @@ public class ATM {
             case 4 -> ATM.transferFunds(theUser,bankList, sc);
             case 5 -> ATM.changePassword(theUser, sc);
             case 6 -> ATM.addAccount(theUser, sc, theBank);
-            case 7 -> ATM.changeAccountName(theUser,sc, theBank); // Not complete
+            case 7 -> ATM.changeAccountName(theUser,sc);
             case 8 -> ATM.deleteAccount(theUser,sc); // Not complete
             case 9 -> sc.nextLine(); // gobble up rest of previous input
         }
@@ -379,43 +379,62 @@ public class ATM {
      * @param theUser	the logged-in User object
      * @param sc		the Scanner object used for user input
      */
-    public static void changeAccountName(User theUser, Scanner sc, Bank currentBank) { // Account acc
+    public static void changeAccountName(User theUser, Scanner sc) {
         System.out.print("Enter the accountNo which you would like to change the name: ");
         int usrChoice = sc.nextInt();
-        System.out.println("Enter new account name: ");
+        System.out.print("Enter new account name: ");
         sc.nextLine();
         String newName = sc.nextLine();
-
         theUser.changeAccountName(usrChoice,newName);
-
-
         System.out.println("Account name successfully changed. ");
+
+        // Update account name changes on sql
+        DB_Util.changeAccountName(theUser.getAcctUUID(usrChoice),theUser.getUUID(), newName);
     }
 
+    /**
+     * Allows user to add a new account
+     * @param theUser	the logged-in User object
+     * @param sc		the Scanner object used for user input
+     * @param currentBank the bank that user is from
+     */
     public static void addAccount(User theUser, Scanner sc, Bank currentBank){
-        System.out.println("Enter your new account name: ");
+        System.out.print("Enter your new account name: ");
         sc.nextLine();
         String newAcc = sc.nextLine();
 
-        Account newAccount = new Account(newAcc, theUser, currentBank, 0.00);
-        theUser.addAccount(newAccount);
+        ArrayList<Account> existingAcc = theUser.getAccounts();
+        int len = existingAcc.size();
 
-        // add account into sql
+        Account newAccount = new Account(len, newAcc, theUser, 0.00);
+        existingAcc.add(newAccount);
+
+        // Update add account on sql
         DB_Util.addAccount(newAccount.getAccountID(),theUser.getUUID(),currentBank.getBankID(), newAcc, 0.00);
-        // theUser.getAcctUUID();
+
     }
 
-    public static void deleteAccount(User theUser, Scanner sc){
-        // Get the specific user account
-        // Get the account arraylist
-        // Delete the account the user want to delete
 
+    /**
+     * Allow user to delete an account only when balance is 0.00
+     * @param theUser	the logged-in User object
+     * @param sc		the Scanner object used for user input
+     */
+    public static void deleteAccount(User theUser, Scanner sc){
         System.out.println("Enter account to delete: ");
         sc.nextLine();
-        String newAcc = sc.nextLine();
+        int usrChoice = sc.nextInt();
+        if(theUser.getAcctBalance(usrChoice) > 0 ){
+            System.out.println("Please make sure that your balance is 0 before deleting! ");
+        }
+        else {
+            System.out.println("Account successfully deleted. ");
+            theUser.deleteAccount(usrChoice);
+        }
 
-        ArrayList<Bank> bankList = DB_Util.fetchBanks();
-        Bank currentBank = bankList.get(0);
+        // Update deleted account on sql
+        DB_Util.deleteAccount(theUser.getAcctUUID(usrChoice)); //theUser.getUUID()
+
 
     }
 

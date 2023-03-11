@@ -258,8 +258,8 @@ public class DB_Util {
     /**
      * Add new account to sql database
      * @param idAcc creates new account with uuid
-     * @param cust_has_id_customer creates new account with fname
-     * @param bank_id_bank creates new account with lname
+     * @param cust_has_id_customer gets the customerID
+     * @param bank_id_bank gets the bankID
      * @param name creates new account with pin
      */
     public static void addAccount(int idAcc, int cust_has_id_customer, int bank_id_bank, String name, double bal) {
@@ -270,12 +270,54 @@ public class DB_Util {
             stmt.setInt(2, cust_has_id_customer);
             stmt.setInt(3, bank_id_bank);
             stmt.setString(4, name);
-            stmt.setDouble(5,0.00);
+            stmt.setDouble(5,bal);
             stmt.executeUpdate();
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Update user's new account name to sql database
+     * @param idAcc get the uuid
+     * @param cust_has_id_customer gets the customerID
+     * @param name the name the user wants to change to
+     */
+
+    public static void changeAccountName(int idAcc, int cust_has_id_customer, String name){
+        try{
+            String strSelect = "update account set name = ? where Customer_idCustomer = ? AND idAccount = ?";
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
+            stmt.setString(1, name);
+            stmt.setInt(2, idAcc);
+            stmt.setInt(3, cust_has_id_customer);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * delete user's specified account from sql database
+     * @param idAcc creates new account with uuid
+     * @param cust_has_id_customer creates new account with fname
+     * @param bank_id_bank creates new account with lname
+     * @param name creates new account with pin
+     */
+
+    public static void deleteAccount(int idAcc){ //int cust_has_id_customer
+        try{
+            String strSelect = "delete from account where idAccount = ?"; //Customer_idCustomer = ? AND
+            PreparedStatement stmt = ATM.conn.prepareStatement(strSelect);
+            stmt.setInt(1, idAcc);
+            //stmt.setInt(2, cust_has_id_customer);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
