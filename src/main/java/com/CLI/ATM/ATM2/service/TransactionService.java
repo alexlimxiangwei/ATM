@@ -1,12 +1,15 @@
 package com.CLI.ATM.ATM2.service;
 
-import com.CLI.ATM.ATM2.DB_Util;
 import com.CLI.ATM.ATM2.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static com.CLI.ATM.ATM2.Constants.conn;
 
 @Component
 public class TransactionService {
@@ -22,12 +25,12 @@ public class TransactionService {
      */
 
     @Autowired
-    DB_Util dbUtil;
+    TransactionService transactionService;
 
     public Transaction createTransaction(double amount, int accountID, int receiverID, String memo){
 
         var timestamp = new java.sql.Date(new java.util.Date().getTime());
-        var transactionID = dbUtil.generateTransactionID();
+        var transactionID = transactionService.generateTransactionID();
 
         return new Transaction(amount, timestamp, memo, accountID, receiverID, transactionID);
     }
@@ -42,20 +45,41 @@ public class TransactionService {
         return new Transaction(amount, timestamp, memo, accountID, receiverID, transactionID);
     }
 
+    public void addTransactionToSQL(Transaction txn) {
+        try {
+            String strSelect = "insert into Transaction values(?, ?, ?, ? , ? , ?)";
 
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            stmt.setInt(1, txn.getTransactionID());
+            stmt.setInt(2, txn.getAccountID());
+            stmt.setDouble(3,txn.getAmount());
+            stmt.setDate(4, txn.getTimestamp());
+            stmt.setInt(5, txn.getReceiverID());
+            stmt.setString(6, txn.getMemo());
+            stmt.executeUpdate();
 
-    public String getSummaryLine(Transaction transaction) {
-
-        double amount = transaction.getAmount();
-        String memo = transaction.getMemo();
-        Date timestamp = transaction.getTimestamp();
-
-        if (amount >= 0) {
-            return String.format("%s, $%.02f : %s",
-                    timestamp.toString(), amount, memo);
-        } else {
-            return String.format("%s, $(%.02f) : %s",
-                    timestamp.toString(), -amount, memo);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+    /**
+     * Gets the biggest transaction number from SQL server, and returns +1 of it
+     */
+    public int generateTransactionID(){
+        int max_id = 0;
+        try {
+            String strSelect = "select idTransaction from Transaction order by idTransaction desc limit 1;";
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            ResultSet rset = stmt.executeQuery(strSelect);
+            rset.next();
+            max_id = rset.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return max_id + 1;
+    }
+
+
+
 }

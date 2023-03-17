@@ -1,6 +1,6 @@
 package com.CLI.ATM.ATM2;
 
-import com.CLI.ATM.ATM2.CLI.ATMCLI;
+import com.CLI.ATM.ATM2.CLI.MainCLI;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
@@ -39,13 +39,12 @@ public class ATM implements CommandLineRunner {
 	AccountService accountService;
 
 	@Autowired
-	ATMCLI atmcli;
+	MainCLI mainCli;
 
-	@Autowired
-	DB_Util dbUtil;
+
 
 	@Override
-	public void run(String... args) throws Exception {
+	public void run(String... args){
 
 
 		try {
@@ -59,7 +58,7 @@ public class ATM implements CommandLineRunner {
 			ex.printStackTrace();
 			System.exit(1);
 		}
-		ArrayList<Bank> bankList = dbUtil.fetchBanks(); // gets all banks from database and stores it in an array
+		ArrayList<Bank> bankList = bankService.fetchBanks(); // gets all banks from database and stores it in an array
 
 		// init Scanner
 		Scanner sc = new Scanner(System.in);
@@ -81,27 +80,19 @@ public class ATM implements CommandLineRunner {
 
 		User curUser;
 
-
-
-
 		// continue looping forever
 		while (true) {
 
+			// displayBankSelectionPage
+			mainCli.displayBankSelectionPage(bankList);
 
-			System.out.println("Please select the bank you would like to use");
-			for (int i = 0; i < bankList.size() ; i++){
-				System.out.printf("  %d) %s\n", i + 1, bankList.get(i).getName());
-			}
-			System.out.print("Enter choice: ");
 			int userInput = sc.nextInt();
 			sc.nextLine();
 			currentBank = bankList.get(userInput - 1);
 
-			System.out.printf("\nWelcome to %s !\n", currentBank.getName());
-			System.out.println("What would you like to do?");
-			System.out.println("  1) Log In");
-			System.out.println("  2) Sign Up");
-			System.out.print("Enter choice: ");
+
+			// displaySignupPage
+			mainCli.displaySignUpMenuPage(currentBank);
 
 			// stay in login prompt until successful login
 			userInput = sc.nextInt();
@@ -109,10 +100,10 @@ public class ATM implements CommandLineRunner {
 
 			if (userInput == 1){
 				// stay in login prompt until successful login
-				curUser = atmcli.mainMenuPrompt(currentBank, sc);
+				curUser = mainCli.mainMenuPrompt(currentBank, sc);
 
 				// stay in main menu until user quits
-				atmcli.printUserMenu(bankList, curUser, currentBank, sc);
+				mainCli.printUserMenu(bankList, curUser, currentBank, sc);
 
 			} else if (userInput == 2) {
 
@@ -133,7 +124,7 @@ public class ATM implements CommandLineRunner {
 				String newPin = Util.hash(sc.nextLine()); //hash it immediately, so we don't store the password at all
 
 
-//                 Creates a new user account based on user input
+//              Creates a new user account based on user input
 				User newUser2 = bankService.addUserToBank(currentBank, fname, lname, newPin);
 				Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
 				userService.addAccountToUser(newUser2, newAccount2);
@@ -145,8 +136,8 @@ public class ATM implements CommandLineRunner {
 				System.out.println("You are on sign up landing");
 
 				// Add new user to SQL
-				dbUtil.addNewUser(newUser2.getUuid(),fname,lname,newPin);
-				dbUtil.addAccount(newAccount.getAccountID(),newUser2.getUuid(),currentBank.getBankID(),"Savings",0.00);
+				userService.addNewUser(newUser2.getUuid(),fname,lname,newPin);
+				accountService.addAccount(newAccount.getAccountID(),newUser2.getUuid(),currentBank.getBankID(),"Savings",0.00);
 
 			} else {
 				System.out.println("You have entered invalid number");

@@ -1,6 +1,5 @@
 package com.CLI.ATM.ATM2.service;
 
-import com.CLI.ATM.ATM2.DB_Util;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
@@ -8,8 +7,13 @@ import com.CLI.ATM.ATM2.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
+
+import static com.CLI.ATM.ATM2.Constants.conn;
 
 @Component
 public class BankService {
@@ -20,8 +24,6 @@ public class BankService {
     @Autowired
     AccountService accountService;
 
-    @Autowired
-    DB_Util dbUtil;
 
     public Bank createNewBank(int bankID, String name, boolean local) {
         var users = new ArrayList<User>();
@@ -60,7 +62,7 @@ public class BankService {
         bank.getUsers().add(existingUser);
 
         //fetches all accounts and transactions belonging to user from sql
-        dbUtil.addAccountsToUser(existingUser, bank);
+        accountService.addAccountsToUser(existingUser, bank);
         // adds all users accounts to banks list of accounts
         bank.getAccounts().addAll(existingUser.getAccounts());
 
@@ -102,7 +104,7 @@ public class BankService {
         }
         //If userId isn't found locally, search sql database
         System.out.println("User not found, attempting to fetch user from database...");
-        User u = dbUtil.addExistingUser(bank, userID);
+        User u = userService.addExistingUser(bank, userID);
         if (u != null && u.getUuid() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) {
             return u;
         }
@@ -156,5 +158,41 @@ public class BankService {
         } while (nonUnique);
 
         return Integer.parseInt(uuid);
+    }
+
+    public  ArrayList<Bank> fetchBanks(){
+        ArrayList<Bank> banks = new ArrayList<>();
+
+        try {
+//         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
+            Statement stmt = conn.createStatement();
+
+            String strSelect = "select * from bank";
+//            System.out.println("The SQL statement is: " + strSelect + "\n"); // Echo For debugging
+
+            ResultSet resultSet = stmt.executeQuery(strSelect);
+
+            // Step 4: Process the 'ResultSet' by scrolling the cursor forward via next().
+            //  For each row, retrieve the contents of the cells with getXxx(columnName).
+//            System.out.println("The records selected are:");
+//            int rowCount = 0;
+            // Row-cursor initially positioned before the first row of the 'ResultSet'.
+            // resultSet.next() inside the whole-loop repeatedly moves the cursor to the next row.
+            // It returns false if no more rows.
+            while (resultSet.next()) {   // Repeatedly process each row
+                int idBank = resultSet.getInt("idBank");  // retrieve a 'String'-cell in the row
+                String name = resultSet.getString("name");  // retrieve a 'double'-cell in the row
+                boolean local = resultSet.getBoolean("local");       // retrieve a 'int'-cell in the row
+                Bank newBank = createNewBank(idBank, name, local);
+                banks.add(newBank);
+//                System.out.println(idBank + ", " + name + ", " + local);
+//                ++rowCount;
+            }
+//            System.out.println("Total number of records = " + rowCount);
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return banks;
     }
 }

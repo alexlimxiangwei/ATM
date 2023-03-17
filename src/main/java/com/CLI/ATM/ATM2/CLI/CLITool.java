@@ -1,6 +1,6 @@
-package com.CLI.ATM.ATM2;
+package com.CLI.ATM.ATM2.CLI;
 
-public class CLITools {
+public class CLITool {
     public static String adjustSpacing(String input){
         int numSpaces;
         String spaces = "";

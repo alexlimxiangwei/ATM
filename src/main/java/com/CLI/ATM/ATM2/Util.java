@@ -1,5 +1,6 @@
 package com.CLI.ATM.ATM2;
 
+import com.CLI.ATM.ATM2.CLI.UserCLI;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
@@ -24,6 +25,9 @@ public class Util {
     @Autowired
     BankService bankService;
 
+    @Autowired
+    UserCLI userCLI;
+
 
 
     /**
@@ -40,7 +44,7 @@ public class Util {
         do {
             System.out.printf("Enter the number (1-%d) of the account to %s: ", numOfAccounts, directionString);
             while (printSumFlag != 1){
-                userService.printAccountsSummarySimp(theUser);
+                userCLI.printAccountsSummarySimp(theUser);
                 printSumFlag +=1;
             }
 
@@ -105,7 +109,7 @@ public class Util {
             }
 
             // if account doesn't exist in local memory, as well as in sql database,
-            if (!accountExists && !DB_Util.isAccount(toAcctIDInput)) {
+            if (!accountExists && !userService.isAccount(toAcctIDInput)) {
                 // invalid account
                 System.out.println("Invalid account. Please try again.");
             }

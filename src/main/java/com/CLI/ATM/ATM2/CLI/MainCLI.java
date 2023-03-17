@@ -1,6 +1,5 @@
 package com.CLI.ATM.ATM2.CLI;
 
-import com.CLI.ATM.ATM2.DB_Util;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
@@ -20,16 +19,13 @@ import static com.CLI.ATM.ATM2.Constants.DEPOSIT;
 import static com.CLI.ATM.ATM2.Constants.WITHDRAW;
 
 @Component
-public class ATMCLI {
+public class MainCLI {
 
     @Autowired
     UserService userService;
 
     @Autowired
     AccountService accountService;
-
-    @Autowired
-    DB_Util dbUtil;
 
     @Autowired
     Util util;
@@ -39,6 +35,28 @@ public class ATMCLI {
 
     @Autowired
     TransactionService transactionService;
+
+    @Autowired
+    UserCLI userCLI;
+
+    public void displayBankSelectionPage(ArrayList<Bank> bankList) {
+        System.out.println("Please select the bank you would like to use");
+        for (int i = 0; i < bankList.size() ; i++){
+            System.out.printf("  %d) %s\n", i + 1, bankList.get(i).getName());
+        }
+        System.out.print("Enter choice: ");
+
+    }
+
+    public void displaySignUpMenuPage(Bank currentBank) {
+        System.out.printf("\nWelcome to %s !\n", currentBank.getName());
+        System.out.println("What would you like to do?");
+        System.out.println("  1) Log In");
+        System.out.println("  2) Sign Up");
+        System.out.print("Enter choice: ");
+    }
+
+
 
     public User mainMenuPrompt(Bank theBank, Scanner sc) {
 
@@ -72,7 +90,7 @@ public class ATMCLI {
     public void printUserMenu(ArrayList<Bank> bankList, User theUser, Bank theBank, Scanner sc) {
 
         // print a summary of the user's accounts
-        userService.printAccountsSummary(theUser);
+        userCLI.printAccountsSummary(theUser);
 
         // init
         int choice;
@@ -165,12 +183,12 @@ public class ATMCLI {
         }
         else{ // if toAcct doesn't exist locally, only add transaction only on sql
             Transaction newTrans = transactionService.createTransaction(amount, toAcctID, fromAcct.getAccountID(), memo);
-            dbUtil.addTransactionToSQL(newTrans);
+            transactionService.addTransactionToSQL(newTrans);
         }
 
         //update balance on SQL for both accounts
-        dbUtil.updateSQLBalance(-amount, fromAcct.getAccountID());
-        dbUtil.updateSQLBalance(amount, toAcctID);
+        accountService.updateSQLBalance(-amount, fromAcct.getAccountID());
+        accountService.updateSQLBalance(amount, toAcctID);
     }
 
     public void showAccountSetting(User theUser, Scanner sc,Bank theBank) {
@@ -252,7 +270,7 @@ public class ATMCLI {
 
         accountService.addBalance(fromAcct, amount);
         // update balance on SQL
-        dbUtil.updateSQLBalance(fromAcct.getBalance(),fromAcct.getAccountID());
+        accountService.updateSQLBalance(fromAcct.getBalance(),fromAcct.getAccountID());
     }
 
     /**
@@ -304,7 +322,7 @@ public class ATMCLI {
                 System.out.println("Incorrect password, please try again. ");
             }
         }while(!is_validated);
-        is_validated = false;
+
         do {
             System.out.println("Enter new password: ");
             pin = sc.nextLine();
@@ -320,7 +338,7 @@ public class ATMCLI {
         System.out.println("Password successfully changed.");
 
         // Update password on SQL
-        dbUtil.changePassword(pin,numOfAcc);
+        userService.changePassword(pin,numOfAcc);
     }
 
     /**
@@ -340,7 +358,7 @@ public class ATMCLI {
 
         // Update account name changes on sql
 
-        dbUtil.changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
+        accountService.changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
     }
 
     /**
@@ -362,7 +380,7 @@ public class ATMCLI {
         existingAcc.add(newAccount);
 
         // Update add account on sql
-        dbUtil.addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAcc, 0.00);
+        accountService.addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAcc, 0.00);
 
     }
 
@@ -385,7 +403,7 @@ public class ATMCLI {
         }
 
         // Update deleted account on sql
-        dbUtil.deleteAccount(userService.getAcctUUID(theUser, usrChoice)); //theUser.getUUID()
+        accountService.deleteAccount(userService.getAcctUUID(theUser, usrChoice)); //theUser.getUUID()
 
 
     }
