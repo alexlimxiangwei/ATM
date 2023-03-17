@@ -148,17 +148,17 @@ public class MainCLI {
 
         } while(choice < 0 || choice > 2);
         // get account to transfer from
-        fromAcct = util.getInternalTransferAccount(theUser, "transfer from", sc);
+        fromAcct = accountService.getInternalTransferAccount(theUser, "transfer from", sc);
         transferLimit = fromAcct.getBalance();
 
         if (choice == 1){
             // get internal account to transfer to
-            toAcct = util.getInternalTransferAccount(theUser, "transfer to", sc);
+            toAcct = accountService.getInternalTransferAccount(theUser, "transfer to", sc);
             toAcctID = toAcct.getAccountID();
         }
         else{
             //get third party account to transfer to
-            accountInfo = util.getThirdPartyTransferAccount(banks, sc);
+            accountInfo = accountService.getThirdPartyTransferAccount(banks, sc);
             toAcctID = accountInfo[0];
             int bankID = accountInfo[1];
             if (bankID != -1){ // if account exists locally
@@ -166,7 +166,7 @@ public class MainCLI {
             }
         }
         // get amount to transfer
-        amount = Util.getTransferAmount(transferLimit, sc);
+        amount = accountService.getTransferAmount(transferLimit, sc);
 
         // get memo for transfer
         System.out.println("Enter memo for this transaction: ");
@@ -248,13 +248,13 @@ public class MainCLI {
             directionString = "transfer to";
         }
 
-        fromAcct = util.getInternalTransferAccount(theUser, directionString, sc);
+        fromAcct = accountService.getInternalTransferAccount(theUser, directionString, sc);
         if (direction == WITHDRAW){ // if making a withdraw, set a limit
             withdrawLimit = fromAcct.getBalance();
         }
 
         // get amount to transfer
-        amount = util.getTransferAmount(withdrawLimit, sc);
+        amount = accountService.getTransferAmount(withdrawLimit, sc);
         // make amount negative if withdrawing (WITHDRAW is = -1 while DEPOSIT is = 1)
         amount = direction * amount;
         // gobble up rest of previous input

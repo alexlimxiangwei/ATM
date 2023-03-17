@@ -1,5 +1,6 @@
 package com.CLI.ATM.ATM2.service;
 
+import com.CLI.ATM.ATM2.CLI.UserCLI;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.Transaction;
@@ -11,6 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 
 import static com.CLI.ATM.ATM2.Constants.conn;
 
@@ -22,6 +24,12 @@ public class AccountService {
 
     @Autowired
     TransactionService transactionService;
+
+    @Autowired
+    UserCLI userCli;
+
+    @Autowired
+    BankService bankService;
 
 
     public Account createAccount(String name, User user, Double balance) {
@@ -277,6 +285,84 @@ public class AccountService {
             e.printStackTrace();
         }
 
+    }
+
+    public Account getInternalTransferAccount(User theUser, String directionString, Scanner sc){
+        int fromAcctIndex;
+        int printSumFlag = 0;
+        int numOfAccounts = userService.numAccounts(theUser);
+        do {
+            System.out.printf("Enter the number (1-%d) of the account to %s: ", numOfAccounts, directionString);
+            while (printSumFlag != 1){
+                userCli.printAccountsSummarySimp(theUser);
+                printSumFlag +=1;
+            }
+
+            fromAcctIndex = sc.nextInt()-1;
+            if (fromAcctIndex < 0 || fromAcctIndex >= numOfAccounts) {
+                System.out.println("Invalid account. Please try again.");
+            }
+        } while (fromAcctIndex < 0 || fromAcctIndex >= numOfAccounts);
+
+        return userService.getAcct(theUser, fromAcctIndex);
+
+    }
+
+    /**
+     * Gets an account by asking user for an account ID
+     * @param banks ArrayList of banks to loop through to look for an account
+     * @return found accountId and found bankID, bankID is -1 if not in local memory
+     */
+    public int[] getThirdPartyTransferAccount(ArrayList<Bank> banks, Scanner sc){
+        //get accountID to transfer to
+        int toAcctIDInput;
+        int toAcctID;
+        boolean accountExists = false;
+        int bankID = -1;
+        do {
+            System.out.println("Enter the account number of the account to " +
+                    "transfer to: ");
+            sc.nextLine();
+            toAcctIDInput = sc.nextInt();
+            //look in every bank to find the account
+            for (int i = 0; i < banks.size() ; i++) {
+                toAcctID = bankService.getAccountIndex(banks.get(i), toAcctIDInput);
+                if (toAcctID != -1){ // if account is found:
+                    accountExists = true;
+                    bankID = i;
+                    break;
+                }
+            }
+
+            // if account doesn't exist in local memory, as well as in sql database,
+            if (!accountExists && !userService.isAccount(toAcctIDInput)) {
+                // invalid account
+                System.out.println("Invalid account. Please try again.");
+            }
+        } while (!accountExists);
+        // get accountId and which bank it belongs to if it exists in local mem
+        return new int[] {toAcctIDInput, bankID};
+    }
+
+    public double getTransferAmount(double limit, Scanner sc){
+        double amount;
+        do {
+            if (limit == -1){
+                System.out.print("Enter the amount to transfer: $");
+            }
+            else{
+                System.out.printf("Enter the amount to transfer (max $%.02f): $",
+                        limit);
+            }
+            amount = sc.nextDouble();
+            if (amount < 0) {
+                System.out.println("Amount must be greater than zero.");
+            } else if (limit != -1 && amount > limit) { // check if transferring more than limit (-1 means no limit)
+                System.out.printf("Amount must not be greater than balance " +
+                        "of $%.02f.\n", limit);
+            }
+        } while (amount < 0 || (limit != -1 && amount > limit));
+        return amount;
     }
 
 
