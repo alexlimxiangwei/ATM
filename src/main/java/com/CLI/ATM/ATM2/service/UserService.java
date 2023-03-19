@@ -93,8 +93,6 @@ public class UserService {
         accountCLI.printTransHistory(user.getAccounts().get(acctIdx));
     }
 
-
-
     /**
      * Check whether a given pin matches the true User pin
      * @param aPin	the pin to check
@@ -139,16 +137,19 @@ public class UserService {
      * @param pin creates new account with pin
      */
 
-    public void addNewUser(int uuid, String fname, String lname, String pin) {
+    public void addNewUser(int uuid, String fname, String lname, String pin, Bank bank) {
         try {
-            String strSelect = "insert into customer values(?, ?, ?, ? )";
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            String strUpdate = "insert into customer values(?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(strUpdate);
             stmt.setInt(1, uuid);
             stmt.setString(2, fname);
             stmt.setString(3, lname);
             stmt.setString(4, pin);
             stmt.executeUpdate();
 
+            strUpdate = String.format("insert into Bank_has_Customer values (%d, %d %s);",bank.getBankID(),uuid, pin);
+            stmt = conn.prepareStatement(strUpdate);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -159,14 +160,15 @@ public class UserService {
      * @param pin pin of account to update to
      * @param uuid uuid of account to update to
      */
-    public void changePassword(String pin , int uuid){
+    public void changePassword(String pin , int uuid, Bank bank){
         try {
 
             String hashedPassword = Util.hash(pin);
-            String strSelect = "update customer set hashedPin = ? where idCustomer = ?";
+            String strSelect = "update Bank_Has_Customer set hashedPin = ? where Customer_idCustomer = ? and Bank_idBank = ?";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
             stmt.setString(1,hashedPassword);
             stmt.setInt(2, uuid );
+            stmt.setInt(3, bank.getBankID());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -205,6 +207,9 @@ public class UserService {
      */
     public User addExistingUser(Bank bank, int idCustomer){
         User user = null;
+        String firstName = null;
+        String lastName = null;
+        String hashedPin = null;
         try {
 //         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
             Statement stmt = conn.createStatement();
@@ -212,11 +217,16 @@ public class UserService {
             ResultSet resultSet = stmt.executeQuery(strSelect);
 
             if (resultSet.next()) {   // Repeatedly process each row
-                String firstName = resultSet.getString("firstName");  // retrieve a 'double'-cell in the row
-                String lastName= resultSet.getString("lastName");
-                String hashedPin = resultSet.getString("hashedPin");
-                user = bankService.addExistingUserToBank(bank, idCustomer, firstName,lastName, hashedPin);
+                firstName = resultSet.getString("firstName");  // retrieve a 'double'-cell in the row
+                lastName= resultSet.getString("lastName");
             }
+            strSelect = String.format("select * from Bank_Has_Customer where Customer_idCustomer = %s and Bank_idBank = %s ", idCustomer, bank.getBankID());
+            resultSet = stmt.executeQuery(strSelect);
+            if (resultSet.next()) {
+                hashedPin = resultSet.getString("hashedPin");
+            }
+            user = bankService.addExistingUserToBank(bank, idCustomer, firstName,lastName, hashedPin);
+
         }
         catch(SQLException ex) {
             ex.printStackTrace();

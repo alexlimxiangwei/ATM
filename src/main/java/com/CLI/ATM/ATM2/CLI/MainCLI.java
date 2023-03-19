@@ -214,7 +214,7 @@ public class MainCLI {
 
         // process the choice
         switch (choice) {
-            case 1 -> changePassword(theUser, sc);
+            case 1 -> changePassword(theUser, theBank, sc);
             case 2 -> addAccount(theUser, sc, theBank);
             case 3 -> changeAccountName(theUser,sc);
             case 4 -> deleteAccount(theUser,sc); // Not complete
@@ -307,10 +307,9 @@ public class MainCLI {
     }
 
     //change passwords
-    public void changePassword(User theUser, Scanner sc) {
+    public void changePassword(User theUser, Bank bank, Scanner sc) {
         String pin;
         boolean is_validated;
-        int numOfAcc = userService.numAccounts(theUser);
 
         sc.nextLine(); // remove empty line first
         do {
@@ -334,10 +333,10 @@ public class MainCLI {
 
             }
         }while(!is_validated);
-        theUser.setPinHash(pin);
+        theUser.setPinHash(Util.hash(pin));
 
         // Update password on SQL
-        userService.changePassword(pin,numOfAcc);
+        userService.changePassword(pin,theUser.getUuid(), bank);
         System.out.println("Password successfully changed.");
 
 

@@ -110,7 +110,7 @@ public class ATM implements CommandLineRunner {
 				System.out.println("Account successfully created.");
 
 				// Add new user to SQL
-				userService.addNewUser(newUser2.getUuid(),fname,lname,newPin);
+				userService.addNewUser(newUser2.getUuid(),fname,lname,newPin,currentBank);
 				accountService.SQL_addAccount(newAccount2.getAccountID(),newUser2.getUuid(),currentBank.getBankID(),"Savings",0.00);
 
 			} else {
