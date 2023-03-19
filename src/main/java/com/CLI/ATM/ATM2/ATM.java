@@ -111,7 +111,7 @@ public class ATM implements CommandLineRunner {
 
 				// Add new user to SQL
 				userService.addNewUser(newUser2.getUuid(),fname,lname,newPin);
-				accountService.addAccount(newAccount2.getAccountID(),newUser2.getUuid(),currentBank.getBankID(),"Savings",0.00);
+				accountService.SQL_addAccount(newAccount2.getAccountID(),newUser2.getUuid(),currentBank.getBankID(),"Savings",0.00);
 
 			} else {
 				System.out.println("You have entered invalid number");

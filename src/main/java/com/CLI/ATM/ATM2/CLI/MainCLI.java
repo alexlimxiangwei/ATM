@@ -109,7 +109,7 @@ public class MainCLI {
             choice = sc.nextInt();
 
             if (choice < 1 || choice > 6) {
-                System.out.println("Invalid choice. Please choose 1-9.");
+                System.out.println("Invalid choice. Please choose 1-6.");
             }
 
         } while (choice < 1 || choice > 6);
@@ -187,8 +187,8 @@ public class MainCLI {
         }
 
         //update balance on SQL for both accounts
-        accountService.updateSQLBalance(-amount, fromAcct.getAccountID());
-        accountService.updateSQLBalance(amount, toAcctID);
+        accountService.SQL_updateBalance(-amount, fromAcct.getAccountID());
+        accountService.SQL_updateBalance(amount, toAcctID);
     }
 
     public void showAccountSetting(User theUser, Scanner sc,Bank theBank) {
@@ -270,7 +270,7 @@ public class MainCLI {
 
         accountService.addBalance(fromAcct, amount);
         // update balance on SQL
-        accountService.updateSQLBalance(fromAcct.getBalance(),fromAcct.getAccountID());
+        accountService.SQL_updateBalance(fromAcct.getBalance(),fromAcct.getAccountID());
     }
 
     /**
@@ -358,7 +358,7 @@ public class MainCLI {
 
         // Update account name changes on sql
 
-        accountService.changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
+        accountService.SQL_changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
     }
 
     /**
@@ -368,20 +368,15 @@ public class MainCLI {
      * @param currentBank the bank that user is from
      */
     public void addAccount(User theUser, Scanner sc, Bank currentBank){
-        int numOfAcc = userService.numAccounts(theUser);
         System.out.print("Enter your new account name: ");
         sc.nextLine();
-        String newAcc = sc.nextLine();
+        String newAccName = sc.nextLine();
 
-        ArrayList<Account> existingAcc = theUser.getAccounts();
-        int len = existingAcc.size();
-
-        Account newAccount = accountService.createAccountExistingId(len, newAcc, theUser, 0.00);
-        existingAcc.add(newAccount);
+        Account newAccount = accountService.createAccount(newAccName, theUser, 0.00);
+        theUser.getAccounts().add(newAccount);
 
         // Update add account on sql
-        accountService.addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAcc, 0.00);
-
+        accountService.SQL_addAccount(newAccount.getAccountID(),theUser.getUuid() ,currentBank.getBankID(), newAccName, 0.00);
     }
 
 

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Scanner;
 
 import static com.CLI.ATM.ATM2.Constants.conn;
@@ -34,7 +33,7 @@ public class AccountService {
 
     public Account createAccount(String name, User user, Double balance) {
 
-        var accountID = getNewAccountID(user);
+        var accountID = generateNewAccountID();
 
         var transactions= new ArrayList<Transaction>();
 
@@ -55,50 +54,11 @@ public class AccountService {
         return new Account(name, accountID, user, transactions, balance);
     }
 
-
-
     public void addBalance(Account account, double amount){
         var balance = account.getBalance();
         account.setBalance(balance + amount);
     }
 
-
-
-
-
-    public int getNewAccountID(User user) {
-
-        // init
-        int id;
-        Random rng = new Random();
-        int len = 10;
-        boolean nonUnique = false;
-
-        // continue looping until we get a unique ID
-        do {
-
-            // generate the number
-            id = 0;
-            for (int c = 0; c < len; c++) {
-                id += (rng.nextInt(10));
-            }
-
-            // check to make sure it's unique
-            for (Account a : user.getAccounts()) {
-                if (id == a.getAccountID()) {
-                    nonUnique = true;
-                    break;
-                }
-            }
-
-        } while (nonUnique);
-
-        return id;
-
-//        Random random = new Random();
-//        return (int) abs(((random.nextInt() % 900000000L) + 1000000000L));
-
-    }
 
     public HashMap<String,String> getSummaryLine(Account account) {
 
@@ -174,7 +134,7 @@ public class AccountService {
      * @param name the name the user wants to change to
      */
 
-    public void changeAccountName(int idAcc, int cust_has_id_customer, String name){
+    public void SQL_changeAccountName(int idAcc, int cust_has_id_customer, String name){
         try{
             String strSelect = "update account set name = ? where Customer_idCustomer = ? AND idAccount = ?";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
@@ -195,7 +155,7 @@ public class AccountService {
      * @param bank_id_bank gets the bankID
      * @param name creates new account with pin
      */
-    public void addAccount(int idAcc, int cust_has_id_customer, int bank_id_bank, String name, double bal) {
+    public void SQL_addAccount(int idAcc, int cust_has_id_customer, int bank_id_bank, String name, double bal) {
         try {
             String strUpdate = "insert into account values(?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(strUpdate);
@@ -206,7 +166,7 @@ public class AccountService {
             stmt.setDouble(5,bal);
             stmt.executeUpdate();
 
-            System.out.println(stmt);
+            System.out.printf("New account %s created.", name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -217,7 +177,7 @@ public class AccountService {
      * @param amount amount to set balance of account to
      * @param AcctID ID of account to update balance of
      */
-    public void updateSQLBalance(double amount, int AcctID) {
+    public void SQL_updateBalance(double amount, int AcctID) {
         try {
             String strSelect = "update account set balance = ? where idAccount = ?";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
@@ -381,5 +341,20 @@ public class AccountService {
         return amount;
     }
 
-
+    /**
+     * Gets the biggest transaction number from SQL server, and returns +1 of it
+     */
+    public int generateNewAccountID(){
+        int max_id = 0;
+        try {
+            String strSelect = "select idAccount from Account order by idAccount desc limit 1;";
+            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            ResultSet rset = stmt.executeQuery(strSelect);
+            rset.next();
+            max_id = rset.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return max_id + 1;
+    }
 }

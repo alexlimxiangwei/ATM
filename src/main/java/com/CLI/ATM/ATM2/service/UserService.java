@@ -35,12 +35,7 @@ public class UserService {
 
         var user = new User(firstName, lastName, idCustomer, pin, accounts);
 
-        // print log message if needed
-//        System.out.printf("New user %s, %s with ID %s created.\n",
-//                lastName, firstName, idCustomer);
-
         return user;
-
     }
 
     public User createNewUser(String firstName, String lastName, String pin, Bank bank) {
