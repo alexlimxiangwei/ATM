@@ -382,7 +382,7 @@ public class MainCLI {
 
         // Update add account on sql
         accountService.SQL_addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAccName, 0.00);
-        System.out.println("Account created successfully");
+        System.out.printf("New account '%s' created successfully!\n", newAccName);
 
     }
 

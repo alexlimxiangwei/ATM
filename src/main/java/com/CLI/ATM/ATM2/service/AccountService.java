@@ -166,8 +166,6 @@ public class AccountService {
             stmt.setDouble(5,bal);
             stmt.executeUpdate();
 
-
-            System.out.printf("New account %s created.", name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
