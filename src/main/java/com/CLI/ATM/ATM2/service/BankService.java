@@ -103,7 +103,7 @@ public class BankService {
             }
         }
         //If userId isn't found locally, search sql database
-        System.out.println("User not found, attempting to fetch user from database...");
+//        System.out.println("User not found locally, attempting to fetch user from database...");
         User u = userService.addExistingUser(bank, userID);
         if (u != null && u.getUuid() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) {
             return u;

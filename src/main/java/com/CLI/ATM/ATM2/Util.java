@@ -28,24 +28,6 @@ public class Util {
     @Autowired
     UserCLI userCLI;
 
-
-
-    /**
-     * Gets an internal account of a user for transferring purposes
-     * by asking for user input
-     * @param theUser	the user to loop through his accounts
-     * @param directionString direction of transfer, e.g. : transfer to / withdraw from
-     * @return Account object for transferring of $
-     */
-
-    /**
-     * Gets amount to transfer from user, with an upper transfer limit
-     * @param limit the upper $ amount limit of transfer, or -1 for no limit
-     * @return the amount the user inputted
-     */
-
-
-
     public static String hash(String pin){
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

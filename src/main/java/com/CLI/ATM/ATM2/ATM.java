@@ -22,9 +22,6 @@ import static com.CLI.ATM.ATM2.Constants.conn;
 @SpringBootApplication
 public class ATM implements CommandLineRunner {
 
-
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(ATM.class, args);
 	}
@@ -45,13 +42,11 @@ public class ATM implements CommandLineRunner {
 
 	@Override
 	public void run(String... args){
-
-
 		try {
 			// Step 1: Construct a database 'Connection' object called 'conn'
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-					"root", "password");   // For MySQL only
+					"root", "");   // For MySQL only
 			// The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
 		}
 		catch(SQLException ex) {
@@ -63,20 +58,6 @@ public class ATM implements CommandLineRunner {
 		// init Scanner
 		Scanner sc = new Scanner(System.in);
 
-		//TODO: delete all the setting up below after integrating with database
-
-		//init Bank
-		Bank currentBank = bankList.get(0); // for creating accounts in first bank, will be removed next time after testing
-		// add a user, which also creates a Savings account
-		User aUser = bankService.addUserToBank(currentBank, "John", "Doe", Util.hash("1234"));
-//        theBank.addUser("Legoland", "Puteri", "123");
-		System.out.println();
-
-		// add a checking account for our user
-		Account newAccount = accountService.createAccount("CHECKING", aUser, 500.00);
-
-		userService.addAccountToUser(aUser, newAccount);
-		bankService.addAccountToBank(currentBank, newAccount);
 
 		User curUser;
 
@@ -88,7 +69,7 @@ public class ATM implements CommandLineRunner {
 
 			int userInput = sc.nextInt();
 			sc.nextLine();
-			currentBank = bankList.get(userInput - 1);
+			Bank currentBank = bankList.get(userInput - 1);
 
 
 			// displaySignupPage
@@ -131,13 +112,11 @@ public class ATM implements CommandLineRunner {
 				bankService.addAccountToBank(currentBank, newAccount2);
 
 
-
 				System.out.println("Account successfully created.");
-				System.out.println("You are on sign up landing");
 
 				// Add new user to SQL
 				userService.addNewUser(newUser2.getUuid(),fname,lname,newPin);
-				accountService.addAccount(newAccount.getAccountID(),newUser2.getUuid(),currentBank.getBankID(),"Savings",0.00);
+				accountService.addAccount(newAccount2.getAccountID(),newUser2.getUuid(),currentBank.getBankID(),"Savings",0.00);
 
 			} else {
 				System.out.println("You have entered invalid number");

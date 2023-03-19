@@ -272,7 +272,6 @@ public class AccountService {
             ResultSet rset = stmt.executeQuery(strSelect);
             while (rset.next()){
                 int idAccount = rset.getInt("idAccount");
-                System.out.println(idAccount);
                 String name = rset.getString("name");
                 double balance = rset.getDouble("balance");
                 Account newAccount = createAccountExistingId(idAccount, name, user, balance);
@@ -286,6 +285,14 @@ public class AccountService {
         }
 
     }
+    /**
+     * Gets an internal account of a user for transferring purposes
+     * by asking for user input
+     * @param theUser	the user to loop through his accounts
+     * @param directionString direction of transfer, e.g. : transfer to / withdraw from
+     * @return Account object for transferring of $
+     */
+
 
     public Account getInternalTransferAccount(User theUser, String directionString, Scanner sc){
         int fromAcctIndex;
@@ -344,6 +351,11 @@ public class AccountService {
         return new int[] {toAcctIDInput, bankID};
     }
 
+    /**
+     * Gets amount to transfer from user, with an upper transfer limit
+     * @param limit the upper $ amount limit of transfer, or -1 for no limit
+     * @return the amount the user inputted
+     */
     public double getTransferAmount(double limit, Scanner sc){
         double amount;
         do {

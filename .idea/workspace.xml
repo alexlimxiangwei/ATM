@@ -4,10 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;fixed account add">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;fixed some system outs">
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/AccountCLI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/CLITool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/TransactionCLI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/UserCLI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Util.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/Account.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/Bank.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/Transaction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/TransactionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/CLI/ATM/ATM2/ATMTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ATM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ATM.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ATM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,11 +47,22 @@
       </list>
     </option>
   </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/unit_testing" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectId" id="2KNY1qg4dUMR4kny8t3CnRr8iVx" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -185,6 +222,7 @@
     <MESSAGE value="DONE:&#10;third party transactions are now SQL-ized&#10;&#10;depositFunds and withdrawFunds merged into 1 function!! easy easy easy&#10;previously forgot to update balance on SQL after withdrawing / depositing, now will update" />
     <MESSAGE value="DONE:&#10;removed conn everywhere and made it global omg code is so much cleaner now" />
     <MESSAGE value="DONE:&#10;fixed account add" />
-    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;fixed account add" />
+    <MESSAGE value="DONE:&#10;fixed some system outs" />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;fixed some system outs" />
   </component>
 </project>

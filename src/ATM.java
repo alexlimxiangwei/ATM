@@ -5,12 +5,9 @@ import java.sql.*;
 public class ATM {
     static final int DEPOSIT = 1;
     static final int WITHDRAW = -1;
-
     public static Connection conn;
 
     public static void main(String[] args) {
-
-
 
         try {
             // Step 1: Construct a database 'Connection' object called 'conn'
@@ -28,27 +25,11 @@ public class ATM {
         // init Scanner
         Scanner sc = new Scanner(System.in);
 
-        //TODO: delete all the setting up below after integrating with database
-
-        //init Bank
-        Bank currentBank = bankList.get(0); // for creating accounts in first bank, will be removed next time after testing
-        // add a user, which also creates a Savings account
-        User aUser = currentBank.addUser("John", "Doe", Util.hash("1234"));
-//        theBank.addUser("Legoland", "Puteri", "123");
-        System.out.println();
-
-        // add a checking account for our user
-        Account newAccount = new Account("Checking", aUser, currentBank, 500.00);
-
-        aUser.addAccount(newAccount);
-        currentBank.addAccount(newAccount);
-
         User curUser;
 
 
         // continue looping forever
         while (true) {
-
             System.out.println("Please select the bank you would like to use");
             for (int i = 0; i < bankList.size() ; i++){
                 System.out.printf("  %d) %s\n", i + 1, bankList.get(i).getName());

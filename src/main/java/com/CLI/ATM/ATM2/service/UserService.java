@@ -35,9 +35,9 @@ public class UserService {
 
         var user = new User(firstName, lastName, idCustomer, pin, accounts);
 
-        // print log message
-        System.out.printf("New user %s, %s with ID %s created.\n",
-                lastName, firstName, idCustomer);
+        // print log message if needed
+//        System.out.printf("New user %s, %s with ID %s created.\n",
+//                lastName, firstName, idCustomer);
 
         return user;
 
@@ -209,7 +209,6 @@ public class UserService {
 //         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
             Statement stmt = conn.createStatement();
             String strSelect = "select * from customer where idCustomer = " + idCustomer;
-            System.out.println(strSelect);
             ResultSet resultSet = stmt.executeQuery(strSelect);
 
             if (resultSet.next()) {   // Repeatedly process each row
