@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;fixed account creation prints">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/bank_has_customer.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/bank_has_customer.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/customers.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/customers.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;changed database schema so that each user has different password for each bank instead of 1 password for all banks.">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -207,7 +202,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679213822970</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="DONE:&#10;changed database schema so that each user has different password for each bank instead of 1 password for all banks.">
+      <created>1679220564837</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1679220564837</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -238,6 +240,7 @@
     <MESSAGE value="DONE:&#10;fixed deletion of sql account&#10;fixed some numbers in user chioce" />
     <MESSAGE value="DONE:&#10;fixed account creation" />
     <MESSAGE value="DONE:&#10;fixed account creation prints" />
-    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;fixed account creation prints" />
+    <MESSAGE value="DONE:&#10;changed database schema so that each user has different password for each bank instead of 1 password for all banks." />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;changed database schema so that each user has different password for each bank instead of 1 password for all banks." />
   </component>
 </project>

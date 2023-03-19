@@ -224,8 +224,9 @@ public class UserService {
             resultSet = stmt.executeQuery(strSelect);
             if (resultSet.next()) {
                 hashedPin = resultSet.getString("hashedPin");
+                user = bankService.addExistingUserToBank(bank, idCustomer, firstName,lastName, hashedPin);
+
             }
-            user = bankService.addExistingUserToBank(bank, idCustomer, firstName,lastName, hashedPin);
 
         }
         catch(SQLException ex) {
