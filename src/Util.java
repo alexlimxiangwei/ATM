@@ -17,11 +17,11 @@ public class Util {
      * @param directionString direction of transfer, e.g. : transfer to / withdraw from
      * @return Account object for transferring of $
      */
-    public static Account getInternalTransferAccount(User theUser, String instructionString, Scanner sc){
+    public static Account getInternalTransferAccount(User theUser, String directionString, Scanner sc){
         int fromAcctIndex;
         int printSumFlag = 0;
         do {
-            System.out.printf("Enter the number (1-%d) of the account to %s: ", theUser.numAccounts(), instructionString);
+            System.out.printf("Enter the number (1-%d) of the account to %s: ", theUser.numAccounts(), directionString);
             while (printSumFlag != 1){
                 theUser.printAccountsSummarySimp();
                 printSumFlag +=1;

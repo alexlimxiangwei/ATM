@@ -245,8 +245,9 @@ public class User extends CLITools{
      * @param acctIdx get the acctid
      *
      */
-    public void deleteAccount(Account account) {
-        accounts.remove(account);
+    public void deleteAccount(int acctIdx) {
+        Account account = this.accounts.get(acctIdx);
+        accounts.remove(acctIdx);
     }
 
 

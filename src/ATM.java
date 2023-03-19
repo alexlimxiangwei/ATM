@@ -16,7 +16,7 @@ public class ATM {
             // Step 1: Construct a database 'Connection' object called 'conn'
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "");   // For MySQL only
+                    "root", "password");   // For MySQL only
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
@@ -94,7 +94,7 @@ public class ATM {
                 String newPin = Util.hash(sc.nextLine()); //hash it immediately so we don't store the password at all
 
 
-                // Creates a new user account based on user input
+//                 Creates a new user account based on user input
                 User createNewUser = currentBank.addUser(fname,lname,newPin);
                 Account createNewAccount = new Account("Checking", createNewUser, currentBank, 0.0);
                 createNewUser.addAccount(createNewAccount);
@@ -170,10 +170,7 @@ public class ATM {
             System.out.println("  2) Withdraw");
             System.out.println("  3) Deposit");
             System.out.println("  4) Transfer");
-            System.out.println("  5) Change Password");
-            System.out.println("  6) Add new account");
-            System.out.println("  7) Change account name");
-            System.out.println("  8) Delete account");
+            System.out.println("  5) Account Setting");
             System.out.println("  9) Quit"); // TODO: password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
@@ -191,15 +188,12 @@ public class ATM {
             case 2 -> ATM.updateFunds(theUser, sc, WITHDRAW);
             case 3 -> ATM.updateFunds(theUser, sc, DEPOSIT);
             case 4 -> ATM.transferFunds(theUser,bankList, sc);
-            case 5 -> ATM.changePassword(theUser, sc);
-            case 6 -> ATM.addAccount(theUser, sc, theBank);
-            case 7 -> ATM.changeAccountName(theUser,sc);
-            case 8 -> ATM.deleteAccount(theUser,sc); // Not complete
-            case 9 -> sc.nextLine(); // gobble up rest of previous input
+            case 5 -> ATM.showAccountSetting(theUser, sc, theBank);
+            case 6 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
-        if (choice != 9) {
+        if (choice != 6) {
             ATM.printUserMenu(bankList, theUser,theBank, sc);
         }
 
@@ -272,6 +266,42 @@ public class ATM {
         DB_Util.updateSQLBalance(amount, toAcctID);
     }
 
+    public static void showAccountSetting(User theUser, Scanner sc,Bank theBank) {
+        int choice;
+
+        // user menu
+        do {
+            System.out.println("Account Setting");
+            System.out.println("  1) Change Password");
+            System.out.println("  2) Create Account");
+            System.out.println("  3) Change Account Type");
+            System.out.println("  4) Delete Account");
+            System.out.println("  5) Back");
+            System.out.println();
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            if (choice < 1 || choice > 6) {
+                System.out.println("Invalid choice. Please choose 1-9.");
+            }
+
+        } while (choice < 1 || choice > 6);
+
+        // process the choice
+        switch (choice) {
+            case 1 -> ATM.changePassword(theUser, sc);
+            case 2 -> ATM.addAccount(theUser, sc, theBank);
+            case 3 -> ATM.changeAccountName(theUser,sc);
+            case 4 -> ATM.deleteAccount(theUser,sc); // Not complete
+            case 5 -> sc.nextLine(); // gobble up rest of previous input
+        }
+
+        // redisplay this menu unless the user wants to quit
+        if (choice != 5) {
+            showAccountSetting(theUser,sc,theBank);
+        }
+    }
+
     /**
      * Process a fund withdraw from an account.
      * @param theUser	the logged-in User object
@@ -328,8 +358,16 @@ public class ATM {
 
         // get account whose transactions to print
         do {
-            System.out.printf("Enter the number (1-%d) of the account\nwhose " +
-                    "transactions you want to see: ", theUser.numAccounts());
+            System.out.println("\n");
+            System.out.println("Account Transaction History");
+            System.out.printf("Enter number (1-%d)\n", theUser.numAccounts());
+
+            int count = 1;
+            for (Account acc: theUser.getAccounts()) {
+                System.out.println(count + ") " + acc.getName());
+                count++;
+            }
+
 
 
             theAcct = sc.nextInt()-1;
@@ -421,18 +459,19 @@ public class ATM {
      * @param sc		the Scanner object used for user input
      */
     public static void deleteAccount(User theUser, Scanner sc){
-        Account acc_to_delete = Util.getInternalTransferAccount(theUser, "delete", sc);
-
-        if(acc_to_delete.getBalance() > 0 ){
+        System.out.println("Enter account to delete: ");
+        sc.nextLine();
+        int usrChoice = sc.nextInt();
+        if(theUser.getAcctBalance(usrChoice) > 0 ){
             System.out.println("Please make sure that your balance is 0 before deleting! ");
         }
         else {
             System.out.println("Account successfully deleted. ");
-            theUser.deleteAccount(acc_to_delete);
+            theUser.deleteAccount(usrChoice);
         }
 
         // Update deleted account on sql
-        DB_Util.deleteAccount(acc_to_delete.getAccountID()); //theUser.getUUID()
+        DB_Util.deleteAccount(theUser.getAcctUUID(usrChoice)); //theUser.getUUID()
 
 
     }

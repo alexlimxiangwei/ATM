@@ -92,6 +92,10 @@ public class Account {
      * @return	account balance
      */
 
+    public String getName() {
+        return this.name;
+    }
+
     public Double getBalance() {
         return balance;
     }

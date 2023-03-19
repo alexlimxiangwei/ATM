@@ -2,6 +2,8 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+import static java.lang.Math.abs;
+
 public class Bank {
     /**
      * The id of the bank.
@@ -82,32 +84,35 @@ public class Bank {
      */
     public int getNewAccountID() { //TODO: maybe static this or move to util
 
-        // inits
-        int id;
-        Random rng = new Random();
-        int len = 10;
-        boolean nonUnique = false;
+//        // inits
+//        int id;
+//        Random rng = new Random();
+//        int len = 10;
+//        boolean nonUnique = false;
+//
+//        // continue looping until we get a unique ID
+//        do {
+//
+//            // generate the number
+//            id = 0;
+//            for (int c = 0; c < len; c++) {
+//                id += ((Integer)rng.nextInt(10));
+//            }
+//
+//            // check to make sure it's unique
+//            for (Account a : this.accounts) {
+//                if (id == a.getAccountID()) {
+//                    nonUnique = true;
+//                    break;
+//                }
+//            }
+//
+//        } while (nonUnique);
+//
+//        return id;
 
-        // continue looping until we get a unique ID
-        do {
-
-            // generate the number
-            id = 0;
-            for (int c = 0; c < len; c++) {
-                id += ((Integer)rng.nextInt(10));
-            }
-
-            // check to make sure it's unique
-            for (Account a : this.accounts) {
-                if (id == a.getAccountID()) {
-                    nonUnique = true;
-                    break;
-                }
-            }
-
-        } while (nonUnique);
-
-        return id;
+        Random random = new Random();
+        return (int) abs(((random.nextInt() % 900000000L) + 1000000000L));
 
     }
 

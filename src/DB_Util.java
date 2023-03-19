@@ -58,8 +58,8 @@ public class DB_Util {
         try {
 //         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
             Statement stmt = ATM.conn.createStatement();
-
             String strSelect = "select * from customer where idCustomer = " + idCustomer;
+            System.out.println(strSelect);
             ResultSet rset = stmt.executeQuery(strSelect);
 
             if (rset.next()) {   // Repeatedly process each row
@@ -107,7 +107,6 @@ public class DB_Util {
         try {
             Statement stmt = ATM.conn.createStatement();
             String strSelect = String.format("select idAccount,name,balance from Account where Customer_idCustomer = %d and Bank_idBank = %d;",user.getUUID(), bank.getBankID());
-            System.out.println(strSelect);
 
             ResultSet rset = stmt.executeQuery(strSelect);
             while (rset.next()){
@@ -272,6 +271,8 @@ public class DB_Util {
             stmt.setString(4, name);
             stmt.setDouble(5,bal);
             stmt.executeUpdate();
+
+            System.out.println(stmt);
         } catch (SQLException e) {
             e.printStackTrace();
         }
