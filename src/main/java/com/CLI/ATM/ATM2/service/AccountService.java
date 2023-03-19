@@ -150,12 +150,16 @@ public class AccountService {
      * name creates new account with pin
      */
 
-    public void deleteAccount(int idAcc){ //int cust_has_id_customer
+    public void SQL_deleteAccount(int idAcc){ //int cust_has_id_customer
         try{
-            String strSelect = "delete from account where idAccount = ?"; //Customer_idCustomer = ? AND
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
+            String strUpdate = "delete from Transaction where Account_idAccount = ?;"; //Customer_idCustomer = ? AND
+            PreparedStatement stmt = conn.prepareStatement(strUpdate);
             stmt.setInt(1, idAcc);
-            //stmt.setInt(2, cust_has_id_customer);
+            stmt.executeUpdate();
+
+            strUpdate = "delete from account where idAccount = ?;"; //Customer_idCustomer = ? AND
+            stmt = conn.prepareStatement(strUpdate);
+            stmt.setInt(1, idAcc);
             stmt.executeUpdate();
 
         } catch (SQLException e) {

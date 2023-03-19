@@ -123,11 +123,16 @@ public class UserService {
 
     /**
      * Allow user to change account name
-     * @param acctIdx get the acctId
+     * @param acctId get the acctId
      *
      */
-    public void deleteAccount(User user, int acctIdx) {
-        user.getAccounts().remove(acctIdx);
+    public void deleteAccount(User user, int acctId) {
+        for (int acc_index = 0; acc_index < user.getAccounts().size(); acc_index++){
+            if (user.getAccounts().get(acc_index).getAccountID() == acctId){
+                user.getAccounts().remove(acc_index);
+                break;
+            }
+        }
     }
 
 

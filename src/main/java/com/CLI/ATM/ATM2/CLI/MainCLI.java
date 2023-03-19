@@ -103,16 +103,16 @@ public class MainCLI {
             System.out.println("  3) Deposit");
             System.out.println("  4) Transfer");
             System.out.println("  5) Account Setting");
-            System.out.println("  9) Quit"); // TODO: password change/reset, settings
+            System.out.println("  6) Quit"); // TODO: password change/reset, settings
             System.out.println();
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
 
-            if (choice < 1 || choice > 9) {
+            if (choice < 1 || choice > 6) {
                 System.out.println("Invalid choice. Please choose 1-9.");
             }
 
-        } while (choice < 1 || choice > 9);
+        } while (choice < 1 || choice > 6);
 
         // process the choice
         switch (choice) {
@@ -206,11 +206,11 @@ public class MainCLI {
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
 
-            if (choice < 1 || choice > 6) {
-                System.out.println("Invalid choice. Please choose 1-9.");
+            if (choice < 1 || choice > 5) {
+                System.out.println("Invalid choice. Please choose 1-6.");
             }
 
-        } while (choice < 1 || choice > 6);
+        } while (choice < 1 || choice > 5);
 
         // process the choice
         switch (choice) {
@@ -391,19 +391,18 @@ public class MainCLI {
      * @param sc		the Scanner object used for user input
      */
     public void deleteAccount(User theUser, Scanner sc){
-        System.out.println("Enter account to delete: ");
-        sc.nextLine();
-        int usrChoice = sc.nextInt();
-        if(userService.getAcctBalance(theUser, usrChoice) > 0 ){
+        Account acc = accountService.getInternalTransferAccount(theUser, "delete", sc);
+        if(acc.getBalance() > 0 ){
             System.out.println("Please make sure that your balance is 0 before deleting! ");
         }
         else {
+            userService.deleteAccount(theUser, acc.getAccountID());
+            // Update deleted account on sql
+            accountService.SQL_deleteAccount(acc.getAccountID()); //theUser.getUUID()
             System.out.println("Account successfully deleted. ");
-            userService.deleteAccount(theUser, usrChoice);
+
         }
 
-        // Update deleted account on sql
-        accountService.deleteAccount(userService.getAcctUUID(theUser, usrChoice)); //theUser.getUUID()
 
 
     }

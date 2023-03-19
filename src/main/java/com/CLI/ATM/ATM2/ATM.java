@@ -39,7 +39,6 @@ public class ATM implements CommandLineRunner {
 	MainCLI mainCli;
 
 
-
 	@Override
 	public void run(String... args){
 		try {
@@ -58,7 +57,6 @@ public class ATM implements CommandLineRunner {
 		// init Scanner
 		Scanner sc = new Scanner(System.in);
 
-
 		User curUser;
 
 		// continue looping forever
@@ -71,7 +69,6 @@ public class ATM implements CommandLineRunner {
 			sc.nextLine();
 			Bank currentBank = bankList.get(userInput - 1);
 
-
 			// displaySignupPage
 			mainCli.displaySignUpMenuPage(currentBank);
 
@@ -82,7 +79,7 @@ public class ATM implements CommandLineRunner {
 			if (userInput == 1){
 				// stay in login prompt until successful login
 				curUser = mainCli.mainMenuPrompt(currentBank, sc);
-
+				System.out.printf("Login Successful.\nWelcome, %s!", curUser.getFirstName());
 				// stay in main menu until user quits
 				mainCli.printUserMenu(bankList, curUser, currentBank, sc);
 
@@ -104,13 +101,11 @@ public class ATM implements CommandLineRunner {
 				System.out.print("Enter pin: ");
 				String newPin = Util.hash(sc.nextLine()); //hash it immediately, so we don't store the password at all
 
-
 //              Creates a new user account based on user input
 				User newUser2 = bankService.addUserToBank(currentBank, fname, lname, newPin);
 				Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
 				userService.addAccountToUser(newUser2, newAccount2);
 				bankService.addAccountToBank(currentBank, newAccount2);
-
 
 				System.out.println("Account successfully created.");
 
@@ -121,14 +116,6 @@ public class ATM implements CommandLineRunner {
 			} else {
 				System.out.println("You have entered invalid number");
 			}
-
 		}
-
 	}
-
-
-
-
-
-
 }
