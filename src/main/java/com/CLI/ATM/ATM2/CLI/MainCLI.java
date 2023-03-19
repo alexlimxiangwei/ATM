@@ -109,7 +109,7 @@ public class MainCLI {
             choice = sc.nextInt();
 
             if (choice < 1 || choice > 6) {
-                System.out.println("Invalid choice. Please choose 1-9.");
+                System.out.println("Invalid choice. Please choose 1-6.");
             }
 
         } while (choice < 1 || choice > 6);
@@ -335,10 +335,13 @@ public class MainCLI {
             }
         }while(!is_validated);
         theUser.setPinHash(pin);
-        System.out.println("Password successfully changed.");
 
         // Update password on SQL
         userService.changePassword(pin,numOfAcc);
+        System.out.println("Password successfully changed.");
+
+
+
     }
 
     /**
@@ -354,11 +357,12 @@ public class MainCLI {
         sc.nextLine();
         String newName = sc.nextLine();
         userService.changeAccountName(theUser, usrChoice, newName);
-        System.out.println("Account name successfully changed. ");
 
         // Update account name changes on sql
-
         accountService.changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
+        System.out.println("Account name successfully changed. ");
+
+
     }
 
     /**
@@ -381,6 +385,7 @@ public class MainCLI {
 
         // Update add account on sql
         accountService.addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAcc, 0.00);
+        System.out.println("Account created successfully");
 
     }
 
