@@ -187,8 +187,8 @@ public class MainCLI {
         }
 
         //update balance on SQL for both accounts
-        accountService.SQL_updateBalance(-amount, fromAcct.getAccountID());
-        accountService.SQL_updateBalance(amount, toAcctID);
+        accountService.updateSQLBalance(-amount, fromAcct.getAccountID());
+        accountService.updateSQLBalance(amount, toAcctID);
     }
 
     public void showAccountSetting(User theUser, Scanner sc,Bank theBank) {
@@ -270,7 +270,7 @@ public class MainCLI {
 
         accountService.addBalance(fromAcct, amount);
         // update balance on SQL
-        accountService.SQL_updateBalance(fromAcct.getBalance(),fromAcct.getAccountID());
+        accountService.updateSQLBalance(fromAcct.getBalance(),fromAcct.getAccountID());
     }
 
     /**
@@ -335,10 +335,13 @@ public class MainCLI {
             }
         }while(!is_validated);
         theUser.setPinHash(pin);
-        System.out.println("Password successfully changed.");
 
         // Update password on SQL
         userService.changePassword(pin,numOfAcc);
+        System.out.println("Password successfully changed.");
+
+
+
     }
 
     /**
@@ -354,11 +357,12 @@ public class MainCLI {
         sc.nextLine();
         String newName = sc.nextLine();
         userService.changeAccountName(theUser, usrChoice, newName);
-        System.out.println("Account name successfully changed. ");
 
         // Update account name changes on sql
+        accountService.changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
+        System.out.println("Account name successfully changed. ");
 
-        accountService.SQL_changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
+
     }
 
     /**
@@ -368,15 +372,21 @@ public class MainCLI {
      * @param currentBank the bank that user is from
      */
     public void addAccount(User theUser, Scanner sc, Bank currentBank){
+        int numOfAcc = userService.numAccounts(theUser);
         System.out.print("Enter your new account name: ");
         sc.nextLine();
-        String newAccName = sc.nextLine();
+        String newAcc = sc.nextLine();
 
-        Account newAccount = accountService.createAccount(newAccName, theUser, 0.00);
-        theUser.getAccounts().add(newAccount);
+        ArrayList<Account> existingAcc = theUser.getAccounts();
+        int len = existingAcc.size();
+
+        Account newAccount = accountService.createAccountExistingId(len, newAcc, theUser, 0.00);
+        existingAcc.add(newAccount);
 
         // Update add account on sql
-        accountService.SQL_addAccount(newAccount.getAccountID(),theUser.getUuid() ,currentBank.getBankID(), newAccName, 0.00);
+        accountService.addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAcc, 0.00);
+        System.out.println("Account created successfully");
+
     }
 
 
