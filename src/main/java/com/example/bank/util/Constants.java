@@ -1,0 +1,10 @@
+package com.example.bank.util;
+
+import java.sql.Connection;
+
+public class Constants {
+    public static final int DEPOSIT = 1;
+    public static final int WITHDRAW = -1;
+
+    public static Connection conn;
+}

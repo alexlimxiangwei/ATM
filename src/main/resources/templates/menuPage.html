@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sidebar Example</title>
+  <style>
+		/* Style for sidebar */
+		.sidebar {
+			height: 100%;
+			width: 200px;
+			position: fixed;
+			z-index: 1;
+			top: 0;
+			left: 0;
+			background-color: #333;
+			overflow-x: hidden;
+			padding-top: 20px;
+		}
+		/* Style for sidebar links */
+		.sidebar a {
+			display: block;
+			color: white;
+			padding: 16px;
+			text-decoration: none;
+		}
+		/* Style for active link */
+		.sidebar a.active {
+			background-color: #4CAF50;
+			color: white;
+		}
+		/* Style for main content */
+		.content {
+			margin-left: 200px;
+			padding: 1px 16px;
+			height: 1000px;
+		}
+	</style>
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+  <a class="active" href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- Main content -->
+<div class="content">
+  <h1>Home</h1>
+  <p>Welcome to my website!</p>
+</div>
+
+<!-- Script to handle button clicks -->
+<script>
+		// Get the sidebar links
+		var sidebarLinks = document.getElementsByClassName("sidebar")[0].getElementsByTagName("a");
+
+		// Add click event listener to each link
+		for (var i = 0; i < sidebarLinks.length; i++) {
+			sidebarLinks[i].addEventListener("click", function() {
+				// Remove "active" class from all links
+				for (var j = 0; j < sidebarLinks.length; j++) {
+					sidebarLinks[j].classList.remove("active");
+				}
+
+				// Add "active" class to clicked link
+				this.classList.add("active");
+
+				// Get the content div
+				var contentDiv = document.getElementsByClassName("content")[0];
+
+				// Change the content based on the clicked link
+				if (this.getAttribute("href") == "#home") {
+					contentDiv.innerHTML = "<h1>Home</h1><p><table><tr><th>Name</th><th>Account ID</th><th>Balance</th></tr><tr><td>Saving</td><td>49</td><td>$0.00</td></tr><tr><td>Checking</td><td>54</td><td>$0.00</td></tr></table>";
+				} else if (this.getAttribute("href") == "#about") {
+					contentDiv.innerHTML = "<h1>About</h1><p>This is my website about me.</p>";
+				} else if (this.getAttribute("href") == "#contact") {
+					contentDiv.innerHTML = "<h1>Contact</h1><p>You can contact me at myemail@example.com.</p>";
+				}
+			});
+		}
+	</script>
+</body>
+</html>

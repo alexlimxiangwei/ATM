@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign In</title>
+  <style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+		}
+		form {
+			background-color: #ffffff;
+			border: 1px solid #cccccc;
+			padding: 20px;
+			width: 400px;
+			margin: auto;
+			margin-top: 50px;
+			border-radius: 10px;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type=text], input[type=password], select {
+			width: 100%;
+			padding: 12px 20px;
+			margin: 8px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+		button[type=submit] {
+			background-color: #4CAF50;
+			color: white;
+			padding: 14px 20px;
+			margin: 8px 0;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			width: 100%;
+		}
+		button[type=submit]:hover {
+			background-color: #45a049;
+		}
+		.signup {
+			display: block;
+			margin-top: 20px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<form>
+  <h1>Sign In</h1>
+  <label for="userid">User ID</label>
+  <input type="text" id="userid" name="userid" required>
+
+  <label for="pin">PIN</label>
+  <input type="password" id="pin" name="pin" required>
+
+  <label for="bank">Select a Bank</label>
+  <select id="bank" name="bank">
+    <option value="A">Bank A</option>
+    <option value="B">Bank B</option>
+    <option value="C">Bank C</option>
+  </select>
+
+  <button type="submit">Sign In</button>
+
+  <a href="http://localhost:8090/signup" class="signup">Don't have an account? Sign up</a>
+</form>
+</body>
+</html>
