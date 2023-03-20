@@ -18,11 +18,15 @@ public class User {
 
     private String lastName;
 
-    private int uuid;
+    private int customerID;
 
     private String pinHash;
 
     private ArrayList<Account> accounts;
+
+    private double local_transfer_limit;
+
+    private double overseas_transfer_limit;
 
 
 }

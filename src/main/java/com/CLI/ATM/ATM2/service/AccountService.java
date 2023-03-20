@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
-import static com.CLI.ATM.ATM2.Constants.conn;
+import static com.CLI.ATM.ATM2.Constants.*;
+
 
 @Component
 public class AccountService {
@@ -28,6 +28,7 @@ public class AccountService {
     UserCLI userCli;
 
     @Autowired
+    static
     BankService bankService;
 
 
@@ -174,14 +175,23 @@ public class AccountService {
     /**
      * Fetches all account balances and updates the balance of the accountId that user chooses
      * @param amount amount to set balance of account to
-     * @param AcctID ID of account to update balance of
+     * @param acctID ID of account to update balance of
      */
-    public void SQL_updateBalance(double amount, int AcctID) {
+    public void SQL_updateBalance(double amount, int acctID) {
         try {
-            String strSelect = "update account set balance = ? where idAccount = ?";
+            //first get current balance
+            double balance = 0;
+            String strSelect = String.format("select * from Account where idAccount = %d;", acctID);
             PreparedStatement stmt = conn.prepareStatement(strSelect);
-            stmt.setDouble(1, amount);
-            stmt.setInt(2, AcctID);
+            ResultSet rset = stmt.executeQuery(strSelect);
+            if (rset.next()){
+                balance = rset.getDouble("balance");
+            }
+            balance += amount;
+            String strUpdate = "update account set balance = ? where idAccount = ?";
+            stmt = conn.prepareStatement(strUpdate);
+            stmt.setDouble(1, balance);
+            stmt.setInt(2, acctID);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -230,7 +240,7 @@ public class AccountService {
 
         try {
             Statement stmt = conn.createStatement();
-            String strSelect = String.format("select idAccount,name,balance from Account where Customer_idCustomer = %d and Bank_idBank = %d;",user.getUuid(), bank.getBankID());
+            String strSelect = String.format("select idAccount,name,balance from Account where Customer_idCustomer = %d and Bank_idBank = %d;",user.getCustomerID(), bank.getBankID());
 
             ResultSet rset = stmt.executeQuery(strSelect);
             while (rset.next()){
@@ -257,7 +267,7 @@ public class AccountService {
      */
 
 
-    public Account getInternalTransferAccount(User theUser, String directionString, Scanner sc){
+    public Account getInternalTransferAccount(User theUser, String directionString){
         int fromAcctIndex;
         int printSumFlag = 0;
         int numOfAccounts = userService.numAccounts(theUser);
@@ -280,38 +290,33 @@ public class AccountService {
 
     /**
      * Gets an account by asking user for an account ID
-     * @param banks ArrayList of banks to loop through to look for an account
      * @return found accountId and found bankID, bankID is -1 if not in local memory
      */
-    public int[] getThirdPartyTransferAccount(ArrayList<Bank> banks, Scanner sc){
+    public int[] getThirdPartyTransferAccount(){
         //get accountID to transfer to
-        int toAcctIDInput;
         int toAcctID;
-        boolean accountExists = false;
-        int bankID = -1;
+        int bankID;
         do {
             System.out.println("Enter the account number of the account to " +
                     "transfer to: ");
             sc.nextLine();
-            toAcctIDInput = sc.nextInt();
-            //look in every bank to find the account
-            for (int i = 0; i < banks.size() ; i++) {
-                toAcctID = bankService.getAccountIndex(banks.get(i), toAcctIDInput);
-                if (toAcctID != -1){ // if account is found:
-                    accountExists = true;
-                    bankID = i;
-                    break;
-                }
-            }
+            toAcctID = sc.nextInt();
+            bankID = getBankIDFromAccountID(toAcctID);
 
-            // if account doesn't exist in local memory, as well as in sql database,
-            if (!accountExists && !userService.isAccount(toAcctIDInput)) {
+            // if account doesn't exist in local memory, but exists in sql database,
+            if (bankID == NOT_FOUND && UserService.isSQLAccount(toAcctID)) {
+                // add that user to local memory
+                userService.addExistingUser(toAcctID);
+                bankID = getBankIDFromAccountID(toAcctID);
+            }
+            else if (bankID == NOT_FOUND){
                 // invalid account
                 System.out.println("Invalid account. Please try again.");
+
             }
-        } while (!accountExists);
+        } while (bankID == NOT_FOUND);
         // get accountId and which bank it belongs to if it exists in local mem
-        return new int[] {toAcctIDInput, bankID};
+        return new int[] {toAcctID, bankID};
     }
 
     /**
@@ -319,7 +324,7 @@ public class AccountService {
      * @param limit the upper $ amount limit of transfer, or -1 for no limit
      * @return the amount the user inputted
      */
-    public double getTransferAmount(double limit, Scanner sc){
+    public double getTransferAmount(double limit){
         double amount;
         do {
             if (limit == -1){
@@ -355,5 +360,21 @@ public class AccountService {
             e.printStackTrace();
         }
         return max_id + 1;
+    }
+    /**
+     * Gets the bankID of the bank that an accountID belongs to.
+     * returns -1 if not found
+     */
+    public static int getBankIDFromAccountID(int accountIDInput){
+        int bankID = NOT_FOUND;
+        for (Bank bank : bankList) {
+            for (Account acc : bank.getAccounts()){
+                if (acc.getAccountID() == accountIDInput){
+                    bankID = bank.getBankID();
+                    break;
+                }
+            }
+        }
+        return bankID;
     }
 }

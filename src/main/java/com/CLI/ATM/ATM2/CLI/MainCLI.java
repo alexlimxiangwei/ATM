@@ -3,7 +3,6 @@ package com.CLI.ATM.ATM2.CLI;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
-import com.CLI.ATM.ATM2.model.Transaction;
 import com.CLI.ATM.ATM2.model.User;
 import com.CLI.ATM.ATM2.service.AccountService;
 import com.CLI.ATM.ATM2.service.BankService;
@@ -13,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import static com.CLI.ATM.ATM2.Constants.DEPOSIT;
-import static com.CLI.ATM.ATM2.Constants.WITHDRAW;
+import static com.CLI.ATM.ATM2.Constants.*;
 
 @Component
 public class MainCLI {
@@ -41,8 +38,12 @@ public class MainCLI {
 
     public void displayBankSelectionPage(ArrayList<Bank> bankList) {
         System.out.println("Please select the bank you would like to use");
-        for (int i = 0; i < bankList.size() ; i++){
-            System.out.printf("  %d) %s\n", i + 1, bankList.get(i).getName());
+        int bank_no = 1;
+        for (Bank bank : bankList) {
+            if (bank.isLocal()) {
+                System.out.printf("  %d) %s\n", bank_no, bank.getName());
+                bank_no++;
+            }
         }
         System.out.print("Enter choice: ");
 
@@ -58,7 +59,7 @@ public class MainCLI {
 
 
 
-    public User mainMenuPrompt(Bank theBank, Scanner sc) {
+    public User mainMenuPrompt(Bank theBank) {
 
         // inits
         // test
@@ -87,7 +88,7 @@ public class MainCLI {
         return authUser;
     }
 
-    public void printUserMenu(ArrayList<Bank> bankList, User theUser, Bank theBank, Scanner sc) {
+    public void printUserMenu(ArrayList<Bank> bankList, User theUser, Bank theBank){
 
         // print a summary of the user's accounts
         userCLI.printAccountsSummary(theUser);
@@ -102,8 +103,8 @@ public class MainCLI {
             System.out.println("  2) Withdraw");
             System.out.println("  3) Deposit");
             System.out.println("  4) Transfer");
-            System.out.println("  5) Account Setting");
-            System.out.println("  6) Quit"); // TODO: password change/reset, settings
+            System.out.println("  5) Account Setting"); // TODO: change transfer limits
+            System.out.println("  6) Quit");
             System.out.println();
             System.out.print("Enter choice: ");
             choice = sc.nextInt();
@@ -116,22 +117,22 @@ public class MainCLI {
 
         // process the choice
         switch (choice) {
-            case 1 -> showTransHistory(theUser, sc);
-            case 2 -> updateFunds(theUser, sc, WITHDRAW);
-            case 3 -> updateFunds(theUser, sc, DEPOSIT);
-            case 4 -> transferFunds(theUser,bankList, sc);
-            case 5 -> showAccountSetting(theUser, sc, theBank);
+            case 1 -> showTransHistory(theUser);
+            case 2 -> updateFunds(theUser, WITHDRAW);
+            case 3 -> updateFunds(theUser, DEPOSIT);
+            case 4 -> transferFunds(theUser,bankList);
+            case 5 -> showAccountSetting(theUser, theBank);
             case 6 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
         if (choice != 6) {
-            printUserMenu(bankList, theUser,theBank, sc);
+            printUserMenu(bankList, theUser,theBank);
         }
 
     }
 
-    public void transferFunds(User theUser, ArrayList<Bank> banks, Scanner sc) {
+    public void transferFunds(User theUser, ArrayList<Bank> banks) {
         Account fromAcct;
         Account toAcct = null;
         int toAcctID;
@@ -148,50 +149,53 @@ public class MainCLI {
 
         } while(choice < 0 || choice > 2);
         // get account to transfer from
-        fromAcct = accountService.getInternalTransferAccount(theUser, "transfer from", sc);
+        fromAcct = accountService.getInternalTransferAccount(theUser, "transfer from");
         transferLimit = fromAcct.getBalance();
 
         if (choice == 1){
             // get internal account to transfer to
-            toAcct = accountService.getInternalTransferAccount(theUser, "transfer to", sc);
+            toAcct = accountService.getInternalTransferAccount(theUser, "transfer to");
             toAcctID = toAcct.getAccountID();
         }
         else{
             //get third party account to transfer to
-            accountInfo = accountService.getThirdPartyTransferAccount(banks, sc);
+            accountInfo = accountService.getThirdPartyTransferAccount();
             toAcctID = accountInfo[0];
             int bankID = accountInfo[1];
-            if (bankID != -1){ // if account exists locally
-                toAcct = bankService.getAccountById(banks.get(bankID), toAcctID);
+
+            Bank toBank = banks.get(bankID);
+            toAcct = bankService.getAccountByID(toBank, toAcctID);
+            // TODO: change the below to get remaining transfer limits instead of just the limit
+            if (toBank.isLocal() & transferLimit > theUser.getLocal_transfer_limit()){
+                transferLimit = theUser.getLocal_transfer_limit(); // if its a local bank, apply limit for local transfer
             }
+            else if (transferLimit > theUser.getOverseas_transfer_limit()){
+                transferLimit =theUser.getOverseas_transfer_limit(); // else, apply limit for overseas transfer
+            }
+
         }
         // get amount to transfer
-        amount = accountService.getTransferAmount(transferLimit, sc);
+        amount = accountService.getTransferAmount(transferLimit);
 
         // get memo for transfer
+        sc.nextLine();
         System.out.println("Enter memo for this transaction: ");
         String memo = sc.nextLine();
 
         // add transaction and update balance of fromAcct
         accountService.addTransaction(fromAcct, -amount, toAcctID, memo);
         accountService.addBalance(fromAcct, -amount);
-
-        // if toAcct exists locally, add transaction locally + on sql, and update balance locally,
-        if (toAcct != null) {
-            accountService.addTransaction(toAcct,amount, fromAcct.getAccountID(), memo);
-            accountService.addBalance(toAcct, amount);
-        }
-        else{ // if toAcct doesn't exist locally, only add transaction only on sql
-            Transaction newTrans = transactionService.createTransaction(amount, toAcctID, fromAcct.getAccountID(), memo);
-            transactionService.addTransactionToSQL(newTrans);
-        }
-
-        //update balance on SQL for both accounts
         accountService.SQL_updateBalance(-amount, fromAcct.getAccountID());
+
+        // add transaction and update balance of toAcct
+        accountService.addTransaction(toAcct,amount, fromAcct.getAccountID(), memo);
+        accountService.addBalance(toAcct, amount);
         accountService.SQL_updateBalance(amount, toAcctID);
+
+        System.out.printf("$%f successfully transferred from %s to Account no: %d", amount, fromAcct.getName(), toAcctID);
     }
 
-    public void showAccountSetting(User theUser, Scanner sc,Bank theBank) {
+    public void showAccountSetting(User theUser,Bank theBank) {
         int choice;
 
         // user menu
@@ -214,25 +218,24 @@ public class MainCLI {
 
         // process the choice
         switch (choice) {
-            case 1 -> changePassword(theUser, theBank, sc);
-            case 2 -> addAccount(theUser, sc, theBank);
-            case 3 -> changeAccountName(theUser,sc);
-            case 4 -> deleteAccount(theUser,sc); // Not complete
+            case 1 -> changePassword(theUser, theBank);
+            case 2 -> addAccount(theUser, theBank);
+            case 3 -> changeAccountName(theUser);
+            case 4 -> deleteAccount(theUser); // Not complete
             case 5 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
         if (choice != 5) {
-            showAccountSetting(theUser,sc,theBank);
+            showAccountSetting(theUser,theBank);
         }
     }
 
     /**
      * Process a fund withdraw from an account.
      * @param theUser	the logged-in User object
-     * @param sc		the Scanner object used for user input
      */
-    public void updateFunds(User theUser, Scanner sc, int direction) {
+    public void updateFunds(User theUser, int direction) {
 
         Account fromAcct;
         double amount;
@@ -248,13 +251,17 @@ public class MainCLI {
             directionString = "transfer to";
         }
 
-        fromAcct = accountService.getInternalTransferAccount(theUser, directionString, sc);
+        fromAcct = accountService.getInternalTransferAccount(theUser, directionString);
         if (direction == WITHDRAW){ // if making a withdraw, set a limit
-            withdrawLimit = fromAcct.getBalance();
+            // set transfer limit to whichever is lower :  current account balance or local transfer limit
+            // TODO: change this to check current transfer limit left (e.g. i alr withdrew $500 of my $1000 limit means my current limit for today is $500)
+            if (theUser.getLocal_transfer_limit() < fromAcct.getBalance()){
+                withdrawLimit = theUser.getLocal_transfer_limit();
+            }
         }
 
         // get amount to transfer
-        amount = accountService.getTransferAmount(withdrawLimit, sc);
+        amount = accountService.getTransferAmount(withdrawLimit);
         // make amount negative if withdrawing (WITHDRAW is = -1 while DEPOSIT is = 1)
         amount = direction * amount;
         // gobble up rest of previous input
@@ -264,7 +271,7 @@ public class MainCLI {
         System.out.print("Enter a memo: ");
         memo = sc.nextLine();
 
-        // do the withdrawal
+        // do the transfer
         // receiverID is -1 when it's an internal transaction (deposit/withdrawal)
         accountService.addTransaction(fromAcct, amount, -1, memo);
 
@@ -276,9 +283,8 @@ public class MainCLI {
     /**
      * Show the transaction history for an account.
      * @param theUser	the logged-in User object
-     * @param sc		the Scanner object used for user input
      */
-    public void showTransHistory(User theUser, Scanner sc) {
+    public void showTransHistory(User theUser) {
 
         int theAcct;
 
@@ -307,7 +313,7 @@ public class MainCLI {
     }
 
     //change passwords
-    public void changePassword(User theUser, Bank bank, Scanner sc) {
+    public void changePassword(User theUser, Bank bank) {
         String pin;
         boolean is_validated;
 
@@ -336,7 +342,7 @@ public class MainCLI {
         theUser.setPinHash(Util.hash(pin));
 
         // Update password on SQL
-        userService.changePassword(pin,theUser.getUuid(), bank);
+        userService.changePassword(pin,theUser.getCustomerID(), bank);
         System.out.println("Password successfully changed.");
 
 
@@ -346,9 +352,8 @@ public class MainCLI {
     /**
      * Change user account name.
      * @param theUser	the logged-in User object
-     * @param sc		the Scanner object used for user input
      */
-    public void changeAccountName(User theUser, Scanner sc) {
+    public void changeAccountName(User theUser) {
         int numOfAcc = userService.numAccounts(theUser);
         System.out.print("Enter the accountNo which you would like to change the name: ");
         int usrChoice = sc.nextInt();
@@ -367,10 +372,9 @@ public class MainCLI {
     /**
      * Allows user to add a new account
      * @param theUser	the logged-in User object
-     * @param sc		the Scanner object used for user input
      * @param currentBank the bank that user is from
      */
-    public void addAccount(User theUser, Scanner sc, Bank currentBank){
+    public void addAccount(User theUser, Bank currentBank){
         int numOfAcc = userService.numAccounts(theUser);
         System.out.print("Enter your new account name: ");
         sc.nextLine();
@@ -389,10 +393,9 @@ public class MainCLI {
     /**
      * Allow user to delete an account only when balance is 0.00
      * @param theUser	the logged-in User object
-     * @param sc		the Scanner object used for user input
      */
-    public void deleteAccount(User theUser, Scanner sc){
-        Account acc = accountService.getInternalTransferAccount(theUser, "delete", sc);
+    public void deleteAccount(User theUser){
+        Account acc = accountService.getInternalTransferAccount(theUser, "delete");
         if(acc.getBalance() > 0 ){
             System.out.println("Please make sure that your balance is 0 before deleting! ");
         }
