@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
@@ -55,23 +55,23 @@
   </style>
 </head>
 <body>
-<form>
+<form method="post"  th:action="@{/handleSubmit}">
     <h1>Sign Up</h1>
     <label for="firstname">First Name:</label>
-    <input type="text" id="firstname" name="firstname" required>
+    <input type="text" id="firstName" name="firstName"  required>
     <label for="lastname">Last Name:</label>
-    <input type="text" id="lastname" name="lastname" required>
+    <input type="text" id="lastName" name="lastName"  required>
     <label for="pin">PIN:</label>
-    <input type="password" id="pin" name="pin" required>
-    <label for="bank">Select your bank:</label>
-    <select id="bank" name="bank" required>
+    <input type="password" id="pin" name="pin"  required>
+    <label for="bankId">Select your bank:</label>
+    <select id="bankId" name="bankId" required>
         <option value="">--Select a bank--</option>
-        <option value="A">Heng Banking</option>
-        <option value="B">Hong Banking</option>
-        <option value="C">Ong Banking</option>
+        <option value="0">Heng Banking</option>
+        <option value="1">Hong Banking</option>
+        <option value="2">Ong Banking</option>
     </select>
     <input type="submit" value="Sign Up">
 </form>
-<a href="signInPage.html">Already have an account? Sign in</a>
+<a href="http://localhost:8090">Already have an account? Sign in</a>
 </body>
 </html>

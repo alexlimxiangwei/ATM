@@ -5,20 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;Updated database schema file">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/UserInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/accounts.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/accounts.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/atm_model_updated.mwb" beforeDir="false" afterPath="$PROJECT_DIR$/db/atm_model_updated.mwb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/bank.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/bank.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/bank_has_customer.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/bank_has_customer.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/customers.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/customers.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/transactions.csv" beforeDir="false" afterPath="$PROJECT_DIR$/db/transactions.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/BankHome.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/WithdrawPage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/account_settings.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/change_password.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/settings.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,16 +58,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/alex/personal files/SIT/OOP - CSC1109/IntelliJ/ATM/db",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/alex/personal files/SIT/OOP - CSC1109/IntelliJ/ATM/db&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\db" />
@@ -76,8 +79,21 @@
   </component>
   <component name="RunManager">
     <configuration name="ATM" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="ATM" />
-      <module name="ATM" />
+      <option name="MAIN_CLASS_NAME" value="com.CLI.ATM.ATM2.ATM" />
+      <module name="bank" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="bank" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="bank" />
+      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
