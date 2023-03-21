@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import static com.CLI.ATM.ATM2.Constants.*;
 
@@ -325,25 +326,34 @@ public class AccountService {
      * @return the amount the user inputted
      */
     public double getTransferAmount(double limit){
+        String error;
         double amount;
         do {
-            if (limit == -1){
-                System.out.print("Enter the amount to transfer: $");
-            }
-            else{
-                System.out.printf("Enter the amount to transfer (max $%.02f): $",
-                        limit);
-            }
-            amount = sc.nextDouble();
-            if (amount < 0) {
-                System.out.println("Amount must be greater than zero.");
-            } else if (limit != -1 && amount > limit) { // check if transferring more than limit (-1 means no limit)
-                System.out.printf("Amount must not be greater than balance " +
-                        "of $%.02f.\n", limit);
-            }
-        } while (amount < 0 || (limit != -1 && amount > limit));
+            amount = readAmount(limit);
+            error = validateAmount(amount, limit);
+        } while (error != null);
         return amount;
     }
+
+    private String validateAmount(double amount, double limit) {
+        if (amount < 0) {
+            return "Amount must be greater than zero.";
+        }
+        if (limit != -1 && amount > limit) {
+            return String.format("Amount must not be greater than balance of $%.02f.", limit);
+        }
+        return null;
+    }
+
+    private double readAmount(double limit) {
+        if (limit == -1){
+            System.out.print("Enter the amount to transfer: $");
+        } else {
+            System.out.printf("Enter the amount to transfer (max $%.02f): $", limit);
+        }
+        return sc.nextDouble();
+    }
+
 
     /**
      * Gets the biggest transaction number from SQL server, and returns +1 of it

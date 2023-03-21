@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 
 import static com.CLI.ATM.ATM2.Constants.*;
+import java.util.*;
 
 @Component
 public class MainCLI {
@@ -235,7 +236,7 @@ public class MainCLI {
      * Process a fund withdraw from an account.
      * @param theUser	the logged-in User object
      */
-    public void updateFunds(User theUser, int direction) {
+    public void updateFunds(User theUser, int direction ) {
 
         Account fromAcct;
         double amount;
@@ -260,7 +261,10 @@ public class MainCLI {
             }
         }
 
+
         // get amount to transfer
+
+
         amount = accountService.getTransferAmount(withdrawLimit);
         // make amount negative if withdrawing (WITHDRAW is = -1 while DEPOSIT is = 1)
         amount = direction * amount;

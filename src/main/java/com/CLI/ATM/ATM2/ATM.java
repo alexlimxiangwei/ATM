@@ -42,7 +42,7 @@ public class ATM implements CommandLineRunner {
 		try {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-					"root", "password");
+					"root", "");
 			// The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
 		}
 		catch(SQLException ex) {
