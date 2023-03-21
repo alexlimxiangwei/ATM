@@ -320,22 +320,8 @@ public class AccountService {
         return new int[] {toAcctID, bankID};
     }
 
-    /**
-     * Gets amount to transfer from user, with an upper transfer limit
-     * @param limit the upper $ amount limit of transfer, or -1 for no limit
-     * @return the amount the user inputted
-     */
-    public double getTransferAmount(double limit){
-        String error;
-        double amount;
-        do {
-            amount = readAmount(limit);
-            error = validateAmount(amount, limit);
-        } while (error != null);
-        return amount;
-    }
 
-    private String validateAmount(double amount, double limit) {
+    public String validateAmount(double amount, double limit) { // TODO: convert the 2 ifs below to throw custom exceptions
         if (amount < 0) {
             return "Amount must be greater than zero.";
         }
@@ -343,15 +329,6 @@ public class AccountService {
             return String.format("Amount must not be greater than balance of $%.02f.", limit);
         }
         return null;
-    }
-
-    private double readAmount(double limit) {
-        if (limit == -1){
-            System.out.print("Enter the amount to transfer: $");
-        } else {
-            System.out.printf("Enter the amount to transfer (max $%.02f): $", limit);
-        }
-        return sc.nextDouble();
     }
 
 

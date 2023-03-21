@@ -1,5 +1,6 @@
 package com.CLI.ATM.ATM2.CLI;
 
+import com.CLI.ATM.ATM2.Strings;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 
 import static com.CLI.ATM.ATM2.Constants.*;
+import static com.CLI.ATM.ATM2.Strings.*;
+
 import java.util.*;
 
 @Component
@@ -47,7 +50,6 @@ public class MainCLI {
             }
         }
         System.out.print("Enter choice: ");
-
     }
 
     public void displaySignUpMenuPage(Bank currentBank) {
@@ -140,8 +142,8 @@ public class MainCLI {
         int[] accountInfo;
         double amount;
         double transferLimit;
-
         int choice;
+        String amountValidationString;
         do {
             System.out.println("Enter a choice below: ");
             System.out.println("1) Inter-account transfer");
@@ -175,9 +177,17 @@ public class MainCLI {
             }
 
         }
-        // get amount to transfer
-        amount = accountService.getTransferAmount(transferLimit);
-
+        do {
+            // get amount to transfer
+            Strings.print_AskAmount(transferLimit);
+            amount = sc.nextDouble();
+            // check if amount is > 0 and < limit
+            amountValidationString = accountService.validateAmount(amount, transferLimit);
+            // if invalid amount, print the error message
+            if (amountValidationString != null){
+                System.out.println(amountValidationString);
+            }
+        }while (amountValidationString != null);
         // get memo for transfer
         sc.nextLine();
         System.out.println("Enter memo for this transaction: ");
@@ -193,7 +203,7 @@ public class MainCLI {
         accountService.addBalance(toAcct, amount);
         accountService.SQL_updateBalance(amount, toAcctID);
 
-        System.out.printf("$%f successfully transferred from %s to Account no: %d", amount, fromAcct.getName(), toAcctID);
+        System.out.printf("$%.02f successfully transferred from %s to Account no: %d", amount, fromAcct.getName(), toAcctID);
     }
 
     public void showAccountSetting(User theUser,Bank theBank) {
@@ -201,18 +211,11 @@ public class MainCLI {
 
         // user menu
         do {
-            System.out.println("Account Setting");
-            System.out.println("  1) Change Password");
-            System.out.println("  2) Create Account");
-            System.out.println("  3) Change Account Type");
-            System.out.println("  4) Delete Account");
-            System.out.println("  5) Back");
-            System.out.println();
-            System.out.print("Enter choice: ");
+            print_AccountSettings();
             choice = sc.nextInt();
 
             if (choice < 1 || choice > 5) {
-                System.out.println("Invalid choice. Please choose 1-6.");
+                System.out.println("Invalid choice. Please choose 1-5.");
             }
 
         } while (choice < 1 || choice > 5);
@@ -243,6 +246,7 @@ public class MainCLI {
         double withdrawLimit = -1;
         String memo;
         String directionString;
+        String amountValidationString;
 
         // get account to withdraw from
         if (direction == WITHDRAW) {
@@ -262,10 +266,18 @@ public class MainCLI {
         }
 
 
-        // get amount to transfer
+        do {
+            // get amount to transfer
+            Strings.print_AskAmount(withdrawLimit);
+            amount = sc.nextDouble();
+            // check if amount is > 0 and < limit
+            amountValidationString = accountService.validateAmount(amount, withdrawLimit);
+            // if invalid amount, print the error message
+            if (amountValidationString != null){
+                System.out.println(amountValidationString);
+            }
+        }while (amountValidationString != null); // while invalid amount
 
-
-        amount = accountService.getTransferAmount(withdrawLimit);
         // make amount negative if withdrawing (WITHDRAW is = -1 while DEPOSIT is = 1)
         amount = direction * amount;
         // gobble up rest of previous input
@@ -276,8 +288,8 @@ public class MainCLI {
         memo = sc.nextLine();
 
         // do the transfer
-        // receiverID is -1 when it's an internal transaction (deposit/withdrawal)
-        accountService.addTransaction(fromAcct, amount, -1, memo);
+        // receiverID is -1 (TRANSACTION_TO_SELF) when it's an internal transaction (deposit/withdrawal)
+        accountService.addTransaction(fromAcct, amount, TRANSACTION_TO_SELF, memo);
 
         accountService.addBalance(fromAcct, amount);
         // update balance on SQL

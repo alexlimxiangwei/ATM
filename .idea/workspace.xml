@@ -5,23 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;Updated database schema file">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/model/UserInput.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/BankHome.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/WithdrawPage.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/account_settings.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/change_password.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/settings.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,24 +64,14 @@
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\.idea" />
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\src" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.CLI.ATM.ATM2" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="ATM" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="com.CLI.ATM.ATM2.ATM" />
-      <module name="bank" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="bank" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="bank" />
-      <option name="filePath" />
+      <option name="MAIN_CLASS_NAME" value="ATM" />
+      <module name="ATM" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -295,18 +273,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java</url>
-          <line>165</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java</url>
-          <line>318</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java</url>
-          <line>373</line>
+          <line>360</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
