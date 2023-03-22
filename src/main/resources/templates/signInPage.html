@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <title>Sign In</title>
   <style>
@@ -50,7 +50,7 @@
 	</style>
 </head>
 <body>
-<form>
+<form method="post"  th:action="@{/signInSubmit}">
   <h1>Sign In</h1>
   <label for="userid">User ID</label>
   <input type="text" id="userid" name="userid" required>
@@ -59,10 +59,10 @@
   <input type="password" id="pin" name="pin" required>
 
   <label for="bank">Select a Bank</label>
-  <select id="bank" name="bank">
-    <option value="A">Bank A</option>
-    <option value="B">Bank B</option>
-    <option value="C">Bank C</option>
+  <select id="bank" name="bank" required>
+    <option value="" disabled selected hidden> Choose Your Bank</option>
+    <option value="0">Heng Bank</option>
+    <option value="1">Hong Bank</option>
   </select>
 
   <button type="submit">Sign In</button>
