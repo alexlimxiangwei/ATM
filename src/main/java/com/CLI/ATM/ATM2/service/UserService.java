@@ -23,8 +23,7 @@ import static com.CLI.ATM.ATM2.Constants.*;
 public class UserService {
 
     @Autowired
-    BankService bankService;
-
+    SQLService SQLService;
 
     @Autowired
     AccountCLI accountCLI;
@@ -37,7 +36,7 @@ public class UserService {
     }
 
     public User createNewUser(String firstName, String lastName, String pin, double local_transfer_limit, double overseas_transfer_limit) {
-       var uuid = generateNewCustomerID();
+       var uuid = SQLService.generateNewCustomerID();
         ArrayList<Account> accounts = new ArrayList<>();
         var user = new User(firstName, lastName, uuid, pin, accounts, local_transfer_limit, overseas_transfer_limit);
 
@@ -126,153 +125,6 @@ public class UserService {
         }
     }
 
-
-    /**
-     * Add new user to sql database
-     * @param uuid creates new account with uuid
-     * @param fname creates new account with fname
-     * @param lname creates new account with lname
-     * @param pin creates new account with pin
-     */
-
-    public void addNewUser(int uuid, String fname, String lname, String pin, Bank bank) {
-        try {
-            String strUpdate = "insert into customer values(?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(strUpdate);
-            stmt.setInt(1, uuid);
-            stmt.setString(2, fname);
-            stmt.setString(3, lname);
-            stmt.setString(4, pin);
-            stmt.executeUpdate();
-
-            strUpdate = String.format("insert into Bank_has_Customer values (%d, %d %s);",bank.getBankID(),uuid, pin);
-            stmt = conn.prepareStatement(strUpdate);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Changes users password
-     * @param pin pin of account to update to
-     * @param uuid uuid of account to update to
-     */
-    public void changePassword(String pin , int uuid, Bank bank){
-        try {
-
-            String hashedPassword = Util.hash(pin);
-            String strSelect = "update Bank_Has_Customer set hashedPin = ? where Customer_idCustomer = ? and Bank_idBank = ?";
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
-            stmt.setString(1,hashedPassword);
-            stmt.setInt(2, uuid );
-            stmt.setInt(3, bank.getBankID());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Searches SQL database for a particular account using its id
-     * @param idAccount account ID to search for
-     * @return true if Account exists, false otherwise
-     */
-    public static boolean isSQLAccount(int idAccount){
-        try {
-            Statement stmt = conn.createStatement();
-
-            String strSelect = "select * from Account where idAccount = " + idAccount;
-            ResultSet rset = stmt.executeQuery(strSelect);
-
-            if (rset.next()) {   // if there is a next row, the account exists
-                return true;
-            }
-        }
-        catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-        return false;
-    }
-    /**
-     * Searches SQL database for a particular User based on only account ID
-     * adds found user and all of its accounts and transactions to bank
-     * @param idAccount adds User based on only account ID
-     * @return found User object or null
-     */
-    public User addExistingUser(int idAccount){
-        User user = null;
-        try {
-            Statement stmt = conn.createStatement();
-
-            String strSelect = "select * from Account where idAccount = " + idAccount;
-            ResultSet resultSet = stmt.executeQuery(strSelect);
-
-            if (resultSet.next()) {   // if there is a next row, the account exists
-                    int idBank = resultSet.getInt("Bank_idBank");
-                    int idCustomer = resultSet.getInt("Customer_idCustomer");
-                user = addExistingUser(BankService.getBankFromID(bankList, idBank), idCustomer);
-            }
-
-        }
-        catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-        return user;
-    }
-    /**
-     * Searches SQL database for a particular customerID and bank
-     * also adds found user and all of its accounts and transactions to bank
-     * @param bank bank to search from
-     * @param idCustomer customer ID to search for
-     * @return found User object or null
-     */
-    public User addExistingUser(Bank bank, int idCustomer){
-        User user = null;
-        String firstName = null;
-        String lastName = null;
-        try {
-//         Step 2: Construct a 'Statement' object called 'stmt' inside the Connection created
-            Statement stmt = conn.createStatement();
-            String strSelect = "select * from customer where idCustomer = " + idCustomer;
-            ResultSet resultSet = stmt.executeQuery(strSelect);
-
-            if (resultSet.next()) {   // Repeatedly process each row
-                firstName = resultSet.getString("firstName");  // retrieve a 'double'-cell in the row
-                lastName= resultSet.getString("lastName");
-            }
-            strSelect = String.format("select * from Bank_Has_Customer where Customer_idCustomer = %s and Bank_idBank = %s ", idCustomer, bank.getBankID());
-            resultSet = stmt.executeQuery(strSelect);
-            if (resultSet.next()) {
-                String hashedPin = resultSet.getString("hashedPin");
-                double local_transfer_limit = resultSet.getDouble("local_transfer_limit");
-                double overseas_transfer_limit = resultSet.getDouble("overseas_transfer_limit");
-                user = bankService.addExistingUserToBank(bank, idCustomer, firstName,lastName, hashedPin, local_transfer_limit, overseas_transfer_limit);
-
-            }
-
-        }
-        catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-        return user;
-    }
-    /**
-     * Gets the biggest User id from SQL server, and returns +1 of it
-     */
-    public int generateNewCustomerID(){
-        int max_id = 0;
-        try {
-            String strSelect = "select idCustomer from Customer order by idACustomer desc limit 1;";
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
-            ResultSet rset = stmt.executeQuery(strSelect);
-            rset.next();
-            max_id = rset.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return max_id + 1;
-    }
 
 
 }

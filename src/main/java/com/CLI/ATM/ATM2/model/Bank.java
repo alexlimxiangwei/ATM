@@ -14,7 +14,6 @@ import java.util.ArrayList;
 @Setter
 @NoArgsConstructor
 public class Bank {
-
     private int bankID;
 
     private String name;
@@ -22,7 +21,6 @@ public class Bank {
     private boolean local;
 
     private ArrayList<User> users;
-
 
     private ArrayList<Account> accounts;
 

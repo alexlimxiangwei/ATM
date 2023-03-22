@@ -5,10 +5,7 @@ import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
-import com.CLI.ATM.ATM2.service.AccountService;
-import com.CLI.ATM.ATM2.service.BankService;
-import com.CLI.ATM.ATM2.service.TransactionService;
-import com.CLI.ATM.ATM2.service.UserService;
+import com.CLI.ATM.ATM2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +13,6 @@ import java.util.ArrayList;
 
 import static com.CLI.ATM.ATM2.Constants.*;
 import static com.CLI.ATM.ATM2.Strings.*;
-
-import java.util.*;
 
 @Component
 public class MainCLI {
@@ -33,6 +28,8 @@ public class MainCLI {
 
     @Autowired
     BankService bankService;
+    @Autowired
+    SQLService SQLService;
 
     @Autowired
     TransactionService transactionService;
@@ -196,12 +193,12 @@ public class MainCLI {
         // add transaction and update balance of fromAcct
         accountService.addTransaction(fromAcct, -amount, toAcctID, memo);
         accountService.addBalance(fromAcct, -amount);
-        accountService.SQL_updateBalance(-amount, fromAcct.getAccountID());
+        SQLService.updateBalance(-amount, fromAcct.getAccountID());
 
         // add transaction and update balance of toAcct
         accountService.addTransaction(toAcct,amount, fromAcct.getAccountID(), memo);
         accountService.addBalance(toAcct, amount);
-        accountService.SQL_updateBalance(amount, toAcctID);
+        SQLService.updateBalance(amount, toAcctID);
 
         System.out.printf("$%.02f successfully transferred from %s to Account no: %d", amount, fromAcct.getName(), toAcctID);
     }
@@ -293,7 +290,7 @@ public class MainCLI {
 
         accountService.addBalance(fromAcct, amount);
         // update balance on SQL
-        accountService.SQL_updateBalance(fromAcct.getBalance(),fromAcct.getAccountID());
+        SQLService.updateBalance(fromAcct.getBalance(),fromAcct.getAccountID());
     }
 
     /**
@@ -358,11 +355,8 @@ public class MainCLI {
         theUser.setPinHash(Util.hash(pin));
 
         // Update password on SQL
-        userService.changePassword(pin,theUser.getCustomerID(), bank);
+        SQLService.changePassword(pin,theUser.getCustomerID(), bank);
         System.out.println("Password successfully changed.");
-
-
-
     }
 
     /**
@@ -379,10 +373,8 @@ public class MainCLI {
         userService.changeAccountName(theUser, usrChoice, newName);
 
         // Update account name changes on sql
-        accountService.SQL_changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
+        SQLService.changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
         System.out.println("Account name successfully changed. ");
-
-
     }
 
     /**
@@ -400,7 +392,7 @@ public class MainCLI {
         theUser.getAccounts().add(newAccount);
 
         // Update add account on sql
-        accountService.SQL_addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAccName, 0.00);
+        SQLService.addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAccName, 0.00);
         System.out.printf("New account '%s' created successfully!\n", newAccName);
 
     }
@@ -418,7 +410,7 @@ public class MainCLI {
         else {
             userService.deleteAccount(theUser, acc.getAccountID());
             // Update deleted account on sql
-            accountService.SQL_deleteAccount(acc.getAccountID()); //theUser.getUUID()
+            SQLService.deleteAccount(acc.getAccountID()); //theUser.getUUID()
             System.out.println("Account successfully deleted. ");
 
         }

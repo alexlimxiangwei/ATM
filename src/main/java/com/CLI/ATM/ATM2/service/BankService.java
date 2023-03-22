@@ -7,12 +7,7 @@ import com.CLI.ATM.ATM2.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-
-import static com.CLI.ATM.ATM2.Constants.conn;
 
 @Component
 public class BankService {
@@ -22,6 +17,8 @@ public class BankService {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    SQLService SQLService;
 
 
     public Bank createNewBank(int bankID, String name, boolean local) {
@@ -61,7 +58,7 @@ public class BankService {
         bank.getUsers().add(existingUser);
 
         //fetches all accounts and transactions belonging to user from sql
-        accountService.addAccountsToUser(existingUser, bank);
+        SQLService.addAccountsToUser(existingUser, bank);
         // adds all users accounts to banks list of accounts
         bank.getAccounts().addAll(existingUser.getAccounts());
 
@@ -103,13 +100,12 @@ public class BankService {
         }
         //If userId isn't found locally, search sql database
 //        System.out.println("User not found locally, attempting to fetch user from database...");
-        User u = userService.addExistingUser(bank, userID);
+        User u = SQLService.addExistingUserByCustomerID(bank, userID);
         if (u != null && u.getCustomerID() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) {
             return u;
         }
         // if we haven't found the user or have an incorrect pin, return null
         return null;
-
     }
 
     public Account getAccountByID(Bank bank, int accountID){
@@ -119,35 +115,9 @@ public class BankService {
             }
         }
         return null;
-
     }
 
-
-    public  ArrayList<Bank> fetchBanks(){
-        ArrayList<Bank> banks = new ArrayList<>();
-
-        try {
-            Statement stmt = conn.createStatement();
-
-            String strSelect = "select * from bank";
-
-            ResultSet resultSet = stmt.executeQuery(strSelect);
-
-            while (resultSet.next()) {   // Repeatedly process each row
-                int idBank = resultSet.getInt("idBank");  // retrieve a 'String'-cell in the row
-                String name = resultSet.getString("name");  // retrieve a 'double'-cell in the row
-                boolean local = resultSet.getBoolean("local");       // retrieve a 'int'-cell in the row
-                Bank newBank = createNewBank(idBank, name, local);
-                banks.add(newBank);
-            }
-
-        }
-        catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-        return banks;
-    }
-    public static Bank getBankFromID(ArrayList<Bank> banks, int bankID){
+    public Bank getBankFromID(ArrayList<Bank> banks, int bankID){
         for (Bank bank: banks){
             if (bank.getBankID() == bankID){
                 return bank;

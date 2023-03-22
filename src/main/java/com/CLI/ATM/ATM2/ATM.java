@@ -6,6 +6,7 @@ import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
 import com.CLI.ATM.ATM2.service.AccountService;
 import com.CLI.ATM.ATM2.service.BankService;
+import com.CLI.ATM.ATM2.service.SQLService;
 import com.CLI.ATM.ATM2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -32,6 +33,8 @@ public class ATM implements CommandLineRunner {
 
 	@Autowired
 	AccountService accountService;
+	@Autowired
+	SQLService SQLService;
 
 	@Autowired
 	MainCLI mainCli;
@@ -49,7 +52,7 @@ public class ATM implements CommandLineRunner {
 			ex.printStackTrace();
 			System.exit(1);
 		}
-		bankList = bankService.fetchBanks(); // gets all banks from database and stores it in an array
+		bankList = SQLService.fetchBanks(); // gets all banks from database and stores it in an array
 
 		User curUser;
 
@@ -105,8 +108,8 @@ public class ATM implements CommandLineRunner {
 				System.out.println("Account successfully created.");
 
 				// Add new user to SQL
-				userService.addNewUser(newUser2.getCustomerID(),fname,lname,newPin,currentBank);
-				accountService.SQL_addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+				SQLService.addNewUser(newUser2.getCustomerID(),fname,lname,newPin,currentBank);
+				SQLService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
 
 			} else {
 				System.out.println("You have entered invalid number");
