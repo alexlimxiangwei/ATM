@@ -66,8 +66,10 @@ public class ATM implements CommandLineRunner {
 			sc.nextLine();
 			Bank currentBank = bankList.get(userInput - 1);
 
+
+
 			// displaySignupPage
-			mainCli.displaySignUpMenuPage(currentBank);
+			Strings.displaySignUpMenuPage(currentBank);
 
 			// stay in login prompt until successful login
 			userInput = sc.nextInt();

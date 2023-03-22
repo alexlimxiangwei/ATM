@@ -1,8 +1,47 @@
 package com.CLI.ATM.ATM2;
 
-import static com.CLI.ATM.ATM2.Constants.sc;
+
+import com.CLI.ATM.ATM2.CLI.UserCLI;
+import com.CLI.ATM.ATM2.model.Bank;
+import com.CLI.ATM.ATM2.model.User;
+import com.CLI.ATM.ATM2.*;
+
+import java.util.ArrayList;
+
+import static com.CLI.ATM.ATM2.Constants.*;
+
 
 public class Strings {
+
+    public static int displayUserMenu(){
+        int choice;
+        do {
+            System.out.println("What would you like to do?");
+            System.out.println("  1) Show account transaction history");
+            System.out.println("  2) Withdraw");
+            System.out.println("  3) Deposit");
+            System.out.println("  4) Transfer");
+            System.out.println("  5) Account Setting"); // TODO: change transfer limits
+            System.out.println("  6) Quit");
+            System.out.println();
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            if (choice < 1 || choice > 6) {
+                System.out.println("Invalid choice. Please choose 1-6.");
+            }
+        } while (choice < 1 || choice > 6);
+
+        return choice;
+    }
+
+    public static void displaySignUpMenuPage(Bank currentBank) {
+        System.out.printf("\nWelcome to %s !\n", currentBank.getName());
+        System.out.println("What would you like to do?");
+        System.out.println("  1) Log In");
+        System.out.println("  2) Sign Up");
+        System.out.print("Enter choice: ");
+    }
 
     public static void print_AskAmount(double limit) {
         if (limit == -1){
