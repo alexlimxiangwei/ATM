@@ -7,7 +7,6 @@
     <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;Updated database schema file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" afterDir="false" />
     </list>
@@ -271,11 +270,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java</url>
-          <line>165</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java</url>
           <line>318</line>

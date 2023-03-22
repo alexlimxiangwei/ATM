@@ -1,21 +1,24 @@
 package com.CLI.ATM.ATM2.controller;
 import com.CLI.ATM.ATM2.CLI.AccountCLI;
 import com.CLI.ATM.ATM2.CLI.MainCLI;
+import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.*;
 import com.CLI.ATM.ATM2.Constants;
+import com.CLI.ATM.ATM2.service.AccountService;
 import com.CLI.ATM.ATM2.service.BankService;
 import com.CLI.ATM.ATM2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sound.midi.SysexMessage;
 
-import static com.CLI.ATM.ATM2.Constants.bankList;
-import static com.CLI.ATM.ATM2.Constants.sc;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.CLI.ATM.ATM2.Constants.*;
+import static com.CLI.ATM.ATM2.Constants.DEFAULT_OVERSEAS_TRANSFER_LIMIT;
 
 @Controller
 public class userController {
@@ -26,38 +29,101 @@ public class userController {
     @Autowired
     BankService bankService;
 
+    @Autowired
+    AccountService accountService;
+
     //signIn page
     @GetMapping("/")
     public String getSignInPage(Model model) {
         return "signInPage";
     }
-
-    @PostMapping("/signInSubmit")
-    public String getSignInDetails(@RequestParam("userid") int userid,
-                                   @RequestParam("pin") String pin,
-                                   @RequestParam("bank") int bank){
-        System.out.println(userid);
-        System.out.println(pin);
-        System.out.println(bank);
-
-        
-
-        return "menuPage";
-    }
-
-    @PostMapping("/signUpSubmit")
-    public String submitUser(UserInput userInput, UserService user, User userModel) {
-        System.out.println(userInput.getFirstName());
-        System.out.println(userInput.getLastName());
-        System.out.println(userInput.getPin());
-        System.out.println(userInput.getBankId());
-
-        return "signInPage";
-    }
-
-    @GetMapping("/signup")
+    @GetMapping("/signupPage")
     public String getSignUpPage() {
         return "signUpPage";
     }
 
+    @RequestMapping(value = "/signInPage", method = RequestMethod.GET)
+    public String populateList(Model model) {
+        List<Bank> bankListing = bankService.fetchBanks();
+        for (int i = 0; i < bankListing.size(); i++){
+            if (!bankListing.get(i).isLocal()){
+                bankListing.remove(i);
+            }
+        }
+        model.addAttribute("bankListing", bankListing);
+        return "signInPage.html";
+    }
+
+    @PostMapping("/signInPage")
+    public String getSignInDetails(@RequestParam("userid") int userid,
+                                   @RequestParam("pin") String pin,
+                                   @RequestParam("bankDropdown") int bankid,
+                                   Model model){
+
+        populateList(model);
+        Bank bankObj = BankService.getBankFromID(bankList, bankid);
+
+        assert bankObj != null;
+        User authUser = bankService.userLogin(bankObj, userid, pin);
+
+        // print html authentication for userLogin
+        String message = "No message here";
+        if (authUser == null){
+            message = "Wrong Login Credentials";
+            model.addAttribute("message", message);
+        }else{
+            return "menuPage";
+        }
+
+        return "signInPage";
+    }
+
+    @PostMapping("/signUpPage")
+    public String submitUser(@RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("pin") String pin,
+                             @RequestParam("bankDropdown") int bankid,
+                             Model model) {
+
+        System.out.println(firstName);
+        System.out.println(lastName);
+        System.out.println(pin);
+        System.out.println(bankid);
+
+        User newuser = new User();
+        newuser.setFirstName(firstName);
+        newuser.setLastName(lastName);
+        String newPin = Util.hash(pin);
+        Bank currentBank = bankList.get(bankid);
+
+//        // Creates a new user account based on user input
+//        User newUser2 = bankService.addUserToBank(currentBank, firstName, lastName, newPin,
+//                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
+//        Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
+//        userService.addAccountToUser(newUser2, newAccount2);
+//        bankService.addAccountToBank(currentBank, newAccount2);
+//
+//        System.out.println("Account successfully created.");
+//
+//        // Add new user to SQL
+//        userService.addNewUser(newUser2.getCustomerID(),firstName,lastName,newPin,currentBank);
+//        accountService.SQL_addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+//
+//        System.out.println(newAccount2.getAccountID());
+//        System.out.println(currentBank.getBankID());
+
+        return "signInPage";
+    }
+
+    @RequestMapping(value = "/signUpPage", method = RequestMethod.GET)
+    public String populateList2(Model model) {
+        List<Bank> bankListing = bankService.fetchBanks();
+        for (int i = 0; i < bankListing.size(); i++){
+            if (!bankListing.get(i).isLocal()){
+                bankListing.remove(i);
+            }
+        }
+        model.addAttribute("bankListing", bankListing);
+        return "signUpPage.html";
+    }
 }
