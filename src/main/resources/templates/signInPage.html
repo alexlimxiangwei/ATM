@@ -64,7 +64,7 @@
 <form method="post"  th:action="@{/signInPage}">
   <h1>Sign In</h1>
   <label for="userid">User ID:</label>
-  <input type="text" id="userid" name="userid" pattern="[0-9]" title="User ID Format is only numeric [0-9]"required>
+  <input type="text" id="userid" name="userid" pattern="[0-9]+" title="User ID Format is only numeric [0-9]"required>
 
   <label for="pin">PIN:</label>
   <input type="password" id="pin" name="pin" required>
