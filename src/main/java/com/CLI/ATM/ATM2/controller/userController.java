@@ -1,16 +1,20 @@
 package com.CLI.ATM.ATM2.controller;
-import com.CLI.ATM.ATM2.CLI.AccountCLI;
-import com.CLI.ATM.ATM2.model.Account;
-import com.CLI.ATM.ATM2.model.Transaction;
+
+import com.CLI.ATM.ATM2.Util;
+import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
-import com.CLI.ATM.ATM2.model.UserInput;
+import com.CLI.ATM.ATM2.service.AccountService;
 import com.CLI.ATM.ATM2.service.BankService;
 import com.CLI.ATM.ATM2.service.UserService;
+import com.CLI.ATM.ATM2.service.SQLService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.CLI.ATM.ATM2.Constants.bankList;
 
 @Controller
 public class userController {
@@ -21,37 +25,25 @@ public class userController {
     @Autowired
     BankService bankService;
 
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    SQLService sqlService;
+
     //signIn page
     @GetMapping("/")
     public String getSignInPage(Model model) {
-        model.addAttribute("userInput", new UserInput());
         return "signInPage";
     }
-
-    @PostMapping("/handleSubmit")
-    public String submitUser(UserInput userInput, Account account, AccountCLI accountCLI) {
-        System.out.println(userInput.getFirstName());
-        System.out.println(userInput.getLastName());
-        System.out.println(userInput.getPin());
-        System.out.println(userInput.getBankId());
-
-        System.out.println(account.getName());
-        System.out.println(account.getAccountID());
-        System.out.println(account.getBalance());
-
-        return "menuPage";
-    }
-
-    @GetMapping("/signup")
+    @GetMapping("/signupPage")
     public String getSignUpPage() {
         return "signUpPage";
     }
 
-<<<<<<< Updated upstream
-=======
     @RequestMapping(value = "/signInPage", method = RequestMethod.GET)
     public String populateList(Model model) {
-        List<Bank> bankListing = bankService.fetchBanks();
+        List<Bank> bankListing = sqlService.fetchBanks();
         for (int i = 0; i < bankListing.size(); i++){
             if (!bankListing.get(i).isLocal()){
                 bankListing.remove(i);
@@ -68,7 +60,7 @@ public class userController {
                                    Model model){
 
         populateList(model);
-        Bank bankObj = BankService.getBankFromID(bankList, bankid);
+        Bank bankObj = bankService.getBankFromID(bankList, bankid);
 
         assert bankObj != null;
         User authUser = bankService.userLogin(bankObj, userid, pin);
@@ -103,28 +95,28 @@ public class userController {
         String newPin = Util.hash(pin);
         Bank currentBank = bankList.get(bankid);
 
-        // Creates a new user account based on user input
-        User newUser2 = bankService.addUserToBank(currentBank, firstName, lastName, newPin,
-                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
-        userService.addAccountToUser(newUser2, newAccount2);
-        bankService.addAccountToBank(currentBank, newAccount2);
-
-        System.out.println("Account successfully created.");
-
-        // Add new user to SQL
-        userService.addNewUser(newUser2.getCustomerID(),firstName,lastName,newPin,currentBank);
-        accountService.SQL_addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
-
-        System.out.println(newAccount2.getAccountID());
-        System.out.println(currentBank.getBankID());
+//        // Creates a new user account based on user input
+//        User newUser2 = bankService.addUserToBank(currentBank, firstName, lastName, newPin,
+//                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
+//        Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
+//        userService.addAccountToUser(newUser2, newAccount2);
+//        bankService.addAccountToBank(currentBank, newAccount2);
+//
+//        System.out.println("Account successfully created.");
+//
+//        // Add new user to SQL
+//        userService.addNewUser(newUser2.getCustomerID(),firstName,lastName,newPin,currentBank);
+//        accountService.SQL_addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+//
+//        System.out.println(newAccount2.getAccountID());
+//        System.out.println(currentBank.getBankID());
 
         return "signInPage";
     }
 
     @RequestMapping(value = "/signUpPage", method = RequestMethod.GET)
     public String populateList2(Model model) {
-        List<Bank> bankListing = bankService.fetchBanks();
+        List<Bank> bankListing = sqlService.fetchBanks();
         for (int i = 0; i < bankListing.size(); i++){
             if (!bankListing.get(i).isLocal()){
                 bankListing.remove(i);
@@ -133,5 +125,4 @@ public class userController {
         model.addAttribute("bankListing", bankListing);
         return "signUpPage.html";
     }
->>>>>>> Stashed changes
 }
