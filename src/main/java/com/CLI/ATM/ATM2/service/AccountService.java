@@ -31,6 +31,8 @@ public class AccountService {
     @Autowired
     AccountService accountService;
 
+
+    //region ACCOUNT_CREATION
     public Account createAccount(String name, User user, Double balance) {
 
         var accountID = SQLService.generateNewAccountID();
@@ -43,10 +45,10 @@ public class AccountService {
 
     /**
      * Create new Account instance, with existing id (imported from SQL)
-     * *@param *accountID existing accountID from sql
-     * *@param *name		the name of the account
-     * *@param *holder	the User object that holds this account
-     * *@param *balance starting balance
+     * @param accountID existing accountID from sql
+     * @param name		the name of the account
+     * @param user	    the User object that holds this account
+     * @param balance   starting balance
      */
     public Account importAccountFromSQL(int accountID, String name, User user, Double balance) {
         var transactions = new ArrayList<Transaction>();
@@ -54,12 +56,24 @@ public class AccountService {
         return new Account(name, accountID, user, transactions, balance);
     }
 
+
+    /**
+     * Add amount to the account that the user chooses
+     * @param account account that user chooses
+     * @param amount  amount that user inputs
+     */
     public void addBalance(Account account, double amount){
         var balance = account.getBalance();
         account.setBalance(balance + amount);
     }
+    //endregion
 
 
+    //region THIRD_PARTY_TRANSFER
+    /**
+     * Get summary of the account
+     * @param account account that user chooses
+     */
     public HashMap<String,String> getSummaryLine(Account account) {
 
         // get the account's balance
@@ -78,8 +92,10 @@ public class AccountService {
 
     /**
      * Add a new transaction in this account.
-     * @param amount	the amount transacted
-     * @param memo		the transaction memo
+     * @param account	    the account that user chooses
+     * @param amount	    the amount that was transacted
+     * @param receiverID    the recipient
+     * @param memo	        adds a memo
      */
     public void addTransaction(Account account, double amount, int receiverID, String memo) {
 
@@ -91,7 +107,15 @@ public class AccountService {
 
     }
 
-
+    /**
+     * Add a transaction in this account.
+     * @param account	    the account that user chooses
+     * @param transactionID	the transactionID
+     * @param receiverID    the recipient
+     * @param amount	    the amount
+     * @param timestamp	    time when the transaction was made
+     * @param memo	        adds a memo
+     */
     public void addExistingTransaction(Account account, int transactionID, int receiverID, double amount, java.sql.Date timestamp, String memo) {
 
         // create new transaction and add it to our list
@@ -109,8 +133,6 @@ public class AccountService {
      * @param directionString direction of transfer, e.g. : transfer to / withdraw from
      * @return Account object for transferring of $
      */
-
-
     public Account getInternalTransferAccount(User theUser, String directionString){
         int fromAcctIndex;
         int printSumFlag = 0;
@@ -163,7 +185,11 @@ public class AccountService {
         return new int[] {toAcctID, bankID};
     }
 
-
+    /**
+     * Makes sure that the amount transferred is > than 0
+     * @param amount	users inputted amount
+     * @param limit     checks for the users daily limit
+     */
     public String validateAmount(double amount, double limit) { // TODO: convert the 2 ifs below to throw custom exceptions
         if (amount < 0) {
             return "Amount must be greater than zero.";
@@ -173,7 +199,6 @@ public class AccountService {
         }
         return null;
     }
-
 
 
     /**
@@ -192,7 +217,14 @@ public class AccountService {
         }
         return bankID;
     }
+    //endregion
 
+
+    //region LOGIN_&_SIGNUP
+    /**
+     * Handles the login
+     * @param currentBank currentBank user is in
+     */
     public User handleLogIn(Bank currentBank){
         User curUser;
         do{
@@ -208,6 +240,11 @@ public class AccountService {
         // stay in main menu until user quits
         return curUser;
     }
+
+    /**
+     * Prompts user to login
+     * @param theBank  bank that the user is in
+     */
     public User loginPrompt(Bank theBank) {
         // inits
         // test
@@ -228,6 +265,10 @@ public class AccountService {
         return authUser;
     }
 
+    /**
+     * Sign up function
+     * @param currentBank  bank that the user is in
+     */
     public void handleSignUp(Bank currentBank){
         System.out.printf("Welcome to %s's sign up\n", currentBank.getName());
 
@@ -259,4 +300,5 @@ public class AccountService {
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
         SQLService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
     }
+    //endregion
 }
