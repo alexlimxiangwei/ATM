@@ -164,9 +164,6 @@ public class AccountService {
         int toAcctID;
         int bankID;
         do {
-            System.out.println("Enter the account number of the account to " +
-                    "transfer to: ");
-            sc.nextLine();
             int[] accountInfo = Strings.thirdPartyTransferMenu();
             toAcctID = accountInfo[0];
             bankID = accountInfo[1];
