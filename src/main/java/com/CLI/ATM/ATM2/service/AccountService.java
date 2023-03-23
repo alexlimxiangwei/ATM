@@ -1,6 +1,7 @@
 package com.CLI.ATM.ATM2.service;
 
 import com.CLI.ATM.ATM2.CLI.UserCLI;
+import com.CLI.ATM.ATM2.Strings;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
@@ -166,8 +167,9 @@ public class AccountService {
             System.out.println("Enter the account number of the account to " +
                     "transfer to: ");
             sc.nextLine();
-            toAcctID = sc.nextInt();
-            bankID = getBankIDFromAccountID(toAcctID);
+            int[] accountInfo = Strings.thirdPartyTransferMenu();
+            toAcctID = accountInfo[0];
+            bankID = accountInfo[1];
 
             // if account doesn't exist in local memory, but exists in sql database,
             if (bankID == NOT_FOUND && SQLService.isSQLAccount(toAcctID)) {

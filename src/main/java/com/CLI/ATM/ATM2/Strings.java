@@ -5,6 +5,7 @@ import com.CLI.ATM.ATM2.CLI.UserCLI;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
 import com.CLI.ATM.ATM2.*;
+import com.CLI.ATM.ATM2.service.AccountService;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,18 @@ import static com.CLI.ATM.ATM2.Constants.*;
 
 
 public class Strings {
+    public static int[] thirdPartyTransferMenu() {
+        int toAcctID;
+        int bankID;
+        System.out.println("Enter the account number of the account to transfer to: ");
+        sc.nextLine();
+        toAcctID = sc.nextInt();
+        bankID = AccountService.getBankIDFromAccountID(toAcctID);
+
+        // create an array containing both toAcctID and bankID and return it
+        return new int[]{toAcctID, bankID};
+    }
+
     public static int transferFundsMenu(){
         int choice;
         do {
