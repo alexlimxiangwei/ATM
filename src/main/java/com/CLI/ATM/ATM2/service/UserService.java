@@ -4,20 +4,14 @@ package com.CLI.ATM.ATM2.service;
 import com.CLI.ATM.ATM2.CLI.AccountCLI;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
-import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import static com.CLI.ATM.ATM2.Constants.*;
 
 @Component
 public class UserService {
@@ -54,15 +48,6 @@ public class UserService {
 
     public int numAccounts(User user) {
         return user.getAccounts().size();
-    }
-
-    /**
-     * Get the balance of a particular account.
-     * @param acctIdx	the index of the account to use
-     * @return			the balance of the account
-     */
-    public double getAcctBalance(User user, int acctIdx) {
-        return user.getAccounts().get(acctIdx).getBalance();
     }
 
     /**

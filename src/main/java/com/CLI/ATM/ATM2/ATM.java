@@ -4,9 +4,7 @@ import com.CLI.ATM.ATM2.CLI.MainCLI;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
 import com.CLI.ATM.ATM2.service.AccountService;
-import com.CLI.ATM.ATM2.service.BankService;
 import com.CLI.ATM.ATM2.service.SQLService;
-import com.CLI.ATM.ATM2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,10 +19,6 @@ public class ATM implements CommandLineRunner {
 		SpringApplication.run(ATM.class, args);
 	}
 	@Autowired
-	UserService userService;
-	@Autowired
-	BankService bankService;
-	@Autowired
 	AccountService accountService;
 	@Autowired
 	SQLService SQLService;
@@ -36,12 +30,12 @@ public class ATM implements CommandLineRunner {
 		//region INIT
 		SQLService.initSQLConnection();
 		bankList = SQLService.fetchBanks(); // gets all banks from database and stores it in an array
-		User curUser = null;
+		User curUser;
 
 		//endregion
 
 		// loop forever
-		while (true)  {
+		while (true) {
 			//region SET BANK TO USE
 			// displayBankSelectionPage
 			mainCli.displayBankSelectionPage(bankList);
@@ -64,7 +58,7 @@ public class ATM implements CommandLineRunner {
 			//endregion
 
 			//region HANDLE USER CHOICE
-			if (userInput == 1){
+			if (userInput == 1) {
 				curUser = accountService.handleLogIn(currentBank);
 				mainCli.printUserMenu(bankList, curUser, currentBank);
 			} else if (userInput == 2) {

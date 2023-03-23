@@ -75,7 +75,7 @@ public class MainCLI {
     //region ACCOUNT_FUNCTIONS
     public void transferFunds(User theUser, ArrayList<Bank> banks) {
         Account fromAcct;
-        Account toAcct = null;
+        Account toAcct;
         int toAcctID;
         int[] accountInfo;
         double amount;

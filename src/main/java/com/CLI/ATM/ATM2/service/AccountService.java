@@ -1,6 +1,5 @@
 package com.CLI.ATM.ATM2.service;
 
-import com.CLI.ATM.ATM2.CLI.MainCLI;
 import com.CLI.ATM.ATM2.CLI.UserCLI;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
