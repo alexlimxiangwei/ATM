@@ -47,4 +47,91 @@ public class userController {
         return "signUpPage";
     }
 
+<<<<<<< Updated upstream
+=======
+    @RequestMapping(value = "/signInPage", method = RequestMethod.GET)
+    public String populateList(Model model) {
+        List<Bank> bankListing = bankService.fetchBanks();
+        for (int i = 0; i < bankListing.size(); i++){
+            if (!bankListing.get(i).isLocal()){
+                bankListing.remove(i);
+            }
+        }
+        model.addAttribute("bankListing", bankListing);
+        return "signInPage.html";
+    }
+
+    @PostMapping("/signInPage")
+    public String getSignInDetails(@RequestParam("userid") int userid,
+                                   @RequestParam("pin") String pin,
+                                   @RequestParam("bankDropdown") int bankid,
+                                   Model model){
+
+        populateList(model);
+        Bank bankObj = BankService.getBankFromID(bankList, bankid);
+
+        assert bankObj != null;
+        User authUser = bankService.userLogin(bankObj, userid, pin);
+
+        // print html authentication for userLogin
+        String message = "No message here";
+        if (authUser == null){
+            message = "Wrong Login Credentials";
+            model.addAttribute("message", message);
+        }else{
+            return "menuPage";
+        }
+
+        return "signInPage";
+    }
+
+    @PostMapping("/signUpPage")
+    public String submitUser(@RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("pin") String pin,
+                             @RequestParam("bankDropdown") int bankid,
+                             Model model) {
+
+        System.out.println(firstName);
+        System.out.println(lastName);
+        System.out.println(pin);
+        System.out.println(bankid);
+
+        User newuser = new User();
+        newuser.setFirstName(firstName);
+        newuser.setLastName(lastName);
+        String newPin = Util.hash(pin);
+        Bank currentBank = bankList.get(bankid);
+
+        // Creates a new user account based on user input
+        User newUser2 = bankService.addUserToBank(currentBank, firstName, lastName, newPin,
+                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
+        Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
+        userService.addAccountToUser(newUser2, newAccount2);
+        bankService.addAccountToBank(currentBank, newAccount2);
+
+        System.out.println("Account successfully created.");
+
+        // Add new user to SQL
+        userService.addNewUser(newUser2.getCustomerID(),firstName,lastName,newPin,currentBank);
+        accountService.SQL_addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+
+        System.out.println(newAccount2.getAccountID());
+        System.out.println(currentBank.getBankID());
+
+        return "signInPage";
+    }
+
+    @RequestMapping(value = "/signUpPage", method = RequestMethod.GET)
+    public String populateList2(Model model) {
+        List<Bank> bankListing = bankService.fetchBanks();
+        for (int i = 0; i < bankListing.size(); i++){
+            if (!bankListing.get(i).isLocal()){
+                bankListing.remove(i);
+            }
+        }
+        model.addAttribute("bankListing", bankListing);
+        return "signUpPage.html";
+    }
+>>>>>>> Stashed changes
 }
