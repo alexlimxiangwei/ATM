@@ -160,5 +160,20 @@ public class BankService {
         }
         return null;
     }
+
+    /**
+     * gets a User from his ID
+     * @param bank	the bank that the user is in
+     * @param customerID gets the accountID
+     * @return User object found or null if not found
+     */
+    public User getUserByID(Bank bank, int customerID){
+        for (int i = 0 ; i < bank.getUsers().size(); i++){
+            if (bank.getUsers().get(i).getCustomerID() == customerID){
+                return bank.getUsers().get(i);
+            }
+        }
+        return null;
+    }
     //endregion
 }

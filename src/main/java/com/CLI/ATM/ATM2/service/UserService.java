@@ -85,7 +85,6 @@ public class UserService {
     }
 
 
-
     /**
      * Allow user to change account name
      * @param acctIdx get the acctId
@@ -109,8 +108,6 @@ public class UserService {
             }
         }
     }
-
-
 
 }
 
