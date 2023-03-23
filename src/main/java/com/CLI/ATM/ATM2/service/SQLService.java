@@ -389,7 +389,7 @@ public class SQLService {
     public int generateNewCustomerID(){
         int max_id = 0;
         try {
-            String strSelect = "select idCustomer from Customer order by idACustomer desc limit 1;";
+            String strSelect = "select idCustomer from Customer order by idCustomer desc limit 1;";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
             ResultSet rset = stmt.executeQuery(strSelect);
             rset.next();

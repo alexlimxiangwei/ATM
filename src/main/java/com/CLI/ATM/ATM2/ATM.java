@@ -56,7 +56,7 @@ public class ATM implements CommandLineRunner {
 
 			//region MAIN MENU
 			// displaySignupPage
-			mainCli.displayMainMenuPage(currentBank);
+			Strings.displaySignUpMenuPage(currentBank);
 
 			// stay in login prompt until successful login
 			userInput = sc.nextInt();

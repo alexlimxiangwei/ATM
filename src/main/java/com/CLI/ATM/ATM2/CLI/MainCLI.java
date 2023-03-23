@@ -29,6 +29,8 @@ public class MainCLI {
     @Autowired
     UserCLI userCLI;
 
+    //region BANK_MENU
+
     public void displayBankSelectionPage(ArrayList<Bank> bankList) {
         System.out.println("Please select the bank you would like to use");
         int bank_no = 1;
@@ -41,15 +43,6 @@ public class MainCLI {
         System.out.print("Enter choice: ");
     }
 
-    public void displayMainMenuPage(Bank currentBank) {
-        System.out.printf("\nWelcome to %s !\n", currentBank.getName());
-        System.out.println("What would you like to do?");
-        System.out.println("  1) Log In");
-        System.out.println("  2) Sign Up");
-        System.out.print("Enter choice: ");
-    }
-
-
 
     public void printUserMenu(ArrayList<Bank> bankList, User theUser, Bank theBank){
 
@@ -57,26 +50,9 @@ public class MainCLI {
         userCLI.printAccountsSummary(theUser);
 
         // init
-        int choice;
-
+        int choice = Strings.displayUserMenu();
         // user menu
-        do {
-            System.out.println("What would you like to do?");
-            System.out.println("  1) Show account transaction history");
-            System.out.println("  2) Withdraw");
-            System.out.println("  3) Deposit");
-            System.out.println("  4) Transfer");
-            System.out.println("  5) Account Setting"); // TODO: change transfer limits
-            System.out.println("  6) Quit");
-            System.out.println();
-            System.out.print("Enter choice: ");
-            choice = sc.nextInt();
 
-            if (choice < 1 || choice > 6) {
-                System.out.println("Invalid choice. Please choose 1-6.");
-            }
-
-        } while (choice < 1 || choice > 6);
 
         // process the choice
         switch (choice) {
@@ -94,7 +70,9 @@ public class MainCLI {
         }
 
     }
+    //endregion
 
+    //region ACCOUNT_FUNCTIONS
     public void transferFunds(User theUser, ArrayList<Bank> banks) {
         Account fromAcct;
         Account toAcct = null;
@@ -166,34 +144,7 @@ public class MainCLI {
         System.out.printf("$%.02f successfully transferred from %s to Account no: %d", amount, fromAcct.getName(), toAcctID);
     }
 
-    public void showAccountSetting(User theUser,Bank theBank) {
-        int choice;
 
-        // user menu
-        do {
-            print_AccountSettings();
-            choice = sc.nextInt();
-
-            if (choice < 1 || choice > 5) {
-                System.out.println("Invalid choice. Please choose 1-5.");
-            }
-
-        } while (choice < 1 || choice > 5);
-
-        // process the choice
-        switch (choice) {
-            case 1 -> changePassword(theUser, theBank);
-            case 2 -> addAccount(theUser, theBank);
-            case 3 -> changeAccountName(theUser);
-            case 4 -> deleteAccount(theUser); // Not complete
-            case 5 -> sc.nextLine(); // gobble up rest of previous input
-        }
-
-        // redisplay this menu unless the user wants to quit
-        if (choice != 5) {
-            showAccountSetting(theUser,theBank);
-        }
-    }
 
     /**
      * Process a fund withdraw from an account.
@@ -287,7 +238,38 @@ public class MainCLI {
         // print the transaction history
         userService.printAcctTransHistory(theUser, theAcct);
     }
+    //endregion
 
+    //region ACCOUNT_SETTINGS
+
+    public void showAccountSetting(User theUser,Bank theBank) {
+        int choice;
+
+        // user menu
+        do {
+            print_AccountSettings();
+            choice = sc.nextInt();
+
+            if (choice < 1 || choice > 5) {
+                System.out.println("Invalid choice. Please choose 1-5.");
+            }
+
+        } while (choice < 1 || choice > 5);
+
+        // process the choice
+        switch (choice) {
+            case 1 -> changePassword(theUser, theBank);
+            case 2 -> addAccount(theUser, theBank);
+            case 3 -> changeAccountName(theUser);
+            case 4 -> deleteAccount(theUser); // Not complete
+            case 5 -> sc.nextLine(); // gobble up rest of previous input
+        }
+
+        // redisplay this menu unless the user wants to quit
+        if (choice != 5) {
+            showAccountSetting(theUser,theBank);
+        }
+    }
     //change passwords
     public void changePassword(User theUser, Bank bank) {
         String pin;
@@ -380,5 +362,6 @@ public class MainCLI {
 
 
 
-    }
+
+    }//endregion
 }
