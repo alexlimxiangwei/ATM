@@ -41,7 +41,7 @@ public class ATM implements CommandLineRunner {
 		//endregion
 
 		// loop forever
-		while (true) {
+		while (true)  {
 			//region SET BANK TO USE
 			// displayBankSelectionPage
 			mainCli.displayBankSelectionPage(bankList);

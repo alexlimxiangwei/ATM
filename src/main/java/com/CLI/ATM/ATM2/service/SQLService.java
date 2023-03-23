@@ -30,7 +30,7 @@ public class SQLService {
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "password");
+                    "root", "");
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
@@ -257,18 +257,24 @@ public class SQLService {
      * @param lname creates new account with lname
      * @param pin creates new account with pin
      */
-    public void addNewUser(int uuid, String fname, String lname, String pin, Bank bank) {
+    public void addNewUser(int uuid, String fname, String lname, String pin, Bank bank,
+                           double local_transfer_limit, double overseas_transfer_limit) {
         try {
             String strUpdate = "insert into customer values(?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(strUpdate);
             stmt.setInt(1, uuid);
             stmt.setString(2, fname);
             stmt.setString(3, lname);
-            stmt.setString(4, pin);
             stmt.executeUpdate();
 
-            strUpdate = String.format("insert into Bank_has_Customer values (%d, %d %s);",bank.getBankID(),uuid, pin);
+            strUpdate = "insert into Bank_has_Customer values (?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(strUpdate);
+            stmt.setInt(1, bank.getBankID());
+            stmt.setInt(2, uuid);
+            stmt.setString(3, pin);
+            stmt.setDouble(4, local_transfer_limit);
+            stmt.setDouble(5, overseas_transfer_limit);
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

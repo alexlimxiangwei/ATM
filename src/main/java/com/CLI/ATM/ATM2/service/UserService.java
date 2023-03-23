@@ -32,7 +32,7 @@ public class UserService {
 
         ArrayList<Account> accounts = new ArrayList<>();
 
-        return new User(firstName, lastName, idCustomer, pin, accounts,local_transfer_limit, overseas_transfer_limit );
+        return new User(firstName, lastName, idCustomer, pin, accounts,local_transfer_limit, overseas_transfer_limit);
     }
 
     public User createNewUser(String firstName, String lastName, String pin, double local_transfer_limit, double overseas_transfer_limit) {

@@ -20,7 +20,6 @@ import static com.CLI.ATM.ATM2.Constants.*;
 public class AccountService {
 
     @Autowired
-    static
     UserService userService;
     @Autowired
     TransactionService transactionService;
@@ -257,7 +256,8 @@ public class AccountService {
         System.out.println("Account successfully created.");
 
         // Add new user to SQL
-        SQLService.addNewUser(newUser2.getCustomerID(),fname,lname,newPin,currentBank);
+        SQLService.addNewUser(newUser2.getCustomerID(),fname,lname,newPin,currentBank,
+                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
         SQLService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
     }
 }
