@@ -19,26 +19,18 @@ public class MainCLI {
 
     @Autowired
     UserService userService;
-
     @Autowired
     AccountService accountService;
-
-    @Autowired
-    Util util;
 
     @Autowired
     BankService bankService;
     @Autowired
     SQLService SQLService;
-
-    @Autowired
-    TransactionService transactionService;
-
     @Autowired
     UserCLI userCLI;
 
-
     //region BANK_MENU
+
     public void displayBankSelectionPage(ArrayList<Bank> bankList) {
         System.out.println("Please select the bank you would like to use");
         int bank_no = 1;
@@ -51,33 +43,6 @@ public class MainCLI {
         System.out.print("Enter choice: ");
     }
 
-    public User mainMenuPrompt(Bank theBank) {
-
-        // inits
-        int userID;
-        String pin;
-        User authUser;
-
-        // prompt user for user ID/pin combo until a correct one is reached
-        do {
-            System.out.print("Enter user ID: ");
-            userID = sc.nextInt();
-            sc.nextLine();
-
-            System.out.print("Enter pin: ");
-            pin = sc.nextLine();
-            // try to get user object corresponding to ID and pin combo
-            authUser = bankService.userLogin(theBank, userID, pin);
-            if (authUser == null) {
-                System.out.println("Incorrect user ID/pin combination. " +
-                        "Please try again");
-            }
-
-        } while(authUser == null); 	// continue looping until we have a
-        // successful login
-
-        return authUser;
-    }
 
     public void printUserMenu(ArrayList<Bank> bankList, User theUser, Bank theBank){
 
@@ -85,11 +50,9 @@ public class MainCLI {
         userCLI.printAccountsSummary(theUser);
 
         // init
-        Strings.displayUserMenu();
-        int choice = displayUserMenu();
-
+        int choice = Strings.displayUserMenu();
         // user menu
-        // moved to strings.java
+
 
         // process the choice
         switch (choice) {
@@ -100,10 +63,12 @@ public class MainCLI {
             case 5 -> showAccountSetting(theUser, theBank);
             case 6 -> sc.nextLine(); // gobble up rest of previous input
         }
+
         // redisplay this menu unless the user wants to quit
         if (choice != 6) {
             printUserMenu(bankList, theUser,theBank);
         }
+
     }
     //endregion
 
@@ -276,6 +241,7 @@ public class MainCLI {
     //endregion
 
     //region ACCOUNT_SETTINGS
+
     public void showAccountSetting(User theUser,Bank theBank) {
         int choice;
 
@@ -304,7 +270,6 @@ public class MainCLI {
             showAccountSetting(theUser,theBank);
         }
     }
-
     //change passwords
     public void changePassword(User theUser, Bank bank) {
         String pin;
@@ -394,6 +359,9 @@ public class MainCLI {
             System.out.println("Account successfully deleted. ");
 
         }
-    }
-    //endregion
+
+
+
+
+    }//endregion
 }

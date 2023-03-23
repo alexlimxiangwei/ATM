@@ -19,7 +19,6 @@ import static com.CLI.ATM.ATM2.Constants.conn;
 @Component
 public class SQLService {
     //region INIT
-
     @Autowired
     BankService bankService;
     @Autowired
@@ -27,6 +26,18 @@ public class SQLService {
     @Autowired
     AccountService accountService;
 
+    public void initSQLConnection(){
+        try {
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
+                    "root", "");
+            // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+    }
 
     //endregion
 
@@ -378,7 +389,7 @@ public class SQLService {
     public int generateNewCustomerID(){
         int max_id = 0;
         try {
-            String strSelect = "select idCustomer from Customer order by idACustomer desc limit 1;";
+            String strSelect = "select idCustomer from Customer order by idCustomer desc limit 1;";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
             ResultSet rset = stmt.executeQuery(strSelect);
             rset.next();

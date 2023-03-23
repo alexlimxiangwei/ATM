@@ -11,15 +11,12 @@ import java.util.ArrayList;
 
 @Component
 public class BankService {
-
     @Autowired
     UserService userService;
-
     @Autowired
     AccountService accountService;
     @Autowired
     SQLService SQLService;
-
 
     public Bank createNewBank(int bankID, String name, boolean local) {
         var users = new ArrayList<User>();

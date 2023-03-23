@@ -1,6 +1,8 @@
 package com.CLI.ATM.ATM2.service;
 
+import com.CLI.ATM.ATM2.CLI.MainCLI;
 import com.CLI.ATM.ATM2.CLI.UserCLI;
+import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.Transaction;
@@ -18,20 +20,18 @@ import static com.CLI.ATM.ATM2.Constants.*;
 public class AccountService {
 
     @Autowired
+    static
     UserService userService;
-
     @Autowired
     TransactionService transactionService;
-
     @Autowired
     UserCLI userCli;
     @Autowired
     SQLService SQLService;
-
     @Autowired
-    static
     BankService bankService;
-
+    @Autowired
+    AccountService accountService;
 
     public Account createAccount(String name, User user, Double balance) {
 
@@ -193,5 +193,71 @@ public class AccountService {
             }
         }
         return bankID;
+    }
+
+    public User handleLogIn(Bank currentBank){
+        User curUser;
+        do{
+            curUser = accountService.loginPrompt(currentBank);
+
+            if (curUser == null){
+                System.out.println("Incorrect user ID/pin combination. " +
+                        "Please try again");
+            }
+        }
+        while(curUser == null);
+        System.out.printf("Login Successful.\nWelcome, %s!", curUser.getFirstName());
+        // stay in main menu until user quits
+        return curUser;
+    }
+    public User loginPrompt(Bank theBank) {
+        // inits
+        // test
+        int userID;
+        String pin;
+        User authUser;
+
+        // prompt user for user ID/pin combo until a correct one is reached
+
+        System.out.print("Enter user ID: ");
+        userID = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter pin: ");
+        pin = sc.nextLine();
+        // try to get user object corresponding to ID and pin combo
+        authUser = bankService.userLogin(theBank, userID, pin);
+        return authUser;
+    }
+
+    public void handleSignUp(Bank currentBank){
+        System.out.printf("Welcome to %s's sign up\n", currentBank.getName());
+
+        // init class
+        User newUser = new User();
+
+        System.out.print("Enter First name: ");
+        String fname = sc.nextLine();
+        newUser.setFirstName(fname);
+
+        System.out.print("Enter last name: ");
+        String lname = sc.nextLine();
+        newUser.setLastName(lname);
+
+        System.out.print("Enter pin: ");
+        String newPin = Util.hash(sc.nextLine()); //hash it immediately, so we don't store the password at all
+
+//              Creates a new user account based on user input
+        User newUser2 = bankService.addUserToBank(currentBank, fname, lname, newPin,
+                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
+        Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
+        userService.addAccountToUser(newUser2, newAccount2);
+        bankService.addAccountToBank(currentBank, newAccount2);
+
+        System.out.println("Account successfully created.");
+
+        // Add new user to SQL
+        SQLService.addNewUser(newUser2.getCustomerID(),fname,lname,newPin,currentBank);
+        SQLService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
     }
 }

@@ -13,6 +13,7 @@ import static com.CLI.ATM.ATM2.Constants.*;
 
 public class Strings {
 
+
     public static int displayUserMenu(){
         int choice;
         do {
