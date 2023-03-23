@@ -18,12 +18,31 @@ public class BankService {
     @Autowired
     SQLService SQLService;
 
+    //region BANK_CREATION
+    /**
+     * Creates new bank.
+     * @param bankID bankID for the bank
+     * @param name name of the bank
+     * @param local to specify if it is local or overseas
+     */
     public Bank createNewBank(int bankID, String name, boolean local) {
         var users = new ArrayList<User>();
         var accounts = new ArrayList<Account>();
         return new Bank(bankID, name, local, users, accounts);
     }
+    //endregion
 
+    //region ADD_USER_&_ACC_TO_BANK
+    /**
+     * Adds new user to bank
+     * @param bank                  the current bank that is chosen
+     * @param firstName             name of the bank
+     * @param lastName              to specify if it is local or overseas
+     * @param pin                   adds user-created pin to the bank
+     * @param local_transfer_limit  adds local transfer limit to the user
+     * @param overseas_transfer_limit adds overseas transfer limit to the user
+     * @return                       the created newUser object
+     */
     public User addUserToBank(Bank bank, String firstName, String lastName, String pin, double local_transfer_limit, double overseas_transfer_limit) {
 
         // create a new User object and add it to our list
@@ -41,10 +60,13 @@ public class BankService {
 
     /**
      * Adds an existing user (that exists in sql but not in local mem) and his accounts to bank.
+     * @param bank the current bank that is chosen
      * @param idCustomer Users id
      * @param firstName first name of user to add to the bank
      * @param lastName last name of user to add to the bank
      * @param pin hashed pin of the user
+     * @param local_transfer_limit adds local transfer limit to the user
+     * @param overseas_transfer_limit adds overseas transfer limit to the user
      * @return the created User object
      */
     public User addExistingUserToBank(Bank bank, int idCustomer, String firstName, String lastName, String pin,double local_transfer_limit, double overseas_transfer_limit) {
@@ -70,7 +92,9 @@ public class BankService {
     public void addAccountToBank(Bank bank, Account newAccount) {
        bank.getAccounts().add(newAccount);
     }
+    //endregion
 
+    //region USER_LOGIN
     /**
      * Get the User object associated with a particular userID and pin, if they
      * are valid.
@@ -79,6 +103,7 @@ public class BankService {
      * @return			the User object, if login is successfully, or null, if
      * 					it is not
      */
+
     public User userLogin(Bank bank, int userID, String pin) {
 
         // search through list of users
@@ -104,7 +129,15 @@ public class BankService {
         // if we haven't found the user or have an incorrect pin, return null
         return null;
     }
+    //endregion
 
+
+    //region GET_REQUESTED_IDS
+    /**
+     * gets the accountID requested
+     * @param bank	the bank that the user is in
+     * @param accountID gets the accountID
+     */
     public Account getAccountByID(Bank bank, int accountID){
         for (int i = 0 ; i < bank.getAccounts().size(); i++){
             if (bank.getAccounts().get(i).getAccountID() == accountID){
@@ -114,6 +147,11 @@ public class BankService {
         return null;
     }
 
+    /**
+     * gets the bankID requested
+     * @param banks	finds the bank requested from the arraylist
+     * @param bankID gets the bankID
+     */
     public Bank getBankFromID(ArrayList<Bank> banks, int bankID){
         for (Bank bank: banks){
             if (bank.getBankID() == bankID){
@@ -122,4 +160,5 @@ public class BankService {
         }
         return null;
     }
+    //endregion
 }
