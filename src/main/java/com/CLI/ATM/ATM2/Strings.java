@@ -12,6 +12,17 @@ import static com.CLI.ATM.ATM2.Constants.*;
 
 
 public class Strings {
+    public static int transferFundsMenu(){
+        int choice;
+        do {
+            System.out.println("Enter a choice below: ");
+            System.out.println("1) Inter-account transfer");
+            System.out.println("2) Third party transfer");
+            choice = sc.nextInt();
+
+        } while(choice < 0 || choice > 2);
+        return choice;
+    }
 
 
     public static int displayUserMenu(){

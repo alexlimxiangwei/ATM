@@ -80,15 +80,8 @@ public class MainCLI {
         int[] accountInfo;
         double amount;
         double transferLimit;
-        int choice;
+        int choice = transferFundsMenu();
         String amountValidationString;
-        do {
-            System.out.println("Enter a choice below: ");
-            System.out.println("1) Inter-account transfer");
-            System.out.println("2) Third party transfer");
-            choice = sc.nextInt();
-
-        } while(choice < 0 || choice > 2);
         // get account to transfer from
         fromAcct = accountService.getInternalTransferAccount(theUser, "transfer from");
         transferLimit = fromAcct.getBalance();
