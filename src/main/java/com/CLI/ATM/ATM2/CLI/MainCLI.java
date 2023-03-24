@@ -127,12 +127,12 @@ public class MainCLI {
         // add transaction and update balance of fromAcct
         accountService.addTransaction(fromAcct, -amount, toAcctID, memo);
         accountService.addBalance(fromAcct, -amount);
-        SQLService.updateBalance(-amount, fromAcct.getAccountID());
+        SQLService.updateBalance(fromAcct.getBalance(), fromAcct.getAccountID());
 
         // add transaction and update balance of toAcct
         accountService.addTransaction(toAcct,amount, fromAcct.getAccountID(), memo);
         accountService.addBalance(toAcct, amount);
-        SQLService.updateBalance(amount, toAcctID);
+        SQLService.updateBalance(toAcct.getBalance(), toAcctID);
 
         System.out.printf("$%.02f successfully transferred from %s to Account no: %d", amount, fromAcct.getName(), toAcctID);
     }

@@ -8,10 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -32,7 +30,7 @@ public class accountController {
     @GetMapping("/menuPage")
     public String getHomeHTML(Model model){
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserByID(currBank, HTML_currUserID);
+        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
         String firstName = currUser.getFirstName();
         String lastName = currUser.getLastName();
         String userName = firstName + " " + lastName;
@@ -47,7 +45,7 @@ public class accountController {
     @GetMapping("/accounts")
     public String getAccountsHTML(Model model){
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserByID(currBank, HTML_currUserID);
+        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
         String firstName = currUser.getFirstName();
         String lastName = currUser.getLastName();
         String userName = firstName + " " + lastName;
@@ -67,16 +65,13 @@ public class accountController {
                               @RequestParam("memo-deposit") String memo) {
 
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserByID(currBank, HTML_currUserID);
-        Account currAcc = currUser.getAccounts().get(accId);
-
+        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
+        Account currAcc = accountService.getAccountFromID(currUser, accId);
         accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo);
-
         accountService.addBalance(currAcc, amount);
 
         // update balance on SQL
         sqlService.updateBalance(currAcc.getBalance(),currAcc.getAccountID());
-
         return "redirect:/accounts";
     }
 
@@ -87,12 +82,11 @@ public class accountController {
                               @RequestParam("memo-withdraw") String memo) {
 
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserByID(currBank, HTML_currUserID);
-        Account currAcc = currUser.getAccounts().get(accId);
+        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
+        Account currAcc = accountService.getAccountFromID(currUser, accId);
         amount = -amount;
 
         accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo);
-
         accountService.addBalance(currAcc, amount);
 
         // update balance on SQL

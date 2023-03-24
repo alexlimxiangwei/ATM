@@ -30,7 +30,7 @@ public class SQLService {
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "password");
+                    "root", "");
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
@@ -159,23 +159,14 @@ public class SQLService {
 
     /**
      * Fetches all account balances and updates the balance of the accountId that user chooses
-     * @param amount amount to set balance of account to
+     * @param newBalance amount to set balance of account to
      * @param acctID ID of account to update balance of
      */
-    public void updateBalance(double amount, int acctID) {
+    public void updateBalance(double newBalance, int acctID) {
         try {
-            //first get current balance
-            double balance = 0;
-            String strSelect = String.format("select * from Account where idAccount = %d;", acctID);
-            PreparedStatement stmt = conn.prepareStatement(strSelect);
-            ResultSet rset = stmt.executeQuery(strSelect);
-            if (rset.next()){
-                balance = rset.getDouble("balance");
-            }
-            balance += amount;
             String strUpdate = "update account set balance = ? where idAccount = ?";
-            stmt = conn.prepareStatement(strUpdate);
-            stmt.setDouble(1, balance);
+            PreparedStatement stmt = conn.prepareStatement(strUpdate);
+            stmt.setDouble(1, newBalance);
             stmt.setInt(2, acctID);
             stmt.executeUpdate();
         } catch (SQLException e) {

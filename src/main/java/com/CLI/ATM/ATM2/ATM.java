@@ -60,6 +60,7 @@ public class ATM implements CommandLineRunner {
 			//region HANDLE USER CHOICE
 			if (userInput == 1) {
 				curUser = accountService.handleLogIn(currentBank);
+
 				mainCli.printUserMenu(bankList, curUser, currentBank);
 			} else if (userInput == 2) {
 				accountService.handleSignUp(currentBank);

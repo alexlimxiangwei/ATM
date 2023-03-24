@@ -123,7 +123,7 @@ public class BankService {
         //If userId isn't found locally, search sql database
 //        System.out.println("User not found locally, attempting to fetch user from database...");
         User u = SQLService.addExistingUserByCustomerID(bank, userID);
-        if (u != null && u.getCustomerID() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) {
+        if (u != null && u.getCustomerID() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) { // TODO: shorten
             return u;
         }
         // if we haven't found the user or have an incorrect pin, return null
@@ -167,7 +167,7 @@ public class BankService {
      * @param customerID gets the accountID
      * @return User object found or null if not found
      */
-    public User getUserByID(Bank bank, int customerID){
+    public User getUserFromID(Bank bank, int customerID){
         for (int i = 0 ; i < bank.getUsers().size(); i++){
             if (bank.getUsers().get(i).getCustomerID() == customerID){
                 return bank.getUsers().get(i);

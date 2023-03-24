@@ -300,4 +300,13 @@ public class AccountService {
         SQLService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
     }
     //endregion
+
+    public Account getAccountFromID(User user, int acctId){
+        for (int acc_index = 0; acc_index < user.getAccounts().size(); acc_index++){
+            if (user.getAccounts().get(acc_index).getAccountID() == acctId){
+                return user.getAccounts().get(acc_index);
+            }
+        }
+        return null;
+    }
 }
