@@ -321,7 +321,6 @@ public class MainCLI {
      * @param currentBank the bank that user is from
      */
     public void addAccount(User theUser, Bank currentBank){
-        int numOfAcc = userService.numAccounts(theUser);
         System.out.print("Enter your new account name: ");
         sc.nextLine();
         String newAccName = sc.nextLine();
@@ -330,7 +329,7 @@ public class MainCLI {
         theUser.getAccounts().add(newAccount);
 
         // Update add account on sql
-        SQLService.addAccount(newAccount.getAccountID(),numOfAcc,currentBank.getBankID(), newAccName, 0.00);
+        SQLService.addAccount(newAccount.getAccountID(), theUser.getCustomerID(), currentBank.getBankID(), newAccName, 0.00);
         System.out.printf("New account '%s' created successfully!\n", newAccName);
 
     }

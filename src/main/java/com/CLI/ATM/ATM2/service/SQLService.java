@@ -30,7 +30,7 @@ public class SQLService {
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "password");
+                    "root", "");
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
@@ -82,12 +82,12 @@ public class SQLService {
      * @param bank_id_bank gets the bankID
      * @param name creates new account with pin
      */
-    public void addAccount(int idAcc, int cust_has_id_customer, int bank_id_bank, String name, double bal) {
+    public void addAccount(int idAcc, int id_customer, int bank_id_bank, String name, double bal) {
         try {
             String strUpdate = "insert into account values(?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(strUpdate);
             stmt.setInt(1, idAcc);
-            stmt.setInt(2, cust_has_id_customer);
+            stmt.setInt(2, id_customer);
             stmt.setInt(3, bank_id_bank);
             stmt.setString(4, name);
             stmt.setDouble(5,bal);
