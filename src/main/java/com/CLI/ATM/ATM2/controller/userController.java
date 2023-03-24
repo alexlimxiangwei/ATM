@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import static com.CLI.ATM.ATM2.Constants.*;
 
 @Controller
@@ -61,7 +59,7 @@ public class userController {
     public String getSignInDetails(@RequestParam("userid") int userid,
                                    @RequestParam("pin") String pin,
                                    @RequestParam("bankDropdown") int bankid,
-                                   Model model){
+                                   Model model, User user){
 
         populateList(model);
         Bank bankObj = bankService.getBankFromID(bankList, bankid);
@@ -75,9 +73,10 @@ public class userController {
             message = "Wrong Login Credentials";
             model.addAttribute("message", message);
         }else{
-            return "menuPage";
+            HTML_currUserID = userid;
+            HTML_currBankID = bankid;
+            return "redirect:/menuPage";
         }
-
         return "signInPage";
     }
 
@@ -114,9 +113,9 @@ public class userController {
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
         sqlService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
 
-        System.out.println(newAccount2.getAccountID());
+        System.out.println(newUser2.getCustomerID());
         System.out.println(currentBank.getBankID());
 
-        return "signInPage";
+        return "redirect:/signInPage";
     }
 }

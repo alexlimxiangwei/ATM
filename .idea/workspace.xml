@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- fixed all warnings for cleaner code">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;Updated database schema file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/test.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -38,13 +44,16 @@
     </option>
   </component>
   <component name="ProjectId" id="2KNY1qg4dUMR4kny8t3CnRr8iVx" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/alex/personal files/SIT/OOP - CSC1109/IntelliJ/ATM/db&quot;,
@@ -67,7 +76,7 @@
   </component>
   <component name="RunManager">
     <configuration name="ATM" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="ATM" />
+      <option name="MAIN_CLASS_NAME" value="com.CLI.ATM.ATM2.ATM" />
       <module name="bank" />
       <method v="2">
         <option name="Make" enabled="true" />
