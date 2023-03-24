@@ -77,6 +77,89 @@
 			margin-bottom: 10px;
 			color: #333;
 		}
+
+		table {
+          border-collapse: collapse;
+          width: 100%;
+          margin-bottom: 20px;
+        }
+
+        th, td {
+          text-align: left;
+          padding: 8px;
+          border: 1px solid #ddd;
+        }
+
+        th {
+          background-color: #f2f2f2;
+          font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+
+        .button {
+			display: inline-block;
+			padding: 10px 20px;
+			border-radius: 5px;
+			font-weight: bold;
+			color: #fff;
+			text-decoration: none;
+			background-color: #007bff;
+			margin: 10px;
+			box-shadow: 0 0 5px rgba(0,0,0,0.3);
+		}
+
+		.deposit {
+			background-color: #3385ff;
+		}
+
+		.withdraw{
+		    background-color: #ff4000;
+		}
+
+		a {
+		    color: #FFFFFF;
+		    text-decoration: none;
+		}
+
+		form {
+			background-color: #ffffff;
+			border: 1px solid #cccccc;
+			padding: 20px;
+			width: 400px;
+			margin: auto;
+			margin-top: 50px;
+			border-radius: 10px;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type=text], input[type=password], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+		}
+		button[type=submit] {
+			background-color: #4CAF50;
+			color: white;
+			padding: 14px 20px;
+			margin: 8px 0;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			width: 100%;
+		}
+		button[type=submit]:hover {
+			background-color: #45a049;
+		}
+
 	</style>
 </head>
 <body>
@@ -85,18 +168,95 @@
         <h2>ATM Menu</h2>
         <a href="http://localhost:8090/menuPage">Home</a>
         <a href="http://localhost:8090/accounts" class="active">Accounts</a>
+        <a href="http://localhost:8090/transfer">Transfer</a>
         <a href="http://localhost:8090/transactions">Transactions</a>
         <a href="http://localhost:8090/settings">Settings</a>
     </div>
     <div class="main-content">
-        <h1 th:text="${bankName}"></h1>
+        <h2><span th:text="${fullName}"></span>'s Accounts</h2>
         <br>
-        <p class="welcome-msg">Welcome
-            <span th:text="${fullName}"></span>
-            <br><br>
-            <span>USER ID: </span><span th:text="${userId}"></span>
-        </p>
+        <table>
+            <thead>
+            <tr>
+                <th>Account Name</th>
+                <th>Account ID</th>
+                <th>Balance($)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.name}"></td>
+                <td th:text="${account.accountID}"></td>
+                <td th:text="${account.balance}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="button deposit" id="show-deposit">
+                Deposit
+        </div>
+        <div class="button withdraw" id="show-withdraw">
+                Withdraw
+        </div>
+
+        <br><br>
+
+        <div id="deposit-div" style="display:none;">
+            <form method="post"  th:action="@{/accounts/deposit}">
+                <label for="accId-deposit">Account ID:</label>
+                <input type="text" id="accId-deposit" name="accId-deposit" pattern="[0-9]+" title="Account ID Format is only numeric [0-9]"required>
+
+                <label for="deposit">Deposit Amount:</label>
+                <input type="text" id="deposit" name="deposit" pattern="[0-9]+" title="Only can deposit numeric values !"required>
+
+                <label for="memo-deposit">Deposit Memo:</label>
+                <input type="text" id="memo-deposit" name="memo-deposit">
+
+                <button type="submit">Deposit</button>
+            </form>
+        </div>
+
+        <div id="withdraw-div" style="display:none;">
+            <form method="post"  th:action="@{/accounts/withdraw}">
+                <label for="accId-deposit">Account ID:</label>
+                <input type="text" id="accId-withdraw" name="accId-withdraw" pattern="[0-9]+" title="Account ID Format is only numeric [0-9]"required>
+
+                <label for="deposit">Withdraw Amount:</label>
+                <input type="text" id="withdraw" name="withdraw" pattern="[0-9]+" title="Only can withdraw numeric values !"required>
+
+                <label for="memo-withdraw">Withdraw Memo:</label>
+                <input type="text" id="memo-withdraw" name="memo-withdraw">
+
+                <button type="submit">Withdraw</button>
+            </form>
+        </div>
+
     </div>
+
 </div>
+<script>
+    const showDivButton = document.getElementById("show-deposit");
+    const depositDiv = document.getElementById("deposit-div");
+
+    showDivButton.addEventListener("click", () => {
+        if (depositDiv.style.display === "none") {
+            depositDiv.style.display = "block";
+            withdrawDiv.style.display = "none";
+        } else {
+            depositDiv.style.display = "none";
+        }
+    });
+
+    const showDiv2Button = document.getElementById("show-withdraw");
+    const withdrawDiv = document.getElementById("withdraw-div");
+
+    showDiv2Button.addEventListener("click", () => {
+        if (withdrawDiv.style.display === "none") {
+            withdrawDiv.style.display = "block";
+            depositDiv.style.display = "none";
+        } else {
+            withdrawDiv.style.display = "none";
+        }
+    });
+</script>
 </body>
 </html>
