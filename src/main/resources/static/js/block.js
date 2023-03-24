@@ -37,3 +37,32 @@
         }
     });
 
+    const showInternal = document.getElementById("type-transfer");
+    const internalDiv = document.getElementById("internal-div");
+
+    showInternal.addEventListener("change", () => {
+        if (showInternal.value === "1") {
+            internalDiv.style.display = "block";
+            externalDiv.style.display = "none";
+
+        } else {
+            internalDiv.style.display = "none";
+        }
+    });
+
+    const showExternal = document.getElementById("type-transfer");
+    const externalDiv = document.getElementById("external-div");
+    const inputVal = document.getElementById("accId-transfer-to-external");
+
+    showExternal.addEventListener("change", () => {
+        if (showExternal.value === "2" || showExternal.value === "3") {
+            externalDiv.style.display = "block";
+            inputVal.value = "";
+            internalDiv.style.display = "none";
+
+        } else {
+            externalDiv.style.display = "none";
+            inputVal.value = "-1";
+        }
+    });
+

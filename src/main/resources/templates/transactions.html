@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>ATM MENU</title>
+  <link rel="stylesheet" th:href="@{/css/transactions.css}">
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <h2>ATM Menu</h2>
+    <a href="http://localhost:8090/menuPage">Home</a>
+    <a href="http://localhost:8090/accounts">Accounts</a>
+    <a href="http://localhost:8090/transactions" class="active">Transactions</a>
+    <a href="http://localhost:8090/settings">Settings</a>
+  </div>
+  <div class="main-content">
+    <h2><span th:text="${fullName}"></span>'s Accounts</h2>
+    <br>
+    <table>
+      <thead>
+      <tr>
+        <th>Account Name</th>
+        <th>Account ID</th>
+        <th>Balance($)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="account : ${accounts}">
+        <td th:text="${account.name}"></td>
+        <td th:text="${account.accountID}"></td>
+        <td th:text="${account.balance}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="transaction-content">
+      <h2>Transaction History</h2>
+      <form method="post"  th:action="@{/transactions/showTransactionsForm}">
+        <select onchange="this.form.submit()" id="acctId" class="form-control" name="acctId" required>
+          <option value="" selected hidden></option>
+          <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+        </select>
+      </form>
+      <br>
+      <table>
+        <thead>
+        <tr>
+          <th>Date</th>
+          <th>Amount($)</th>
+          <th>Memo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transaction : ${transactions}">
+          <td th:text="${transaction.timestamp}"></td>
+          <td th:text="${transaction.amount}"></td>
+          <td th:text="${transaction.memo}"></td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

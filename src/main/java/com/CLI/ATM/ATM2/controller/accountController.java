@@ -27,6 +27,9 @@ public class accountController {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    TransactionService transactionService;
+
     @GetMapping("/menuPage")
     public String getHomeHTML(Model model){
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
@@ -36,7 +39,7 @@ public class accountController {
         String userName = firstName + " " + lastName;
 
         model.addAttribute("fullName", userName);
-        model.addAttribute("userId", HTML_currBankID);
+        model.addAttribute("userId", HTML_currUserID);
         model.addAttribute("bankName", currBank.getName());
 
         return "menuPage";
@@ -58,6 +61,12 @@ public class accountController {
         return "accounts.html";
     }
 
+//    @GetMapping("/transactions")
+//    public String getTransactionsHTML(Model model){
+//        getAccountsHTML(model);
+//        return "transactions.html";
+//    }
+
     @PostMapping("/accounts/deposit")
     public String depositHTML(Model mode,
                               @RequestParam("accId-deposit") int accId,
@@ -66,7 +75,6 @@ public class accountController {
 
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
         User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        //change to dropdown
         Account currAcc = accountService.getAccountFromID(currUser, accId);
 
         accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo);
@@ -85,7 +93,6 @@ public class accountController {
 
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
         User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        //change to dropdown
         Account currAcc = accountService.getAccountFromID(currUser, accId);
 
         amount = -amount;
@@ -102,15 +109,51 @@ public class accountController {
     @PostMapping("/accounts/transfer")
     public String internalTransfer(Model model,
                                    @RequestParam("accId-transfer-from") int accIdFrom,
-                                   @RequestParam("accId-transfer-to") int accIdTo,
+                                   @RequestParam("accId-transfer-to-internal") int accIdTo_Internal,
+                                   @RequestParam("accId-transfer-to-external") int accIdTo_External,
                                    @RequestParam("transfer") double amount,
                                    @RequestParam("memo-transfer") String memo,
                                    @RequestParam("type-transfer") int transferType) {
 
+        // need to add transfer methods here !!!
+
         return "redirect:/accounts";
     }
 
+    @GetMapping("/transactions")
+    public String transactionsHTML(Model model){
+        getAccountsHTML(model);
+        return "transactions";
+    }
 
+    @PostMapping("/transactions/showTransactionsForm")
+    public String showTransactionsHTMLForm(Model model,
+                                       @RequestParam("acctId") int acctId){
 
+        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
+        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
+        Account currAcc = accountService.getAccountFromID(currUser, acctId);
 
+        HTML_currAccID = currAcc.getAccountID();
+
+        return "redirect:/transactions/showTransaction";
+    }
+
+    @GetMapping("/transactions/showTransaction")
+    public String showTransactionHTML(Model model){
+
+        getAccountsHTML(model);
+
+        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
+        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
+        Account currAcc = accountService.getAccountFromID(currUser, HTML_currAccID);
+
+        System.out.println(HTML_currAccID);
+
+        List<Transaction> transactionListing = currAcc.getTransactions();
+
+        model.addAttribute("transactions", transactionListing);
+
+        return "transactions";
+    }
 }

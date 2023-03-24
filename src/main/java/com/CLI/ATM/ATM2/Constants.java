@@ -19,4 +19,5 @@ public class Constants {
     public static ArrayList<Bank> bankList;
     public static int HTML_currUserID = -1;
     public static int HTML_currBankID = -1;
+    public static int HTML_currAccID = -1;
 }

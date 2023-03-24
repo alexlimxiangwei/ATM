@@ -73,7 +73,7 @@
                     <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
                 </select>
 
-                <label for="deposit">Withdraw Amount:</label>
+                <label for="withdraw">Withdraw Amount:</label>
                 <input type="text" id="withdraw" name="withdraw" pattern="[0-9]+" title="Only can withdraw numeric values !"required>
 
                 <label for="memo-withdraw">Withdraw Memo:</label>
@@ -93,7 +93,7 @@
                     <option value="" disabled selected hidden></option>
                     <option id="internal" style="" value="1">Internal Transfer (Own --> Own)</option>
                     <option id="third-party" style="" value="2">Third Party Transfer (Own --> Others)</option>
-                    <option id="overseas" style="" value="1">Overseas Transfer (Own --> Overseas)</option>
+                    <option id="overseas" style="" value="3">Overseas Transfer (Own --> Overseas)</option>
                 </select>
 
                 <label for="accId-transfer-from">Select Your Account:</label>
@@ -102,11 +102,20 @@
                     <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
                 </select>
 
-                <label for="accId-transfer-to">Transfer To:</label>
-                <select id="accId-transfer-to" class="form-control" name="accId-transfer-to" required>
-                    <option value="" disabled selected hidden></option>
-                    <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
-                </select>
+                <!--  Internal Transfer ONLY -->
+                <div id="internal-div" style="display: none;">
+                    <label for="accId-transfer-to-internal">Transfer To:</label>
+                    <select id="accId-transfer-to-internal" class="form-control" name="accId-transfer-to-internal">
+                        <option value="-1" selected hidden></option>
+                        <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+                    </select>
+                </div>
+
+                <!-- Third Party & Overseas Transfer -->
+                <div id="external-div" style="display: none;">
+                    <label for="accId-transfer-to-external">Transfer To:</label>
+                    <input type="text" id="accId-transfer-to-external" name="accId-transfer-to-external" pattern="[-1-9]+" title="Invalid Account Format !" value="-1">
+                </div>
 
                 <label for="transfer">Transfer Amount:</label>
                 <input type="text" id="transfer" name="transfer" pattern="[0-9]+" title="Only can transfer numeric values !"required>
@@ -115,10 +124,8 @@
                 <input type="text" id="memo-transfer" name="memo-transfer">
 
                 <button type="submit">Confirm Transfer</button>
-
             </form>
         </div>
-
     </div>
 
 </div>
