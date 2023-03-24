@@ -1,0 +1,172 @@
+		body {
+			margin: 0;
+			padding: 0;
+            font-family: "Lucida Console", "Courier New", monospace;
+			background-color: #f9f9f9;
+			color: #444;
+		}
+
+		.container {
+			display: flex;
+			flex-direction: row;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		.sidebar {
+			background-color: #fff;
+			width: 200px;
+			height: 100%;
+			position: fixed;
+			left: 0;
+			top: 0;
+			padding: 20px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.sidebar a {
+			display: block;
+			margin-bottom: 10px;
+			padding: 10px;
+			color: #000;
+			text-decoration: none;
+			border-radius: 5px;
+			transition: background-color 0.2s ease;
+		}
+
+		.sidebar a:hover {
+			color: #fff;
+			background-color: #333;
+		}
+
+		.sidebar a.active {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		.main-content {
+			margin-left: 200px;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			border-radius: 5px;
+		}
+
+		h1 {
+			font-size: 36px;
+			margin-top: 0;
+			margin-bottom: 20px;
+			color: #333;
+		}
+
+		p {
+			font-size: 18px;
+			line-height: 1.5;
+			margin-bottom: 20px;
+		}
+
+		h2 {
+			font-size: 24px;
+			margin-top: 0;
+			margin-bottom: 10px;
+			color: #333;
+		}
+
+		table {
+          border-collapse: collapse;
+          width: 100%;
+          margin-bottom: 20px;
+        }
+
+        th, td {
+          text-align: left;
+          padding: 8px;
+          border: 1px solid #ddd;
+        }
+
+        th {
+          background-color: #f2f2f2;
+          font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+
+        .button {
+			display: inline-block;
+			padding: 10px 20px;
+			border-radius: 5px;
+			font-weight: bold;
+			color: #fff;
+			text-decoration: none;
+			background-color: #007bff;
+			margin: 10px;
+			box-shadow: 0 0 5px rgba(0,0,0,0.3);
+		}
+
+		.deposit {
+			background-color: #3385ff;
+		}
+
+		.withdraw{
+		    background-color: #ff4000;
+		}
+
+		.transfer{
+		    background-color: #00e600;
+		}
+
+		a {
+		    color: #FFFFFF;
+		    text-decoration: none;
+		}
+
+		form {
+			background-color: #ffffff;
+			border: 1px solid #cccccc;
+			padding: 20px;
+			width: 400px;
+			margin: auto;
+			margin-top: 50px;
+			border-radius: 10px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		input[type=text], input[type=password], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+		}
+
+		button[type=submit] {
+			background-color: #4CAF50;
+			color: white;
+			padding: 14px 20px;
+			margin: 8px 0;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			width: 100%;
+		}
+
+		button[type=submit]:hover {
+			background-color: #45a049;
+		}
+
+        .form-title{
+            text-align: center;
+        }
+
+        select, option{
+            font-family: "Lucida Console", "Courier New", monospace;
+        }

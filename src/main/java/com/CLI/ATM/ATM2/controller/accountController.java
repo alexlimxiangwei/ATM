@@ -66,7 +66,9 @@ public class accountController {
 
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
         User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
+        //change to dropdown
         Account currAcc = accountService.getAccountFromID(currUser, accId);
+
         accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo);
         accountService.addBalance(currAcc, amount);
 
@@ -76,14 +78,16 @@ public class accountController {
     }
 
     @PostMapping("/accounts/withdraw")
-    public String withdrawHTML(Model mode,
+    public String withdrawHTML(Model model,
                               @RequestParam("accId-withdraw") int accId,
                               @RequestParam("withdraw") double amount,
                               @RequestParam("memo-withdraw") String memo) {
 
         Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
         User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
+        //change to dropdown
         Account currAcc = accountService.getAccountFromID(currUser, accId);
+
         amount = -amount;
 
         accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo);
@@ -94,6 +98,18 @@ public class accountController {
 
         return "redirect:/accounts";
     }
+
+    @PostMapping("/accounts/transfer")
+    public String internalTransfer(Model model,
+                                   @RequestParam("accId-transfer-from") int accIdFrom,
+                                   @RequestParam("accId-transfer-to") int accIdTo,
+                                   @RequestParam("transfer") double amount,
+                                   @RequestParam("memo-transfer") String memo,
+                                   @RequestParam("type-transfer") int transferType) {
+
+        return "redirect:/accounts";
+    }
+
 
 
 }

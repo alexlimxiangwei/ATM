@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- fixed all warnings for cleaner code">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;Updated database schema file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +43,9 @@
     </option>
   </component>
   <component name="ProjectId" id="2KNY1qg4dUMR4kny8t3CnRr8iVx" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -64,12 +65,34 @@
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\db" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\kaiya\OneDrive\SIT\Year 1 Trimester 2\CSC1109 - Object-Oriented Programming\ATM\src\main\resources\static\js" />
+      <recent name="C:\Users\kaiya\OneDrive\SIT\Year 1 Trimester 2\CSC1109 - Object-Oriented Programming\ATM\src\main\resources" />
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\.idea" />
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\src" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.CLI.ATM.ATM2" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="ATM" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.CLI.ATM.ATM2.ATM" />
+      <module name="bank" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.CLI.ATM.ATM2.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ATM" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -278,5 +301,16 @@
     <MESSAGE value="DONE:&#10;- removed all user inputs from transfer functions so that unit testing is doable. (fixed tims previous commit)&#10;&#10;- added a file called Strings.java where we will print common strings, i will slowly move our stuff over there so that our code is cleaner and easier to read" />
     <MESSAGE value="DONE:&#10;- fixed sign up SQL functions" />
     <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- fixed sign up SQL functions" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

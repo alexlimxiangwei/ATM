@@ -2,82 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <title>ATM MENU</title>
-  <style>
-		body {
-			margin: 0;
-			padding: 0;
-            font-family: "Lucida Console", "Courier New", monospace;
-			background-color: #f9f9f9;
-			color: #444;
-		}
-
-		.container {
-			display: flex;
-			flex-direction: row;
-			max-width: 1200px;
-			margin: 0 auto;
-			padding: 20px;
-		}
-
-		.sidebar {
-			background-color: #fff;
-			width: 200px;
-			height: 100%;
-			position: fixed;
-			left: 0;
-			top: 0;
-			padding: 20px;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		}
-
-		.sidebar a {
-			display: block;
-			margin-bottom: 10px;
-			padding: 10px;
-			color: #000;
-			text-decoration: none;
-			border-radius: 5px;
-			transition: background-color 0.2s ease;
-		}
-
-		.sidebar a:hover {
-			color: #fff;
-			background-color: #333;
-		}
-
-		.sidebar a.active {
-			background-color: #4CAF50;
-			color: white;
-		}
-
-		.main-content {
-			margin-left: 200px;
-			padding: 20px;
-			background-color: #fff;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-			border-radius: 5px;
-		}
-
-		h1 {
-			font-size: 36px;
-			margin-top: 0;
-			margin-bottom: 20px;
-			color: #333;
-		}
-
-		p {
-			font-size: 18px;
-			line-height: 1.5;
-			margin-bottom: 20px;
-		}
-
-		h2 {
-			font-size: 24px;
-			margin-top: 0;
-			margin-bottom: 10px;
-			color: #333;
-		}
-	</style>
+  <link rel="stylesheet" th:href="@{/css/menu.css}">
 </head>
 <body>
 <div class="container">
@@ -85,7 +10,6 @@
     <h2>ATM Menu</h2>
     <a href="http://localhost:8090/menuPage" class="active">Home</a>
     <a href="http://localhost:8090/accounts">Accounts</a>
-    <a href="http://localhost:8090/transfer">Transfer</a>
     <a href="http://localhost:8090/transactions">Transactions</a>
     <a href="http://localhost:8090/settings">Settings</a>
   </div>
