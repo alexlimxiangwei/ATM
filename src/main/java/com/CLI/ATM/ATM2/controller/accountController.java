@@ -189,4 +189,41 @@ public class accountController {
 
         return "transactions";
     }
+
+    @GetMapping("/settings")
+    public String getSettingsHTML(Model model){
+
+        getAccountsHTML(model);
+        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
+        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
+        String firstName = currUser.getFirstName();
+        String lastName = currUser.getLastName();
+
+        model.addAttribute("firstName", firstName);
+        model.addAttribute("lastName", lastName);
+        model.addAttribute("userId", HTML_currUserID);
+        model.addAttribute("bankName", currBank.getName());
+
+        return "settings";
+    }
+
+    @PostMapping("/settings/changePassword")
+    public String changePasswordHTML(Model model,
+                                     @RequestParam("current_pin") int current_pin,
+                                     @RequestParam("new_pin") int new_pin,
+                                     @RequestParam("confirm_pin") int confirm_pin){
+
+        // add change password functions
+
+        return "redirect:/settings";
+    }
+
+    @PostMapping("/settings/createAcc")
+    public String createNewAccHTML(Model model,
+                                   @RequestParam("newAccName") String newAccName){
+
+        // add create account functions
+
+        return "redirect:/settings";
+    }
 }
