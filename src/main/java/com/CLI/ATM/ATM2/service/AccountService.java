@@ -133,7 +133,7 @@ public class AccountService {
      * @param directionString direction of transfer, e.g. : transfer to / withdraw from
      * @return Account object for transferring of $
      */
-    public Account getInternalTransferAccount(User theUser, String directionString){
+    public Account getInternalAccount(User theUser, String directionString){
         int fromAcctIndex;
         int printSumFlag = 0;
         int numOfAccounts = userService.numAccounts(theUser);

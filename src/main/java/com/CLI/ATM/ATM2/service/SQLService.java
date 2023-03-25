@@ -30,7 +30,7 @@ public class SQLService {
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "password");
+                    "root", "");
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
@@ -200,16 +200,14 @@ public class SQLService {
     /**
      * Update user's new account name on sql database
      * @param idAcc id of account
-     * @param cust_has_id_customer id of customer
      * @param name the name the user wants to change to
      */
-    public void changeAccountName(int idAcc, int cust_has_id_customer, String name){
+    public void changeAccountName(int idAcc, String name){
         try{
-            String strSelect = "update account set name = ? where Customer_idCustomer = ? AND idAccount = ?";
+            String strSelect = "update account set name = ? where idAccount = ?";
             PreparedStatement stmt = conn.prepareStatement(strSelect);
             stmt.setString(1, name);
             stmt.setInt(2, idAcc);
-            stmt.setInt(3, cust_has_id_customer);
             stmt.executeUpdate();
 
         } catch (SQLException e) {

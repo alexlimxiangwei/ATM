@@ -61,7 +61,7 @@ public class Strings {
         System.out.println("Account Setting");
         System.out.println("  1) Change Password");
         System.out.println("  2) Create Account");
-        System.out.println("  3) Change Account Type");
+        System.out.println("  3) Change Account Name");
         System.out.println("  4) Delete Account");
         System.out.println("  5) Back");
         System.out.println();

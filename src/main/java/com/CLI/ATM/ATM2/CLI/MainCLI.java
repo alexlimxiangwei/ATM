@@ -83,12 +83,12 @@ public class MainCLI {
         int choice = transferFundsMenu();
         String amountValidationString;
         // get account to transfer from
-        fromAcct = accountService.getInternalTransferAccount(theUser, "transfer from");
+        fromAcct = accountService.getInternalAccount(theUser, "transfer from");
         transferLimit = fromAcct.getBalance();
 
         if (choice == 1){
             // get internal account to transfer to
-            toAcct = accountService.getInternalTransferAccount(theUser, "transfer to");
+            toAcct = accountService.getInternalAccount(theUser, "transfer to");
             toAcctID = toAcct.getAccountID();
         }
         else{
@@ -161,7 +161,7 @@ public class MainCLI {
             directionString = "transfer to";
         }
 
-        fromAcct = accountService.getInternalTransferAccount(theUser, directionString);
+        fromAcct = accountService.getInternalAccount(theUser, directionString);
         if (direction == WITHDRAW){ // if making a withdraw, set a limit
             // set transfer limit to whichever is lower :  current account balance or local transfer limit
             // TODO: change this to check current transfer limit left (e.g. i alr withdrew $500 of my $1000 limit means my current limit for today is $500)
@@ -308,16 +308,15 @@ public class MainCLI {
      * @param theUser	the logged-in User object
      */
     public void changeAccountName(User theUser) {
-        int numOfAcc = userService.numAccounts(theUser);
-        System.out.print("Enter the accountNo which you would like to change the name: ");
-        int usrChoice = sc.nextInt();
+        Account acct = accountService.getInternalAccount(theUser,"change the name of");
         System.out.print("Enter new account name: ");
         sc.nextLine();
         String newName = sc.nextLine();
-        userService.changeAccountName(theUser, usrChoice, newName);
+        // update locally
+        acct.setName(newName);
 
-        // Update account name changes on sql
-        SQLService.changeAccountName(userService.getAcctUUID(theUser, usrChoice),numOfAcc, newName);
+        // Update on SQL
+        SQLService.changeAccountName(acct.getAccountID(), newName);
         System.out.println("Account name successfully changed. ");
     }
 
@@ -346,7 +345,7 @@ public class MainCLI {
      * @param theUser	the logged-in User object
      */
     public void deleteAccount(User theUser){
-        Account acc = accountService.getInternalTransferAccount(theUser, "delete");
+        Account acc = accountService.getInternalAccount(theUser, "delete");
         if(acc.getBalance() > 0 ){
             System.out.println("Please make sure that your balance is 0 before deleting! ");
         }
