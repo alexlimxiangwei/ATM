@@ -188,6 +188,17 @@
 
         .create-acc{
             margin: 0 auto;
+            background-color: #7FFFD4;
+        }
+
+        .edit-acc{
+            margin: 0 auto;
+            background-color: #FFD700;
+        }
+
+        .delete-acc{
+            margin: 0 auto;
+            background-color: #CD5C5C;
         }
 
 

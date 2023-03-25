@@ -54,22 +54,25 @@
         <tr>
           <th>Account Name</th>
           <th>Account ID</th>
-          <th>Settings</th>
+          <th>Balance($)</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="account : ${accounts}">
           <td th:text="${account.name}"></td>
           <td th:text="${account.accountID}"></td>
-          <td>
-            <button id="acc-edit">Edit</button>
-            <button id="acc-delete">Delete</button>
-          </td>
+          <td th:text="${account.balance}"></td>
         </tr>
         </tbody>
       </table>
       <div class="button create-acc" id="create-acc">
         Create New Account
+      </div>
+      <div class="button edit-acc" id="edit-acc">
+        Edit Account Name
+      </div>
+      <div class="button delete-acc" id="delete-acc">
+        Delete Account
       </div>
       <br><br><br>
       <div id="newAcc-div" style="display: none;">
@@ -78,6 +81,30 @@
           <label for="newAccName">New Account Name:</label>
           <input type="text" id="newAccName" name="newAccName" required>
           <button type="submit">Confirm New Account</button>
+        </form>
+      </div>
+      <div id="edit-div" style="display: none;">
+        <h3 class="form-title">Edit Account Name</h3>
+        <form method="post"  th:action="@{/settings/editAcc}">
+          <label for="accID_edit">Select an Account:</label>
+          <select id="accID_edit" class="form-control" name="accID_edit">
+            <option value="" selected hidden></option>
+            <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+          </select>
+          <label for="editedAccName">New Account Name:</label>
+          <input type="text" id="editedAccName" name="editedAccName" required>
+          <button type="submit">Confirm</button>
+        </form>
+      </div>
+      <div id="delete-div" style="display: none;">
+        <h3 class="form-title">Edit Account Name</h3>
+        <form method="post"  th:action="@{/settings/deleteAcc}">
+          <label for="accID_delete">Delete Account:</label>
+          <select id="accID_delete" class="form-control" name="accID_delete">
+            <option value="" selected hidden></option>
+            <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+          </select>
+          <button type="submit">Delete Account</button>
         </form>
       </div>
     </div>

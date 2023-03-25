@@ -226,4 +226,25 @@ public class accountController {
 
         return "redirect:/settings";
     }
+
+    @PostMapping("/settings/editAcc")
+    public String editAccHTML(Model model,
+                              @RequestParam("editedAccName") String editedAccName,
+                              @RequestParam("accID_edit") int accID){
+
+        getAccountsHTML(model);
+        // add edit account functions
+
+        return "redirect:/settings";
+    }
+
+    @PostMapping("/settings/deleteAcc")
+    public String deleteAccHTML(Model model,
+                                @RequestParam("accID_delete") int accID){
+
+        // add delete account functions
+        System.out.println(accID);
+
+        return "redirect:/settings";
+    }
 }
