@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.List;
 
 @Controller
@@ -118,6 +117,37 @@ public class accountController {
                                    @RequestParam("type-transfer") int transferType) {
 
         // need to add transfer methods here !!!
+        Bank fromBank = bankService.getBankFromID(bankList, HTML_currBankID);
+        User fromUser = bankService.getUserFromID(fromBank, HTML_currUserID);
+        Account fromAcct = accountService.getAccountFromID(fromUser, accIdFrom);
+        Account toAcct = null;
+        switch (transferType) {
+            case 1 -> { // internal transfer
+                toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
+
+                // add transaction locally
+                accountService.addTransaction(fromAcct, -amount, TRANSACTION_TO_SELF, memo);
+                accountService.addTransaction(toAcct, amount, TRANSACTION_TO_SELF, memo);
+            }
+            case 2 -> { // external transfer
+                int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
+                Bank toBank = bankService.getBankFromID(bankList, toBankID);
+                toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
+                // add transaction locally
+                accountService.addTransaction(fromAcct, -amount, accIdTo_External, memo);
+                accountService.addTransaction(toAcct, amount, accIdFrom, memo);
+
+
+            }
+            default -> {
+            }
+        }
+            accountService.addBalance(fromAcct, -amount);
+            accountService.addBalance(toAcct, amount);
+            //update on SQL
+            sqlService.updateBalance(fromAcct.getBalance(),accIdFrom);
+            sqlService.updateBalance(toAcct.getBalance(),accIdTo_External);
+
 
         return "redirect:/accounts";
     }

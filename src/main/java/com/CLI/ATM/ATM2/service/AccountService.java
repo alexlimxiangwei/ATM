@@ -1,7 +1,6 @@
 package com.CLI.ATM.ATM2.service;
 
 import com.CLI.ATM.ATM2.CLI.UserCLI;
-import com.CLI.ATM.ATM2.Strings;
 import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.Account;
 import com.CLI.ATM.ATM2.model.Bank;
@@ -156,32 +155,35 @@ public class AccountService {
     }
 
     /**
-     * Gets an account by asking user for an account ID
-     * @return found accountId and found bankID, bankID is -1 if not in local memory
+     * Validates whether an accountID exists or not.
+     * Creates a new user if the account exists in SQL database
+     * @param toAcctID accountID to validate
+     * @return bankID that accountID belongs to or null if not found
      */
-    public int[] getThirdPartyTransferAccount(){
-        //get accountID to transfer to
-        int toAcctID;
-        int bankID;
-        do {
-            int[] accountInfo = Strings.thirdPartyTransferMenu();
-            toAcctID = accountInfo[0];
-            bankID = accountInfo[1];
+    public int validateThirdPartyAccount(int toAcctID){
+        int bankID = AccountService.getBankIDFromAccountID(toAcctID);
 
-            // if account doesn't exist in local memory, but exists in sql database,
-            if (bankID == NOT_FOUND && SQLService.isSQLAccount(toAcctID)) {
-                // add that user to local memory
-                SQLService.addExistingUserByAcctId(toAcctID);
-                bankID = getBankIDFromAccountID(toAcctID);
-            }
-            else if (bankID == NOT_FOUND){
-                // invalid account
-                System.out.println("Invalid account. Please try again.");
-
-            }
-        } while (bankID == NOT_FOUND);
-        // get accountId and which bank it belongs to if it exists in local mem
-        return new int[] {toAcctID, bankID};
+        // if account doesn't exist in local memory, but exists in sql database,
+        if (bankID == NOT_FOUND && SQLService.isSQLAccount(toAcctID)) {
+            // add that user to local memory
+            SQLService.addExistingUserByAcctId(toAcctID);
+            bankID = getBankIDFromAccountID(toAcctID);
+        }
+        else if (bankID == NOT_FOUND) {
+            // invalid account
+            System.out.println("Invalid account. Please try again.");
+        }
+        // returns accountId and which bank it belongs to if it exists in local mem
+        return bankID;
+    }
+    /**
+     * Asks user for third party accountID to transfer to
+     * @return User inputted accountID (may not be valid accountID)
+     */
+    public int getThirdPartyAccount() {
+        System.out.println("Enter the account number of the account to transfer to: ");
+        sc.nextLine();
+        return sc.nextInt();
     }
 
     /**

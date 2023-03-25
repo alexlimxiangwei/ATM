@@ -44,7 +44,7 @@ public class MainCLI {
     }
 
 
-    public void printUserMenu(ArrayList<Bank> bankList, User theUser, Bank theBank){
+    public void printUserMenu(User theUser, Bank theBank){
 
         // print a summary of the user's accounts
         userCLI.printAccountsSummary(theUser);
@@ -59,25 +59,25 @@ public class MainCLI {
             case 1 -> showTransHistory(theUser);
             case 2 -> updateFunds(theUser, WITHDRAW);
             case 3 -> updateFunds(theUser, DEPOSIT);
-            case 4 -> transferFunds(theUser,bankList);
+            case 4 -> transferFunds(theUser);
             case 5 -> showAccountSetting(theUser, theBank);
             case 6 -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
         if (choice != 6) {
-            printUserMenu(bankList, theUser,theBank);
+            printUserMenu(theUser,theBank);
         }
 
     }
     //endregion
 
     //region ACCOUNT_FUNCTIONS
-    public void transferFunds(User theUser, ArrayList<Bank> banks) {
+    public void transferFunds(User theUser) {
         Account fromAcct;
         Account toAcct;
         int toAcctID;
-        int[] accountInfo;
+        int bankID;
         double amount;
         double transferLimit;
         int choice = transferFundsMenu();
@@ -93,12 +93,13 @@ public class MainCLI {
         }
         else{
             //get third party account to transfer to
-            accountInfo = accountService.getThirdPartyTransferAccount();
-            toAcctID = accountInfo[0];
-            int bankID = accountInfo[1];
+            do {
+                toAcctID = accountService.getThirdPartyAccount();
+                bankID = accountService.validateThirdPartyAccount(toAcctID);
+            }while (bankID == NOT_FOUND);
 
-            Bank toBank = banks.get(bankID);
-            toAcct = bankService.getAccountByID(toBank, toAcctID);
+            Bank toBank = bankService.getBankFromID(bankList, bankID);
+            toAcct = bankService.getAccountFromID(toBank, toAcctID);
             // TODO: change the below to get remaining transfer limits instead of just the limit
             if (toBank.isLocal() & transferLimit > theUser.getLocal_transfer_limit()){
                 transferLimit = theUser.getLocal_transfer_limit(); // if its a local bank, apply limit for local transfer

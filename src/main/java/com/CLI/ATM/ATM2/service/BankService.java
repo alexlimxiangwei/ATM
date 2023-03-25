@@ -138,7 +138,7 @@ public class BankService {
      * @param bank	the bank that the user is in
      * @param accountID gets the accountID
      */
-    public Account getAccountByID(Bank bank, int accountID){
+    public Account getAccountFromID(Bank bank, int accountID){
         for (int i = 0 ; i < bank.getAccounts().size(); i++){
             if (bank.getAccounts().get(i).getAccountID() == accountID){
                 return bank.getAccounts().get(i);

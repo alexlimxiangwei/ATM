@@ -30,7 +30,7 @@ public class SQLService {
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "password");
+                    "root", "");
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
@@ -78,7 +78,7 @@ public class SQLService {
     /**
      * Add new account to sql database
      * @param idAcc creates new account with uuid
-     * @param cust_has_id_customer gets the customerID
+     * @param id_customer gets the customerID
      * @param bank_id_bank gets the bankID
      * @param name creates new account with pin
      */
