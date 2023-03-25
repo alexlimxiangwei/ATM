@@ -242,8 +242,8 @@ public class accountController {
     public String deleteAccHTML(Model model,
                                 @RequestParam("accID_delete") int accID){
 
+        getAccountsHTML(model);
         // add delete account functions
-        System.out.println(accID);
 
         return "redirect:/settings";
     }
