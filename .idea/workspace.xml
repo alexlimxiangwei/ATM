@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- they didnt detect one of my changes to ATM jn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/AccountCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/AccountCLI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,7 +263,28 @@
       <option name="project" value="LOCAL" />
       <updated>1679553044511</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="DONE:&#10;- Changed third party transfer so that it doesnt ask for input in function for easier unit testing&#10;- moved getThirdPartyAccount() from Strings to AccountService &#10;- fixed javadocs for SQLService.addAccount&#10;- fixed a lot of warnings from intelliJ&#10;HTML:&#10;- added third party transfer code to HTML&#10;- added internal transfer code to HTML&#10;- fixed typo in regex pattern for third party transfer that didnt allow me to transter to accountIDs that are more than 1 digit">
+      <created>1679732742019</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1679732742019</updated>
+    </task>
+    <task id="LOCAL-00025" summary="DONE:&#10;- they didnt detect one of my changes to ATM jn">
+      <created>1679732795728</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1679732795728</updated>
+    </task>
+    <task id="LOCAL-00026" summary="DONE:&#10;- they didnt detect one of my changes to ATM jn">
+      <created>1679732813602</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1679732813602</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -303,6 +320,10 @@
     <MESSAGE value="DONE:&#10;Updated database schema file" />
     <MESSAGE value="DONE:&#10;- removed all user inputs from transfer functions so that unit testing is doable. (fixed tims previous commit)&#10;&#10;- added a file called Strings.java where we will print common strings, i will slowly move our stuff over there so that our code is cleaner and easier to read" />
     <MESSAGE value="DONE:&#10;- fixed sign up SQL functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- fixed sign up SQL functions" />
+    <MESSAGE value="DONE:&#10;- Changed third party transfer so that it doesnt ask for input in function for easier unit testing&#10;- moved getThirdPartyAccount() from Strings to AccountService &#10;&#10;HTML:&#10;- added third party transfer code to HTML&#10;- added internal transfer code to HTML&#10;- fixed typo in regex pattern for third party transfer that didnt allow me to transter to accountIDs that are more than 1 digit" />
+    <MESSAGE value="DONE:&#10;- Changed third party transfer so that it doesnt ask for input in function for easier unit testing&#10;- moved getThirdPartyAccount() from Strings to AccountService &#10;- fixed javadocs for SQLService.addAccount&#10;&#10;HTML:&#10;- added third party transfer code to HTML&#10;- added internal transfer code to HTML&#10;- fixed typo in regex pattern for third party transfer that didnt allow me to transter to accountIDs that are more than 1 digit" />
+    <MESSAGE value="DONE:&#10;- Changed third party transfer so that it doesnt ask for input in function for easier unit testing&#10;- moved getThirdPartyAccount() from Strings to AccountService &#10;- fixed javadocs for SQLService.addAccount&#10;- fixed a lot of warnings from intelliJ&#10;HTML:&#10;- added third party transfer code to HTML&#10;- added internal transfer code to HTML&#10;- fixed typo in regex pattern for third party transfer that didnt allow me to transter to accountIDs that are more than 1 digit" />
+    <MESSAGE value="DONE:&#10;- they didnt detect one of my changes to ATM jn" />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- they didnt detect one of my changes to ATM jn" />
   </component>
 </project>

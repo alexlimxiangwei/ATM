@@ -107,7 +107,7 @@ public class SQLService {
             Statement stmt = conn.createStatement();
             int id = acc.getAccountID();
             String strSelect = String.format("select * from Transaction where Account_idAccount =" +
-                    " %d or receiverID = %d order by idTransaction;", id, id);
+                    " %d or receiverID = %d order by timeStamp desc;", id, id);
             ResultSet rset = stmt.executeQuery(strSelect);
             while (rset.next()){
                 int idTransaction = rset.getInt("idTransaction");

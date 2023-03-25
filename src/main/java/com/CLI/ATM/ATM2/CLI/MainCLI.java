@@ -231,6 +231,11 @@ public class MainCLI {
 
         // print the transaction history
         userService.printAcctTransHistory(theUser, theAcct);
+        sc.nextLine();
+        System.out.println("Enter any key to continue");
+        sc.nextLine();
+
+
     }
     //endregion
 

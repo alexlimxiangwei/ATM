@@ -13,11 +13,10 @@ public class AccountCLI {
     /**
      * Print transaction history for account
      */
-    //TODO : make this filo I/O to store all transactions
     public void printTransHistory(Account account) {
 
-        System.out.printf("\nTransaction history for account %s\n", account.getAccountID());
-        for (int t = account.getTransactions().size()-1; t >= 0; t--) {
+        System.out.printf("\nTransaction history for account %s:\n\n", account.getAccountID());
+        for (int t = 0; t < account.getTransactions().size(); t++) {
             System.out.println(transactionCLI.getSummaryLine(account.getTransactions().get(t)));
         }
         System.out.println();
