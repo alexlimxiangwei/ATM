@@ -102,7 +102,7 @@ public class MainCLI {
             toAcct = bankService.getAccountFromID(toBank, toAcctID);
             // TODO: change the below to get remaining transfer limits instead of just the limit
             if (toBank.isLocal() & transferLimit > theUser.getLocal_transfer_limit()){
-                transferLimit = theUser.getLocal_transfer_limit(); // if its a local bank, apply limit for local transfer
+                transferLimit = theUser.getLocal_transfer_limit(); // if it's a local bank, apply limit for local transfer
             }
             else if (transferLimit > theUser.getOverseas_transfer_limit()){
                 transferLimit =theUser.getOverseas_transfer_limit(); // else, apply limit for overseas transfer
