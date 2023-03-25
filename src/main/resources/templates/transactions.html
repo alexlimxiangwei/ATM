@@ -33,35 +33,56 @@
       </tbody>
     </table>
     <div class="transaction-content">
-      <h2>Transaction History</h2>
+      <h2>Transaction History
+        <span id="idLabel" style="display: none;">[Account ID:
+          <span id="currAcctID" th:text="${currAcctID}" th:value="${currAcctID}"></span>
+          ]
+        </span>
+      </h2>
       <form method="post"  th:action="@{/transactions/showTransactionsForm}">
-        <select onchange="this.form.submit()" id="acctId" class="form-control" name="acctId" required>
+        <select onchange="this.form.submit()" id="acctId" class="form-control" name="acctId">
           <option value="" selected hidden></option>
           <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
         </select>
       </form>
       <br>
-      <table>
-        <thead>
-        <tr>
-          <th>Date</th>
-          <th>Amount($)</th>
-          <th>Memo</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="transaction : ${transactions}">
-          <td th:text="${transaction.timestamp}"></td>
-          <td th:text="${transaction.amount}"></td>
-          <td th:text="${transaction.memo}"></td>
-        </tr>
-        </tbody>
-      </table>
-
+      <div id="transaction-table" style="display: none;">
+        <table>
+          <thead>
+          <tr>
+            <th>Date</th>
+            <th>Amount($)</th>
+            <th>Receiver ID</th>
+            <th>Memo</th>
+            <th>Transaction ID</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="transaction : ${transactions}">
+            <td th:text="${transaction.timestamp}"></td>
+            <td th:text="${transaction.amount}"></td>
+            <td th:text="${transaction.receiverID}"></td>
+            <td th:text="${transaction.memo}"></td>
+            <td th:text="${transaction.transactionID}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
   </div>
-
 </div>
+<script>
+    const acctSelect = document.getElementById("currAcctID");
+    const transactionTable = document.getElementById("transaction-table");
+    const idLabel = document.getElementById("idLabel");
+
+        if (acctSelect.textContent.trim() === "") {
+            transactionTable.style.display = "none";
+            idLabel.style.display = "none"
+        } else {
+            transactionTable.style.display = "block";
+            idLabel.style.display = "block"
+        }
+</script>
 </body>
 </html>

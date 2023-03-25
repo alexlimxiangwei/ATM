@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;Updated database schema file">
-
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/block.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/block.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" afterDir="false" />
-
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/transactions.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/transactions.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,17 +49,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/alex/personal files/SIT/OOP - CSC1109/IntelliJ/ATM/db",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/alex/personal files/SIT/OOP - CSC1109/IntelliJ/ATM/db&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\alex\personal files\SIT\OOP - CSC1109\IntelliJ\ATM\db" />
@@ -306,16 +301,5 @@
     <MESSAGE value="DONE:&#10;- removed all user inputs from transfer functions so that unit testing is doable. (fixed tims previous commit)&#10;&#10;- added a file called Strings.java where we will print common strings, i will slowly move our stuff over there so that our code is cleaner and easier to read" />
     <MESSAGE value="DONE:&#10;- fixed sign up SQL functions" />
     <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- fixed sign up SQL functions" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java</url>
-          <line>64</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

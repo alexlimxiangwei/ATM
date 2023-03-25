@@ -65,4 +65,3 @@
             inputVal.value = "-1";
         }
     });
-

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -148,11 +150,12 @@ public class accountController {
         User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
         Account currAcc = accountService.getAccountFromID(currUser, HTML_currAccID);
 
-        System.out.println(HTML_currAccID);
-
         List<Transaction> transactionListing = currAcc.getTransactions();
 
+        // implement date sorting
+
         model.addAttribute("transactions", transactionListing);
+        model.addAttribute("currAcctID", HTML_currAccID);
 
         return "transactions";
     }
