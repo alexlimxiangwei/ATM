@@ -61,7 +61,7 @@ public class ATM implements CommandLineRunner {
 			if (userInput == 1) {
 				curUser = accountService.handleLogIn(currentBank);
 
-				mainCli.printUserMenu(bankList, curUser, currentBank);
+				mainCli.printUserMenu(curUser, currentBank);
 			} else if (userInput == 2) {
 				accountService.handleSignUp(currentBank);
 			} else {
