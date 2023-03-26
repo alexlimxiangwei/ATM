@@ -154,7 +154,6 @@ public class accountController {
                                        @RequestParam("acctId") int acctId){
 
         Account currAcc = accountService.getAccountFromID(HTML_currUser, acctId);
-
         HTML_currAccID = currAcc.getAccountID();
 
         return "redirect:/transactions/showTransaction";
