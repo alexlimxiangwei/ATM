@@ -1,5 +1,6 @@
 package com.CLI.ATM.ATM2.controller;
 
+import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.*;
 import com.CLI.ATM.ATM2.service.*;
 import static com.CLI.ATM.ATM2.Constants.*;
@@ -33,29 +34,25 @@ public class accountController {
 
     @GetMapping("/menuPage")
     public String getHomeHTML(Model model){
-        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        String firstName = currUser.getFirstName();
-        String lastName = currUser.getLastName();
+        String firstName = HTML_currUser.getFirstName();
+        String lastName = HTML_currUser.getLastName();
         String userName = firstName + " " + lastName;
 
         model.addAttribute("fullName", userName);
-        model.addAttribute("userId", HTML_currUserID);
-        model.addAttribute("bankName", currBank.getName());
+        model.addAttribute("userId", HTML_currUser.getCustomerID());
+        model.addAttribute("bankName", HTML_currBank.getName());
 
         return "menuPage";
     }
 
     @GetMapping("/accounts")
     public String getAccountsHTML(Model model){
-        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        String firstName = currUser.getFirstName();
-        String lastName = currUser.getLastName();
+        String firstName = HTML_currUser.getFirstName();
+        String lastName = HTML_currUser.getLastName();
         String userName = firstName + " " + lastName;
 
         // show account summary on HTML
-        List<Account> accountListing = currUser.getAccounts();
+        List<Account> accountListing = HTML_currUser.getAccounts();
         model.addAttribute("fullName", userName);
         model.addAttribute("accounts", accountListing);
 
@@ -73,10 +70,7 @@ public class accountController {
                               @RequestParam("accId-deposit") int accId,
                               @RequestParam("deposit") double amount,
                               @RequestParam("memo-deposit") String memo) {
-
-        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        Account currAcc = accountService.getAccountFromID(currUser, accId);
+        Account currAcc = accountService.getAccountFromID(HTML_currUser, accId);
 
         accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo);
         accountService.addBalance(currAcc, amount);
@@ -92,9 +86,8 @@ public class accountController {
                               @RequestParam("withdraw") double amount,
                               @RequestParam("memo-withdraw") String memo) {
 
-        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        Account currAcc = accountService.getAccountFromID(currUser, accId);
+
+        Account currAcc = accountService.getAccountFromID(HTML_currUser, accId);
 
         amount = -amount;
 
@@ -116,9 +109,7 @@ public class accountController {
                                    @RequestParam("memo-transfer") String memo,
                                    @RequestParam("type-transfer") int transferType) {
 
-        // need to add transfer methods here !!!
-        Bank fromBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User fromUser = bankService.getUserFromID(fromBank, HTML_currUserID);
+        User fromUser = HTML_currUser;
         Account fromAcct = accountService.getAccountFromID(fromUser, accIdFrom);
         Account toAcct = null;
         switch (transferType) {
@@ -162,9 +153,7 @@ public class accountController {
     public String showTransactionsHTMLForm(Model model,
                                        @RequestParam("acctId") int acctId){
 
-        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        Account currAcc = accountService.getAccountFromID(currUser, acctId);
+        Account currAcc = accountService.getAccountFromID(HTML_currUser, acctId);
 
         HTML_currAccID = currAcc.getAccountID();
 
@@ -176,10 +165,7 @@ public class accountController {
 
         getAccountsHTML(model);
 
-        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        Account currAcc = accountService.getAccountFromID(currUser, HTML_currAccID);
-
+        Account currAcc = accountService.getAccountFromID(HTML_currUser, HTML_currAccID);
         List<Transaction> transactionListing = currAcc.getTransactions();
 
         // implement date sorting
@@ -194,15 +180,14 @@ public class accountController {
     public String getSettingsHTML(Model model){
 
         getAccountsHTML(model);
-        Bank currBank = bankService.getBankFromID(bankList, HTML_currBankID);
-        User currUser = bankService.getUserFromID(currBank, HTML_currUserID);
-        String firstName = currUser.getFirstName();
-        String lastName = currUser.getLastName();
+
+        String firstName = HTML_currUser.getFirstName();
+        String lastName = HTML_currUser.getLastName();
 
         model.addAttribute("firstName", firstName);
         model.addAttribute("lastName", lastName);
         model.addAttribute("userId", HTML_currUserID);
-        model.addAttribute("bankName", currBank.getName());
+        model.addAttribute("bankName", HTML_currBank.getName());
 
         return "settings";
     }
@@ -212,9 +197,10 @@ public class accountController {
                                      @RequestParam("current_pin") int current_pin,
                                      @RequestParam("new_pin") int new_pin,
                                      @RequestParam("confirm_pin") int confirm_pin){
+        //TODO: change all the above param to String then uncomment below
 
-        // add change password functions
-
+//        HTML_currUser.setPinHash(Util.hash(new_pin));
+//        sqlService.changePassword(HTML_currUserID, Util.hash(new_pin), HTML_currBank);
         return "redirect:/settings";
     }
 
@@ -223,7 +209,11 @@ public class accountController {
                                    @RequestParam("newAccName") String newAccName){
 
         // add create account functions
+        Account newAccount = accountService.createAccount(newAccName, HTML_currUser, 0.00);
+        HTML_currUser.getAccounts().add(newAccount);
 
+        // Update add account on sql
+        sqlService.addAccount(newAccount.getAccountID(), HTML_currUser.getCustomerID(), HTML_currBank.getBankID(), newAccName, 0.00);
         return "redirect:/settings";
     }
 
@@ -234,6 +224,8 @@ public class accountController {
 
         getAccountsHTML(model);
         // add edit account functions
+        accountService.getAccountFromID(HTML_currUser, accID).setName(editedAccName);
+        sqlService.changeAccountName(accID, editedAccName);
 
         return "redirect:/settings";
     }
@@ -244,7 +236,10 @@ public class accountController {
 
         getAccountsHTML(model);
         // add delete account functions
+        userService.deleteAccount(HTML_currUser, accID);
 
+        // Update deleted account on sql
+        sqlService.deleteAccount(accID);
         return "redirect:/settings";
     }
 }

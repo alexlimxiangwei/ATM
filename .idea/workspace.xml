@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- Fixed account name change functions">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

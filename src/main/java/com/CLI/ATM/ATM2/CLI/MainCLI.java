@@ -352,7 +352,7 @@ public class MainCLI {
         else {
             userService.deleteAccount(theUser, acc.getAccountID());
             // Update deleted account on sql
-            SQLService.deleteAccount(acc.getAccountID()); //theUser.getUUID()
+            SQLService.deleteAccount(acc.getAccountID());
             System.out.println("Account successfully deleted. ");
 
         }

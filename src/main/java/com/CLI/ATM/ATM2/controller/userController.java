@@ -73,8 +73,8 @@ public class userController {
             message = "Wrong Login Credentials";
             model.addAttribute("message", message);
         }else{
-            HTML_currUserID = userid;
-            HTML_currBankID = bankid;
+            HTML_currBank = bankService.getBankFromID(bankList, bankid);
+            HTML_currUser = bankService.getUserFromID(HTML_currBank, userid);
             return "redirect:/menuPage";
         }
         return "signInPage";

@@ -1,6 +1,7 @@
 package com.CLI.ATM.ATM2;
 
 import com.CLI.ATM.ATM2.model.Bank;
+import com.CLI.ATM.ATM2.model.User;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -20,4 +21,7 @@ public class Constants {
     public static int HTML_currUserID = -1;
     public static int HTML_currBankID = -1;
     public static int HTML_currAccID = -1;
+
+    public static User HTML_currUser;
+    public static Bank HTML_currBank;
 }
