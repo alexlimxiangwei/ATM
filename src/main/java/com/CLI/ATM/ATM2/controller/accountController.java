@@ -193,13 +193,19 @@ public class accountController {
 
     @PostMapping("/settings/changePassword")
     public String changePasswordHTML(Model model,
-                                     @RequestParam("current_pin") int current_pin,
-                                     @RequestParam("new_pin") int new_pin,
-                                     @RequestParam("confirm_pin") int confirm_pin){
-        //TODO: change all the above param to String then uncomment below
-
-//        HTML_currUser.setPinHash(Util.hash(new_pin));
-//        sqlService.changePassword(HTML_currUserID, Util.hash(new_pin), HTML_currBank);
+                                     @RequestParam("current_pin") String current_pin,
+                                     @RequestParam("new_pin") String new_pin,
+                                     @RequestParam("confirm_pin") String confirm_pin){
+        if (!new_pin.equals(confirm_pin)){
+            System.out.println("new pin does not match confirm pin");// TODO: maybe show error message
+        }
+        else if (!HTML_currUser.getPinHash().equals(Util.hash(current_pin))){
+            System.out.println("current pin does not match entered pin!");// TODO: maybe show error message
+        }
+        else{
+            HTML_currUser.setPinHash(Util.hash(new_pin));
+            sqlService.changePassword(Util.hash(new_pin), HTML_currUserID , HTML_currBank);
+        }
         return "redirect:/settings";
     }
 
