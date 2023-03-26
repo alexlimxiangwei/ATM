@@ -28,7 +28,7 @@ public class userController {
     //signIn page
     @GetMapping("/")
     public String home(Model model) {
-        return "home";
+        return "redirect:/signInPage";
     }
 
     @RequestMapping(value = "/signInPage", method = RequestMethod.GET)
