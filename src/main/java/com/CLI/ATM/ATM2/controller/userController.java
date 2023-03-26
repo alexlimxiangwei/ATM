@@ -75,6 +75,7 @@ public class userController {
         }else{
             HTML_currBank = bankService.getBankFromID(bankList, bankid);
             HTML_currUser = bankService.getUserFromID(HTML_currBank, userid);
+            HTML_currUserID = userid;
             return "redirect:/menuPage";
         }
         return "signInPage";
