@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ATM MENU</title>
+    <link rel="stylesheet" th:href="@{/css/accounts.css}">
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <h2>ATM Menu</h2>
+        <br><br>
+        <a href="http://localhost:8090/menuPage">Home</a>
+        <a href="http://localhost:8090/accounts" class="active">Accounts</a>
+        <a href="http://localhost:8090/transactions">Transactions</a>
+        <a href="http://localhost:8090/settings">Settings</a>
+    </div>
+    <div class="main-content">
+        <h2><span th:text="${fullName}"></span>'s Accounts</h2>
+        <br>
+        <table>
+            <thead>
+            <tr>
+                <th>Account Name</th>
+                <th>Account ID</th>
+                <th>Balance($)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${account.name}"></td>
+                <td th:text="${account.accountID}"></td>
+                <td th:text="${account.balance}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="button deposit" id="show-deposit">
+            Deposit
+        </div>
+        <div class="button withdraw" id="show-withdraw">
+            Withdraw
+        </div>
+
+        <div class="button transfer" id="show-transfer">
+            Transfer
+        </div>
+
+        <br><br>
+
+        <div id="deposit-div" style="display:none;">
+            <h3 class="form-title">Deposit Form</h3>
+            <form method="post"  th:action="@{/accounts/deposit}">
+                <label for="accId-deposit">Select an Account:</label>
+                <select id="accId-deposit" class="form-control" name="accId-deposit" required>
+                    <option value="" disabled selected hidden></option>
+                    <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+                </select>
+
+                <label for="deposit">Deposit Amount:</label>
+                <input type="text" id="deposit" name="deposit" pattern="[0-9]+" title="Only can deposit numeric values !"required>
+
+                <label for="memo-deposit">Deposit Memo:</label>
+                <input type="text" id="memo-deposit" name="memo-deposit">
+
+                <button type="submit">Confirm Deposit</button>
+            </form>
+        </div>
+
+        <div id="withdraw-div" style="display:none;">
+            <h3 class="form-title">Withdraw Form</h3>
+            <form method="post"  th:action="@{/accounts/withdraw}">
+                <label for="accId-withdraw">Select an Account:</label>
+                <select id="accId-withdraw" class="form-control" name="accId-withdraw" required>
+                    <option value="" disabled selected hidden></option>
+                    <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+                </select>
+
+                <label for="withdraw">Withdraw Amount:</label>
+                <input type="text" id="withdraw" name="withdraw" pattern="[0-9]+" title="Only can withdraw numeric values !"required>
+
+                <label for="memo-withdraw">Withdraw Memo:</label>
+                <input type="text" id="memo-withdraw" name="memo-withdraw">
+
+                <button type="submit">Confirm Withdraw</button>
+            </form>
+        </div>
+
+
+        <div id="transfer-div" style="display:none;">
+            <h3 class="form-title">Transfer Form</h3>
+            <form method="post"  th:action="@{/accounts/transfer}">
+
+                <label for="type-transfer">Select transfer type:</label>
+                <select id="type-transfer" class="form-control" name="type-transfer" required>
+                    <option value="" disabled selected hidden></option>
+                    <option id="internal" style="" value="1">Internal Transfer (Own --> Own)</option>
+                    <option id="third-party" style="" value="2">Third Party Transfer (Own --> Others)</option>
+                    <option id="overseas" style="" value="3">Overseas Transfer (Own --> Overseas)</option>
+                </select>
+
+                <label for="accId-transfer-from">Select Your Account:</label>
+                <select id="accId-transfer-from" class="form-control" name="accId-transfer-from" required>
+                    <option value="" disabled selected hidden></option>
+                    <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+                </select>
+
+                <!--  Internal Transfer ONLY -->
+                <div id="internal-div" style="display: none;">
+                    <label for="accId-transfer-to-internal">Transfer To:</label>
+                    <select id="accId-transfer-to-internal" class="form-control" name="accId-transfer-to-internal">
+                        <option value="-1" selected hidden></option>
+                        <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+                    </select>
+                </div>
+
+                <!-- Third Party & Overseas Transfer -->
+                <div id="external-div" style="display: none;">
+                    <label for="accId-transfer-to-external">Transfer To:</label>
+                    <input type="text" id="accId-transfer-to-external" name="accId-transfer-to-external" pattern="[0-9]+" title="Invalid Account Format !" value="-1">
+                </div>
+
+                <label for="transfer">Transfer Amount:</label>
+                <input type="text" id="transfer" name="transfer" pattern="[0-9]+" title="Only can transfer numeric values !"required>
+
+                <label for="memo-transfer">Transfer Memo:</label>
+                <input type="text" id="memo-transfer" name="memo-transfer">
+
+                <button type="submit">Confirm Transfer</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" th:src="@{/js/block.js}"></script>
+</body>
+</html>

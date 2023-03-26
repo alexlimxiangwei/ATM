@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>ATM MENU</title>
+  <link rel="stylesheet" th:href="@{/css/menu.css}">
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <h2>ATM Menu</h2>
+    <br><br>
+    <a href="http://localhost:8090/menuPage" class="active">Home</a>
+    <a href="http://localhost:8090/accounts">Accounts</a>
+    <a href="http://localhost:8090/transactions">Transactions</a>
+    <a href="http://localhost:8090/settings">Settings</a>
+  </div>
+  <div class="main-content">
+    <h1 th:text="${bankName}"></h1>
+    <br>
+    <p class="welcome-msg">WELCOME,
+      <span th:text="${fullName}"></span>
+      <br><br>
+      <span>USER ID: </span><span th:text="${userId}"></span>
+    </p>
+  </div>
+</div>
+</body>
+</html>

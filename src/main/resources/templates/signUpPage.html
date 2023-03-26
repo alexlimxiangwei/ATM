@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" th:href="@{/css/signUp.css}">
+</head>
+<body>
+<form method="post"  th:action="@{/signUpPage}">
+    <h1>Sign Up</h1>
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstName" name="firstName"  required>
+    <label for="lastname">Last Name:</label>
+    <input type="text" id="lastName" name="lastName"  required>
+    <label for="pin">PIN:</label>
+    <input type="password" id="pin" name="pin"  required>
+    <label for="bank">Select your bank:</label>
+    <select id="bank" class="form-control" name="bankDropdown" required>
+        <option value="" disabled selected hidden> Choose Your Bank</option>
+        <option th:each="bank : ${bankListing}" th:value="${bank.bankID}" th:text="${bank.name}"></option>
+    </select>
+    <input type="submit" value="Sign Up">
+</form>
+<a href="http://localhost:8090/signInPage">Already have an account? Sign in</a>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>ATM MENU</title>
+  <link rel="stylesheet" th:href="@{/css/settings.css}">
+</head>
+<body>
+<div class="container">
+  <div class="sidebar">
+    <h2>ATM Menu</h2>
+    <br><br>
+    <a href="http://localhost:8090/menuPage">Home</a>
+    <a href="http://localhost:8090/accounts">Accounts</a>
+    <a href="http://localhost:8090/transactions">Transactions</a>
+    <a href="http://localhost:8090/settings" class="active">Settings</a>
+  </div>
+  <div class="main-content user-settings">
+    <h1>User Settings</h1>
+    <br>
+    <p class="first-name">
+      <span th:text="'Bank: ' + ${bankName}"></span>
+      <br><br>
+      <span th:text="'First Name: ' + ${firstName}"></span>
+      <br><br>
+      <span th:text="'Last Name: ' + ${lastName}"></span>
+      <br><br>
+      <span th:text="'USER ID: ' + ${userId}"></span>
+      <br><br>
+      <span>Password: ****** </span><button id="password-change">Change</button>
+    </p>
+    <br><br>
+    <div id="password-div" style="display: none;">
+      <h3 class="form-title">Change Password/PIN</h3>
+      <form method="post"  th:action="@{/settings/changePassword}">
+        <label for="current_pin">Current PIN:</label>
+        <input type="password" id="current_pin" name="current_pin" required>
+
+        <label for="new_pin">New PIN:</label>
+        <input type="password" id="new_pin" name="new_pin" required>
+
+        <label for="confirm_pin">Confirm PIN:</label>
+        <input type="password" id="confirm_pin" name="confirm_pin" required>
+
+        <button type="submit">Confirm New PIN</button>
+      </form>
+    </div>
+    <br>
+    <p style="border-top: 1px dotted black;"></p>
+    <br>
+    <div class="account-settings">
+      <h1>Account Settings</h1>
+      <table>
+        <thead>
+        <tr>
+          <th>Account Name</th>
+          <th>Account ID</th>
+          <th>Balance($)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="account : ${accounts}">
+          <td th:text="${account.name}"></td>
+          <td th:text="${account.accountID}"></td>
+          <td th:text="${account.balance}"></td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="button create-acc" id="create-acc">
+        Create New Account
+      </div>
+      <div class="button edit-acc" id="edit-acc">
+        Edit Account Name
+      </div>
+      <div class="button delete-acc" id="delete-acc">
+        Delete Account
+      </div>
+      <br><br><br>
+      <div id="newAcc-div" style="display: none;">
+        <h3 class="form-title">New Account Form</h3>
+        <form method="post"  th:action="@{/settings/createAcc}">
+          <label for="newAccName">New Account Name:</label>
+          <input type="text" id="newAccName" name="newAccName" required>
+          <button type="submit">Confirm New Account</button>
+        </form>
+      </div>
+      <div id="edit-div" style="display: none;">
+        <h3 class="form-title">Edit Account Name</h3>
+        <form method="post"  th:action="@{/settings/editAcc}">
+          <label for="accID_edit">Select an Account:</label>
+          <select id="accID_edit" class="form-control" name="accID_edit">
+            <option value="" selected hidden></option>
+            <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+          </select>
+          <label for="editedAccName">New Account Name:</label>
+          <input type="text" id="editedAccName" name="editedAccName" required>
+          <button type="submit">Confirm</button>
+        </form>
+      </div>
+      <div id="delete-div" style="display: none;">
+        <h3 class="form-title">Edit Account Name</h3>
+        <form method="post"  th:action="@{/settings/deleteAcc}">
+          <label for="accID_delete">Delete Account:</label>
+          <select id="accID_delete" class="form-control" name="accID_delete">
+            <option value="" selected hidden></option>
+            <option th:each="account : ${accounts}" th:value="${account.accountID}" th:text="${account.accountID}"></option>
+          </select>
+          <button type="submit">Delete Account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" th:src="@{/js/settings.js}"></script>
+</body>
+</html>

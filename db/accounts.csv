@@ -1,0 +1,23 @@
+idAccount,Customer_idCustomer,Bank_idBank,name,balance
+0,0,0,Savings,5101.24
+1,0,0,Checkings,8472.37
+2,1,1,for my momma,1875.73
+3,1,1,Alcohol,6688.15
+4,1,1,Spending,3660.5
+5,2,2,gf expenditure,3110.74
+6,2,2,Savings,9576.6
+7,3,0,Checkings,1102.53
+8,4,1,for my momma,3071.04
+9,4,1,Alcohol,492.25
+10,4,1,Spending,8142.1
+11,5,2,gf expenditure,7300.61
+12,5,2,Savings,4578.84
+13,6,0,Checkings,2724.18
+14,6,0,for my momma,2126.15
+15,6,0,Alcohol,499.74
+16,7,1,Spending,5836.8
+17,7,1,gf expenditure,9305.39
+18,8,2,Savings,8023.19
+19,9,0,Checkings,8959.46
+20,9,0,for my momma,685.1
+21,9,0,Alcohol,1535.32

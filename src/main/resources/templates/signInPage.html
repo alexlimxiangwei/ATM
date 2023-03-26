@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Sign In</title>
+  <link rel="stylesheet" th:href="@{/css/signIn.css}">
+</head>
+<body>
+<form method="post"  th:action="@{/signInPage}">
+  <h1>Sign In</h1>
+  <label for="userid">User ID:</label>
+  <input type="text" id="userid" name="userid" pattern="[0-9]+" title="User ID Format is only numeric [0-9]"required>
+
+  <label for="pin">PIN:</label>
+  <input type="password" id="pin" name="pin" required>
+
+  <label for="bank">Select a Bank:</label>
+  <select id="bank" class="form-control" name="bankDropdown" required>
+    <option value="" disabled selected hidden> Choose Your Bank</option>
+    <option th:each="bank : ${bankListing}" th:value="${bank.bankID}" th:text="${bank.name}"></option>
+  </select>
+
+  <button type="submit">Sign In</button>
+
+  <a href="http://localhost:8090/signUpPage" class="signup">Don't have an account? Sign up</a>
+</form>
+<br>
+<div th:if="${message}" th:class="${'alert alert-' + type}" role="alert" id="errorbox">
+  <span th:text="${message}"></span>
+</div>
+</body>
+</html>
