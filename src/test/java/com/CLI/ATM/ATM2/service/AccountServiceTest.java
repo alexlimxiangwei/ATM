@@ -32,8 +32,8 @@ public class AccountServiceTest {
     @Mock
     BankService bankService;
 
-    @InjectMocks
-    AccountService accountService;
+
+    private AccountService accountService;
 
     private User user;
 
@@ -41,8 +41,10 @@ public class AccountServiceTest {
     public void setUp() {
         user = new User("John", "Doe", 123456, "1234", new ArrayList<Account>(), 1000, 500);
         MockitoAnnotations.initMocks(this);
+        accountService = new AccountService();
         sqlService = mock(SQLService.class);
     }
+
 
     @Test
     public void testImportAccountFromSQL() {
@@ -68,4 +70,8 @@ public class AccountServiceTest {
         Assertions.assertEquals("1001", summary.get("uuid"));
         Assertions.assertEquals("500.00", summary.get("balance"));
     }
+
+
+
+
 }
