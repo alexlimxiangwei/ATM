@@ -33,11 +33,11 @@ class TransactionServiceTest {
         String memo = "test";
         Date timestamp = new Date(new java.util.Date().getTime());
         int transactionID = 123;
-
+        boolean local = true;
         // Mock the SQLService's generateTransactionID() method
         when(sqlService.generateTransactionID()).thenReturn(transactionID);
 
-        Transaction transaction = transactionService.createTransaction(amount, accountID, receiverID, memo);
+        Transaction transaction = transactionService.createTransaction(amount, accountID, receiverID, memo, local);
 
         Assertions.assertEquals(amount, transaction.getAmount());
         Assertions.assertEquals(memo, transaction.getMemo());
@@ -54,8 +54,9 @@ class TransactionServiceTest {
         double amount = 100.0;
         Date timestamp = new Date(new java.util.Date().getTime());
         String memo = "test";
+        boolean local = true;
 
-        Transaction transaction = transactionService.createTransactionFromSQL(accountID, transactionID, receiverID, amount, timestamp, memo);
+        Transaction transaction = transactionService.createTransactionFromSQL(accountID, transactionID, receiverID, amount, timestamp, memo, local);
 
         Assertions.assertEquals(amount, transaction.getAmount());
         Assertions.assertEquals(timestamp, transaction.getTimestamp());
@@ -63,5 +64,6 @@ class TransactionServiceTest {
         Assertions.assertEquals(accountID, transaction.getAccountID());
         Assertions.assertEquals(receiverID, transaction.getReceiverID());
         Assertions.assertEquals(transactionID, transaction.getTransactionID());
+        Assertions.assertTrue(transaction.isLocal());
     }
 }

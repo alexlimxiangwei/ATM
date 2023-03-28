@@ -97,10 +97,10 @@ public class AccountService {
      * @param receiverID    the recipient
      * @param memo	        adds a memo
      */
-    public void addTransaction(Account account, double amount, int receiverID, String memo) {
+    public void addTransaction(Account account, double amount, int receiverID, String memo, boolean local) {
 
         // create new transaction and add it to our list
-        Transaction newTrans = transactionService.createTransaction(amount, account.getAccountID(), receiverID, memo);
+        Transaction newTrans = transactionService.createTransaction(amount, account.getAccountID(), receiverID, memo, local);
         // add transaction to SQL database too
         SQLService.addTransaction(newTrans);
         account.getTransactions().add(newTrans);
@@ -116,10 +116,10 @@ public class AccountService {
      * @param timestamp	    time when the transaction was made
      * @param memo	        adds a memo
      */
-    public void addExistingTransaction(Account account, int transactionID, int receiverID, double amount, java.sql.Date timestamp, String memo) {
+    public void addExistingTransaction(Account account, int transactionID, int receiverID, double amount, java.sql.Date timestamp, String memo, boolean local) {
 
         // create new transaction and add it to our list
-        Transaction newTrans = transactionService.createTransactionFromSQL(account.getAccountID(), transactionID, receiverID, amount, timestamp, memo);
+        Transaction newTrans = transactionService.createTransactionFromSQL(account.getAccountID(), transactionID, receiverID, amount, timestamp, memo, local);
         account.getTransactions().add(newTrans);
 
     }

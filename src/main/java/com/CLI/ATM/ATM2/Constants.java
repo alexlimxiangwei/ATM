@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Constants {
     public static final int DEPOSIT = 1;
     public static final int WITHDRAW = -1;
-
+    public static final boolean LOCAL_TRANSACTION = true;
     public static final double DEFAULT_LOCAL_TRANSFER_LIMIT = 1000;
     public static final double DEFAULT_OVERSEAS_TRANSFER_LIMIT = 1000;
     public static final int NOT_FOUND = -1;
@@ -23,4 +23,5 @@ public class Constants {
 
     public static User HTML_currUser;
     public static Bank HTML_currBank;
+
 }

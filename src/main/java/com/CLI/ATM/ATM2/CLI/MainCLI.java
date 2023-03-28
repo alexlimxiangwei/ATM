@@ -80,6 +80,7 @@ public class MainCLI {
         int bankID;
         double amount;
         double transferLimit;
+        boolean isLocalTransaction = true;
         int choice = transferFundsMenu();
         String amountValidationString;
         // get account to transfer from
@@ -100,12 +101,26 @@ public class MainCLI {
 
             Bank toBank = bankService.getBankFromID(bankList, bankID);
             toAcct = bankService.getAccountFromID(toBank, toAcctID);
+
             // TODO: change the below to get remaining transfer limits instead of just the limit
             if (toBank.isLocal() & transferLimit > theUser.getLocal_transfer_limit()){
-                transferLimit = theUser.getLocal_transfer_limit(); // if it's a local bank, apply limit for local transfer
+                transferLimit = userService.getLocalTransferLimit(theUser); // if it's a local bank, apply limit for local transfer
+                if (transferLimit == -1){
+                    System.out.println("Sorry, you have reached your local transfer limit for today.\nPress enter to continue.");
+                    sc.nextLine();
+                    sc.nextLine();
+                    return;
+                }
             }
-            else if (transferLimit > theUser.getOverseas_transfer_limit()){
-                transferLimit =theUser.getOverseas_transfer_limit(); // else, apply limit for overseas transfer
+            else if (!toBank.isLocal() & transferLimit > theUser.getOverseas_transfer_limit()){
+                isLocalTransaction = false;
+                transferLimit = userService.getOverseasTransferLimit(theUser); // else, apply limit for overseas transfer
+                if (transferLimit == -1){
+                    System.out.println("Sorry, you have reached your overseas transfer limit for today.\nPress enter to continue.");
+                    sc.nextLine();
+                    sc.nextLine();
+                    return;
+                }
             }
 
         }
@@ -126,12 +141,12 @@ public class MainCLI {
         String memo = sc.nextLine();
 
         // add transaction and update balance of fromAcct
-        accountService.addTransaction(fromAcct, -amount, toAcctID, memo);
+        accountService.addTransaction(fromAcct, -amount, toAcctID, memo, isLocalTransaction);
         accountService.addBalance(fromAcct, -amount);
         SQLService.updateBalance(fromAcct.getBalance(), fromAcct.getAccountID());
 
         // add transaction and update balance of toAcct
-        accountService.addTransaction(toAcct,amount, fromAcct.getAccountID(), memo);
+        accountService.addTransaction(toAcct,amount, fromAcct.getAccountID(), memo, isLocalTransaction);
         accountService.addBalance(toAcct, amount);
         SQLService.updateBalance(toAcct.getBalance(), toAcctID);
 
@@ -164,9 +179,14 @@ public class MainCLI {
         fromAcct = accountService.getInternalAccount(theUser, directionString);
         if (direction == WITHDRAW){ // if making a withdraw, set a limit
             // set transfer limit to whichever is lower :  current account balance or local transfer limit
-            // TODO: change this to check current transfer limit left (e.g. i alr withdrew $500 of my $1000 limit means my current limit for today is $500)
             if (theUser.getLocal_transfer_limit() < fromAcct.getBalance()){
-                withdrawLimit = theUser.getLocal_transfer_limit();
+                withdrawLimit = userService.getLocalTransferLimit(theUser);
+                if (withdrawLimit == -1){
+                    System.out.println("Sorry, you have reached your daily withdrawal limit\nPress enter to continue.");
+                    sc.nextLine();
+                    sc.nextLine();
+                    return;
+                }
             }
         }
 
@@ -194,7 +214,7 @@ public class MainCLI {
 
         // do the transfer
         // receiverID is -1 (TRANSACTION_TO_SELF) when it's an internal transaction (deposit/withdrawal)
-        accountService.addTransaction(fromAcct, amount, TRANSACTION_TO_SELF, memo);
+        accountService.addTransaction(fromAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
 
         accountService.addBalance(fromAcct, amount);
         // update balance on SQL

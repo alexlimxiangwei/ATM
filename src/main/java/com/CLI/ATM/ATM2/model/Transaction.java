@@ -25,6 +25,7 @@ public class Transaction {
     private int receiverID;
 
     private int transactionID;
+    private boolean local;
 
 
 

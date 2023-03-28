@@ -30,7 +30,7 @@ public class SQLService {
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/mydb?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                    "root", "password");
+                    "root", "");
             // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
         }
         catch(SQLException ex) {
@@ -116,12 +116,12 @@ public class SQLService {
                 Date date = rset.getDate("timeStamp");
                 double amount = rset.getDouble("amount");
                 String memo = rset.getString("memo");
-
+                boolean isLocal = rset.getBoolean("local");
                 if (idAccount == id) {
-                    accountService.addExistingTransaction(acc, idTransaction, receiverID, amount, date, memo);
+                    accountService.addExistingTransaction(acc, idTransaction, receiverID, amount, date, memo, isLocal);
                 }
                 else{
-                    accountService.addExistingTransaction(acc, idTransaction, receiverID, amount * -1, date, memo);
+                    accountService.addExistingTransaction(acc, idTransaction, receiverID, amount * -1, date, memo, isLocal);
                 }
             }
         } catch (SQLException e) {
@@ -406,7 +406,7 @@ public class SQLService {
      */
     public void addTransaction(Transaction txn) {
         try {
-            String strSelect = "insert into Transaction values(?, ?, ?, ? , ? , ?)";
+            String strSelect = "insert into Transaction values(?, ?, ?, ? ,? ,?, ?)";
 
             PreparedStatement stmt = conn.prepareStatement(strSelect);
             stmt.setInt(1, txn.getTransactionID());
@@ -415,6 +415,7 @@ public class SQLService {
             stmt.setDate(4, txn.getTimestamp());
             stmt.setInt(5, txn.getReceiverID());
             stmt.setString(6, txn.getMemo());
+            stmt.setBoolean(7, txn.isLocal());
             stmt.executeUpdate();
 
         } catch (SQLException e) {

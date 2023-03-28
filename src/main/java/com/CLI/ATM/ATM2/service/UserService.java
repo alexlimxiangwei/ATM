@@ -22,6 +22,9 @@ public class UserService {
     @Autowired
     AccountCLI accountCLI;
 
+    @Autowired
+    TransactionService transactionService;
+
     public User createUserFromSQL(int idCustomer, String firstName, String lastName, String pin, double local_transfer_limit, double overseas_transfer_limit) {
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -110,7 +113,22 @@ public class UserService {
     }
 
 
-
+    public double getLocalTransferLimit(User user){
+        double recentLocalTransfers = transactionService.getRecentLocalTransfers(user);
+        System.out.printf("Recent Local Transfers: $%.2f  your limit is: $%.2f.\n",recentLocalTransfers,user.getLocal_transfer_limit());
+        if (recentLocalTransfers >= user.getLocal_transfer_limit()){
+            return -1;
+        }
+        return user.getLocal_transfer_limit() - recentLocalTransfers;
+    }
+    public double getOverseasTransferLimit(User user){
+        double recentOverseasTransfers = transactionService.getRecentOverseasTransfers(user);
+        System.out.printf("Recent Overseas Transfers: $%.2f, your limit is: $%.2f.\n", recentOverseasTransfers, user.getOverseas_transfer_limit());
+        if (recentOverseasTransfers >= user.getOverseas_transfer_limit()){
+            return -1;
+        }
+        return user.getOverseas_transfer_limit() - recentOverseasTransfers;
+    }
 }
 
 
