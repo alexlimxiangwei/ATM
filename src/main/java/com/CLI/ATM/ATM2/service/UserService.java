@@ -87,15 +87,14 @@ public class UserService {
 //              Creates a new user account based on user input
         User newUser = bankService.addUserToBank(currentBank, fname, lname, newPin,
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        Account newAccount2 = accountService.createAccount("CHECKING", newUser, 0.0);
-        userService.addAccountToUser(newUser, newAccount2);
-        bankService.addAccountToBank(currentBank, newAccount2);
-
+        Account newAccount = accountService.createAccount("CHECKING", newUser, 0.0);
+        userService.addAccountToUser(newUser, newAccount);
+        bankService.addAccountToBank(currentBank, newAccount);
 
         // Add new user to SQL
         SQLService.addNewUser(newUser.getCustomerID(),fname,lname,newPin,currentBank,
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        SQLService.addAccount(newAccount2.getAccountID(),newUser.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+        SQLService.addAccount(newAccount.getAccountID(),newUser.getCustomerID(),currentBank.getBankID(),newAccount.getName(),newAccount.getBalance());
 
         System.out.println("Account successfully created.");
     }

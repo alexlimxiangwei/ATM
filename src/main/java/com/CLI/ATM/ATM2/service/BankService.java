@@ -50,12 +50,6 @@ public class BankService {
         // create a new User object and add it to our list
         User newUser = userService.createNewUser(firstName, lastName, pin, local_transfer_limit, overseas_transfer_limit);
         bank.getUsers().add(newUser);
-
-        // create a savings account for the user and add it to our list
-        var newAccount = accountService.createAccount("SAVING", newUser, 0.0);
-        userService.addAccountToUser(newUser, newAccount);
-        bank.getAccounts().add(newAccount);
-
         return newUser;
 
     }
