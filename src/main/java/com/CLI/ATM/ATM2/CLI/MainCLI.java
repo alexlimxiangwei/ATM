@@ -97,9 +97,16 @@ public class MainCLI {
         if (fromAcct == null){
             return;
         }
+        else if (direction == WITHDRAW && fromAcct.getBalance() == 0){
+            System.out.println("Cannot withdraw from account with $0.00\nPress enter to continue.");
+            sc.nextLine();
+            sc.nextLine();
+            return;
+        }
         if (direction == WITHDRAW) { // if making a withdrawal, set a limit
             // set transfer limit to whichever is lower :  current account balance or local transfer limit
-            if (theUser.getLocal_transfer_limit() < fromAcct.getBalance()) {
+            limit = fromAcct.getBalance();
+            if (theUser.getLocal_transfer_limit() < limit) {
                 limit = userService.getLocalTransferLimit(theUser);
                 if (limit == -1) {
                     System.out.println("Sorry, you have reached your daily withdrawal limit\nPress enter to continue.");

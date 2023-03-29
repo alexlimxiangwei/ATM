@@ -87,7 +87,7 @@ public class UserService {
 //              Creates a new user account based on user input
         User newUser = bankService.addUserToBank(currentBank, fname, lname, newPin,
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        Account newAccount = accountService.createAccount("CHECKING", newUser, 0.0);
+        Account newAccount = accountService.createAccount("Savings", newUser, 0.0);
         userService.addAccountToUser(newUser, newAccount);
         bankService.addAccountToBank(currentBank, newAccount);
 
