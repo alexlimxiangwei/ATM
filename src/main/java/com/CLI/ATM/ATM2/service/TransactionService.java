@@ -59,6 +59,9 @@ public class TransactionService {
                 }
             }
         }
+        if (recentLocalTransfers == 0){
+            return 0;
+        }
         return -recentLocalTransfers;
     }
 
@@ -77,6 +80,9 @@ public class TransactionService {
                     recentOverseasTransfers += txn.getAmount();
                 }
             }
+        }
+        if (recentOverseasTransfers == 0){
+            return 0;
         }
         return -recentOverseasTransfers;
     }

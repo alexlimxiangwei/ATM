@@ -216,6 +216,7 @@ public class MainCLI {
         }
 
         // get memo for transfer
+        sc.nextLine();
         String memo = Util.readString("Enter memo for this transaction: ");
 
         // add transaction and update balance of fromAcct

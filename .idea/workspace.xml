@@ -4,23 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- removed a useless constant">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/js/signOut.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- changed print transaction history to only show 10 at a time">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/signIn.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/signIn.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signOutPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/menuPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/settings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signInPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/signUpPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/transactions.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/transactions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/TransactionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -348,7 +334,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680093830201</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="DONE:&#10;- changed print transaction history to only show 10 at a time">
+      <created>1680107051459</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1680107051459</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -363,7 +356,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use." />
     <MESSAGE value="DONE:&#10;removed redundant Util.addAccountTransaction function&#10;added Account.addInternalTransaction() this is for withdrawals and deposits&#10;&#10;added DB_Util.generateTransactionID to generate a new txn id when creating a new txn&#10;&#10;Updated Transaction constructors : theres 2, 1 for new i transactions, 1 for existing transactions that is only used when we import transactiosn from sql.&#10;NOTE: receiverID field is -1 if it is an internal transaction such as deposit/withdrawal&#10;&#10;Updated database schema to change hashedPin to char(64), previously 45 couldnt fit SHA256.&#10;Updated customers.csv to reflect new SHA256 hash&#10;yall need to re import everyth..&#10;&#10;withdrawals and deposits will now update SQL transaction!!&#10;&#10;NOT WORKING:&#10;external transfer , i havent do i commented them out for now" />
     <MESSAGE value="DONE:&#10;third party transactions are now SQL-ized&#10;&#10;depositFunds and withdrawFunds merged into 1 function!! easy easy easy&#10;previously forgot to update balance on SQL after withdrawing / depositing, now will update" />
     <MESSAGE value="DONE:&#10;removed conn everywhere and made it global omg code is so much cleaner now" />
@@ -388,7 +380,8 @@
     <MESSAGE value="DONE:&#10;- able to quit at any time while signing up" />
     <MESSAGE value="DONE:&#10;- able to quit at any time while making deposit / withdrawal / inter account transfer / third party transfer&#10;&#10;- changes all deposit / withdrawal/ transfer to validate input" />
     <MESSAGE value="DONE:&#10;- able to quit at any time anywhere!!&#10;&#10;- refactored a lot of stuff to make code cleaner" />
-    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- able to quit at any time anywhere!!&#10;&#10;- refactored a lot of stuff to make code cleaner" />
+    <MESSAGE value="DONE:&#10;- changed print transaction history to only show 10 at a time" />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- changed print transaction history to only show 10 at a time" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
