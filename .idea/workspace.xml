@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- changed print transaction history to only show 10 at a time">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- fixed some error in local and overseas transfer limit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/AccountCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/AccountCLI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -341,7 +341,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680107051459</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="DONE:&#10;- fixed some error in local and overseas transfer limit">
+      <created>1680107532141</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1680107532141</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -356,7 +363,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="DONE:&#10;removed redundant Util.addAccountTransaction function&#10;added Account.addInternalTransaction() this is for withdrawals and deposits&#10;&#10;added DB_Util.generateTransactionID to generate a new txn id when creating a new txn&#10;&#10;Updated Transaction constructors : theres 2, 1 for new i transactions, 1 for existing transactions that is only used when we import transactiosn from sql.&#10;NOTE: receiverID field is -1 if it is an internal transaction such as deposit/withdrawal&#10;&#10;Updated database schema to change hashedPin to char(64), previously 45 couldnt fit SHA256.&#10;Updated customers.csv to reflect new SHA256 hash&#10;yall need to re import everyth..&#10;&#10;withdrawals and deposits will now update SQL transaction!!&#10;&#10;NOT WORKING:&#10;external transfer , i havent do i commented them out for now" />
     <MESSAGE value="DONE:&#10;third party transactions are now SQL-ized&#10;&#10;depositFunds and withdrawFunds merged into 1 function!! easy easy easy&#10;previously forgot to update balance on SQL after withdrawing / depositing, now will update" />
     <MESSAGE value="DONE:&#10;removed conn everywhere and made it global omg code is so much cleaner now" />
     <MESSAGE value="DONE:&#10;fixed account add" />
@@ -381,7 +387,8 @@
     <MESSAGE value="DONE:&#10;- able to quit at any time while making deposit / withdrawal / inter account transfer / third party transfer&#10;&#10;- changes all deposit / withdrawal/ transfer to validate input" />
     <MESSAGE value="DONE:&#10;- able to quit at any time anywhere!!&#10;&#10;- refactored a lot of stuff to make code cleaner" />
     <MESSAGE value="DONE:&#10;- changed print transaction history to only show 10 at a time" />
-    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- changed print transaction history to only show 10 at a time" />
+    <MESSAGE value="DONE:&#10;- fixed some error in local and overseas transfer limit" />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- fixed some error in local and overseas transfer limit" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

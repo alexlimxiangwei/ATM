@@ -17,6 +17,10 @@ public class AccountCLI {
      * Print transaction history for account
      */
     public void printTransHistory(Account account) {
+        if (account.getTransactions().size() == 0) {
+            System.out.println("No transactions found for this account");
+            return;
+        }
         int page = 1;
         int max_page = (int) Math.ceil((account.getTransactions().size() / PAGE_SIZE));
         System.out.printf("\nTransaction history for account %s:\n\n", account.getAccountID());
