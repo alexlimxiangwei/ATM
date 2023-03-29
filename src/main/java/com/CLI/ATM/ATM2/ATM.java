@@ -21,25 +21,22 @@ public class ATM implements CommandLineRunner {
 		SpringApplication.run(ATM.class, args);
 	}
 
+	//region FIELDS
 	@Autowired
 	BankService bankService;
 	@Autowired
 	UserService userService;
 	@Autowired
-	AccountService accountService;
-	@Autowired
 	SQLService SQLService;
 	@Autowired
-	MainCLI mainCli;
-	@Autowired
 	Util util;
+	//endregion
 
 	@Override
 	public void run(String... args) {
 		//region INIT
 		SQLService.initSQLConnection();
 		bankList = SQLService.fetchBanks(); // gets all banks from database and stores it in an array
-		User curUser = null;
 
 		//endregion
 
@@ -51,7 +48,7 @@ public class ATM implements CommandLineRunner {
 			//region SET BANK TO USE
 
 			// displayBankSelectionPage
-			Strings.displayBankSelectionPage(bankList);
+			Strings.print_BankSelectionPage(bankList);
 			int num_of_local_banks = bankService.getNumOfLocalBanks();
 
 			// ask for user's bank choice
@@ -66,26 +63,17 @@ public class ATM implements CommandLineRunner {
 			Bank currentBank = bankList.get(userInput - 1);
 			//endregion
 
-			//region MAIN MENU
 			// displaySignupPage
 			while (userInput != QUIT) {
-				Strings.displaySignUpMenuPage(currentBank);
+				Strings.print_SignUpMenuPage(currentBank);
 
 				userInput = Util.readInt("Enter choice: ", 1, 2);
 
-				//endregion
-
 				//region HANDLE USER CHOICE
 				switch (userInput) {
-					case QUIT:
-						System.out.println("Quitting from " + currentBank.getName() + "...\n");
-						break;
-					case 1:
-						util.handleLogin(currentBank);
-						break;
-					case 2:
-						accountService.handleSignUp(currentBank);
-						break;
+					case QUIT -> System.out.println("Quitting from " + currentBank.getName() + "...\n");
+					case 1 -> util.handleLogin(currentBank);
+					case 2 -> userService.handleSignUp(currentBank);
 				}
 				//endregion
 			}

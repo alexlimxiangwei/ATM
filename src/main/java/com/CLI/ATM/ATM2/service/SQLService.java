@@ -118,10 +118,10 @@ public class SQLService {
                 String memo = rset.getString("memo");
                 boolean isLocal = rset.getBoolean("local");
                 if (idAccount == id) {
-                    accountService.addExistingTransaction(acc, idTransaction, receiverID, amount, date, memo, isLocal);
+                    accountService.addExistingTransactionToAcct(acc, idTransaction, receiverID, amount, date, memo, isLocal);
                 }
                 else{
-                    accountService.addExistingTransaction(acc, idTransaction, receiverID, amount * -1, date, memo, isLocal);
+                    accountService.addExistingTransactionToAcct(acc, idTransaction, receiverID, amount * -1, date, memo, isLocal);
                 }
             }
         } catch (SQLException e) {

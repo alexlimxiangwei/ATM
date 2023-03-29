@@ -34,7 +34,7 @@ public class BankService {
     }
     //endregion
 
-    //region ADD_USER_&_ACC_TO_BANK
+    //region ADD USERS AND ACCOUNTS TO BANK
     /**
      * Adds new user to bank
      * @param bank                  the current bank that is chosen
@@ -95,11 +95,6 @@ public class BankService {
        bank.getAccounts().add(newAccount);
     }
     //endregion
-
-    //region USER_LOGIN
-
-    //endregion
-
 
     //region GETTERS
     /**

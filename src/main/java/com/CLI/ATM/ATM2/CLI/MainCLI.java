@@ -34,7 +34,7 @@ public class MainCLI {
         userCLI.printAccountsSummary(theUser);
 
         // print user menu
-        Strings.displayUserMenu();
+        Strings.print_UserMenu();
 
         // process the choice
         int choice = Util.readInt("Enter your choice: ",1, 5);
@@ -74,7 +74,7 @@ public class MainCLI {
         sc.nextLine();
     }
 
-    //region ACCOUNT_FUNCTIONS
+    //region ACCOUNT TRANSACTION FUNCTIONS
     /**
      * Process a fund withdraw from an account.
      * @param theUser	the logged-in User object
@@ -126,7 +126,7 @@ public class MainCLI {
 
         // do the transfer
         // receiverID is -1 (TRANSACTION_TO_SELF) when it's an internal transaction (deposit/withdrawal)
-        accountService.addTransaction(fromAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+        accountService.addTransactionToAcct(fromAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
 
         accountService.addBalance(fromAcct, amount);
         // update balance on SQL
@@ -220,12 +220,12 @@ public class MainCLI {
         String memo = Util.readString("Enter memo for this transaction: ");
 
         // add transaction and update balance of fromAcct
-        accountService.addTransaction(fromAcct, -amount, toAcctID, memo, isLocalTransaction);
+        accountService.addTransactionToAcct(fromAcct, -amount, toAcctID, memo, isLocalTransaction);
         accountService.addBalance(fromAcct, -amount);
         SQLService.updateBalance(fromAcct.getBalance(), fromAcct.getAccountID());
 
         // add transaction and update balance of toAcct
-        accountService.addTransaction(toAcct,amount, fromAcct.getAccountID(), memo, isLocalTransaction);
+        accountService.addTransactionToAcct(toAcct,amount, fromAcct.getAccountID(), memo, isLocalTransaction);
         accountService.addBalance(toAcct, amount);
         SQLService.updateBalance(toAcct.getBalance(), toAcctID);
 
@@ -233,26 +233,16 @@ public class MainCLI {
     }
 
 
-
-
-
     //endregion
 
-    //region ACCOUNT_SETTINGS
+    //region ACCOUNT SETTINGS
 
     public void showAccountSetting(User theUser,Bank theBank) {
         int choice;
 
         // user menu
-        do {
-            print_AccountSettings();
-            choice = sc.nextInt();
-
-            if (choice < 1 || choice > 5) {
-                System.out.println("Invalid choice. Please choose 1-5.");
-            }
-
-        } while (choice < 1 || choice > 5);
+        print_AccountSettings();
+        choice = Util.readInt("Enter your choice: ", 1, 4);
 
         // process the choice
         switch (choice) {
@@ -260,11 +250,11 @@ public class MainCLI {
             case 2 -> addAccount(theUser, theBank);
             case 3 -> changeAccountName(theUser);
             case 4 -> deleteAccount(theUser); // Not complete
-            case 5 -> sc.nextLine(); // gobble up rest of previous input
+            case QUIT -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
-        if (choice != 5) {
+        if (choice != QUIT) {
             showAccountSetting(theUser,theBank);
         }
     }
@@ -273,26 +263,31 @@ public class MainCLI {
         String pin;
         boolean is_validated;
 
-        sc.nextLine(); // remove empty line first
+        // get current password
         do {
-            System.out.println("Enter current password: ");
-            pin = sc.nextLine();
-
+            pin = Util.readString("Enter your current password: ");
+            if (pin.equals(QUIT_STRING)) {
+                return;
+            }
             is_validated = userService.validatePin(theUser, pin);
             if (!is_validated) {
-                System.out.println("Incorrect password, please try again. ");
+                System.out.println("Incorrect password, please try again.\n");
             }
         }while(!is_validated);
 
+        // get new password
         do {
-            System.out.println("Enter new password: ");
-            pin = sc.nextLine();
-            System.out.println("Confirm new password: ");
-            String confirm_Pin = sc.nextLine();
+            pin = Util.readString("Enter new password: ");
+            if (pin.equals(QUIT_STRING)) {
+                return;
+            }
+            String confirm_Pin = Util.readString("Confirm new password:");
+            if (confirm_Pin.equals(QUIT_STRING)) {
+                return;
+            }
             is_validated = pin.equals(confirm_Pin);
             if (!is_validated) {
                 System.out.println("The two passwords do not match, please try again.");
-
             }
         }while(!is_validated);
         theUser.setPinHash(Util.hash(pin));
@@ -303,14 +298,34 @@ public class MainCLI {
     }
 
     /**
+     * Allows user to add a new account
+     * @param theUser	the logged-in User object
+     * @param currentBank the bank that user is from
+     */
+    public void addAccount(User theUser, Bank currentBank){
+        String newAccName = Util.readString("Enter your new account name: ");
+        if (newAccName.equals(QUIT_STRING)) {
+            return;
+        }
+
+        Account newAccount = accountService.createAccount(newAccName, theUser, 0.00);
+        theUser.getAccounts().add(newAccount);
+
+        // Update add account on sql
+        SQLService.addAccount(newAccount.getAccountID(), theUser.getCustomerID(), currentBank.getBankID(), newAccName, 0.00);
+        System.out.printf("New account '%s' created successfully!\n", newAccName);
+    }
+
+    /**
      * Change user account name.
      * @param theUser	the logged-in User object
      */
     public void changeAccountName(User theUser) {
         Account acct = accountService.getInternalAccount(theUser,"change the name of");
-        System.out.print("Enter new account name: ");
-        sc.nextLine();
-        String newName = sc.nextLine();
+        if (acct == null){
+            return;
+        }
+        String newName = Util.readString("Enter new account name: ");
         // update locally
         acct.setName(newName);
 
@@ -319,24 +334,7 @@ public class MainCLI {
         System.out.println("Account name successfully changed. ");
     }
 
-    /**
-     * Allows user to add a new account
-     * @param theUser	the logged-in User object
-     * @param currentBank the bank that user is from
-     */
-    public void addAccount(User theUser, Bank currentBank){
-        System.out.print("Enter your new account name: ");
-        sc.nextLine();
-        String newAccName = sc.nextLine();
 
-        Account newAccount = accountService.createAccount(newAccName, theUser, 0.00);
-        theUser.getAccounts().add(newAccount);
-
-        // Update add account on sql
-        SQLService.addAccount(newAccount.getAccountID(), theUser.getCustomerID(), currentBank.getBankID(), newAccName, 0.00);
-        System.out.printf("New account '%s' created successfully!\n", newAccName);
-
-    }
 
 
     /**
@@ -345,19 +343,19 @@ public class MainCLI {
      */
     public void deleteAccount(User theUser){
         Account acc = accountService.getInternalAccount(theUser, "delete");
+        if (acc == null){
+            return;
+        }
         if(acc.getBalance() > 0 ){
-            System.out.println("Please make sure that your balance is 0 before deleting! ");
+            System.out.println("Please make sure that your balance is 0 before deleting!\n");
+            deleteAccount(theUser);
         }
         else {
             userService.deleteAccount(theUser, acc.getAccountID());
             // Update deleted account on sql
             SQLService.deleteAccount(acc.getAccountID());
             System.out.println("Account successfully deleted. ");
-
         }
-
-
-
 
     }//endregion
 }

@@ -4,12 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- able to quit at any time while signing up">
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- able to quit at any time while making deposit / withdrawal / inter account transfer / third party transfer&#10;&#10;- changes all deposit / withdrawal/ transfer to validate input">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -320,7 +326,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680088584479</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="DONE:&#10;- able to quit at any time while making deposit / withdrawal / inter account transfer / third party transfer&#10;&#10;- changes all deposit / withdrawal/ transfer to validate input">
+      <created>1680091820023</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1680091820023</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -335,7 +348,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changes:&#10;1)&#10;shortened a lot of code for withdraw/transfer/deposit&#10;by converting repeated code into Utils.java functions&#10;2)&#10;added 'balance' attribute to Account class&#10;no longer need to loop through all transactions everytime we want to get an account balance (more efficient)" />
     <MESSAGE value="fixed nextLine issues with logging in" />
     <MESSAGE value="added connection to mysql, added DB_Util class which i will slowly fill with diff sql statements.&#10;Added bankID and local fields to Bank class and updated its constructor&#10;in main, we now fetch a list of banks from mysql, and user can choose which bank he wants to use." />
     <MESSAGE value="DONE:&#10;removed redundant Util.addAccountTransaction function&#10;added Account.addInternalTransaction() this is for withdrawals and deposits&#10;&#10;added DB_Util.generateTransactionID to generate a new txn id when creating a new txn&#10;&#10;Updated Transaction constructors : theres 2, 1 for new i transactions, 1 for existing transactions that is only used when we import transactiosn from sql.&#10;NOTE: receiverID field is -1 if it is an internal transaction such as deposit/withdrawal&#10;&#10;Updated database schema to change hashedPin to char(64), previously 45 couldnt fit SHA256.&#10;Updated customers.csv to reflect new SHA256 hash&#10;yall need to re import everyth..&#10;&#10;withdrawals and deposits will now update SQL transaction!!&#10;&#10;NOT WORKING:&#10;external transfer , i havent do i commented them out for now" />
@@ -360,6 +372,7 @@
     <MESSAGE value="DONE:&#10;- removed a useless constant" />
     <MESSAGE value="DONE:&#10;- moved some functions in wrong places to different services&#10;&#10;- added a few Util functions to read and validate different input&#10;&#10;- changed some functions to include a way to quit at any time (will slowly fill in for all functions) currently works for selecting back to logging in" />
     <MESSAGE value="DONE:&#10;- able to quit at any time while signing up" />
-    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- able to quit at any time while signing up" />
+    <MESSAGE value="DONE:&#10;- able to quit at any time while making deposit / withdrawal / inter account transfer / third party transfer&#10;&#10;- changes all deposit / withdrawal/ transfer to validate input" />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- able to quit at any time while making deposit / withdrawal / inter account transfer / third party transfer&#10;&#10;- changes all deposit / withdrawal/ transfer to validate input" />
   </component>
 </project>

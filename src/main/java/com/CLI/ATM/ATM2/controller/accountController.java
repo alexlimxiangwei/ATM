@@ -72,7 +72,7 @@ public class accountController {
                               @RequestParam("memo-deposit") String memo) {
         Account currAcc = accountService.getAccountFromID(HTML_currUser, accId);
 
-        accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+        accountService.addTransactionToAcct(currAcc, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
         accountService.addBalance(currAcc, amount);
 
         // update balance on SQL
@@ -91,7 +91,7 @@ public class accountController {
 
         amount = -amount;
 
-        accountService.addTransaction(currAcc, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+        accountService.addTransactionToAcct(currAcc, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
         accountService.addBalance(currAcc, amount);
 
         // update balance on SQL
@@ -124,8 +124,8 @@ public class accountController {
                     toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
 
                     // add transaction locally
-                    accountService.addTransaction(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-                    accountService.addTransaction(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                    accountService.addTransactionToAcct(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                    accountService.addTransactionToAcct(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
                 }
                 case 2 -> { // external transfer
                     int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
@@ -133,8 +133,8 @@ public class accountController {
                     toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
                     boolean isLocal = toBank.isLocal();
                     // add transaction locally
-                    accountService.addTransaction(fromAcct, -amount, accIdTo_External, memo, isLocal);
-                    accountService.addTransaction(toAcct, amount, accIdFrom, memo, isLocal);
+                    accountService.addTransactionToAcct(fromAcct, -amount, accIdTo_External, memo, isLocal);
+                    accountService.addTransactionToAcct(toAcct, amount, accIdFrom, memo, isLocal);
 
 
                 }

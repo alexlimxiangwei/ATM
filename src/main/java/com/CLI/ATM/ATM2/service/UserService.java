@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-import static com.CLI.ATM.ATM2.Constants.QUIT;
-import static com.CLI.ATM.ATM2.Constants.sc;
+import static com.CLI.ATM.ATM2.Constants.*;
+import static com.CLI.ATM.ATM2.Constants.DEFAULT_OVERSEAS_TRANSFER_LIMIT;
 
 
 @Component
 public class UserService {
-
+    //region INIT
     @Autowired
     SQLService SQLService;
 
@@ -27,8 +27,18 @@ public class UserService {
     AccountCLI accountCLI;
 
     @Autowired
-    TransactionService transactionService;
+    BankService bankService;
+    @Autowired
+    AccountService accountService;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    TransactionService transactionService;
+    //endregion
+
+    //region USER_CREATION
     public User createUserFromSQL(int idCustomer, String firstName, String lastName, String pin, double local_transfer_limit, double overseas_transfer_limit) {
 
         ArrayList<Account> accounts = new ArrayList<>();
@@ -53,6 +63,45 @@ public class UserService {
         user.getAccounts().add(acc);
     }
 
+    /**
+     * Sign up function
+     * @param currentBank  bank that the user is in
+     */
+    public void handleSignUp(Bank currentBank){
+        System.out.printf("Welcome to %s's sign up\n", currentBank.getName());
+
+        String fname = Util.readString("Enter First name:");
+        if (fname.equals("-1")){
+            return;
+        }
+        String lname = Util.readString("Enter last name:");
+        if (lname.equals("-1")){
+            return;
+        }
+        String newPin = Util.readString("Enter pin:");
+        if (newPin.equals("-1")){
+            return;
+        }
+        newPin = Util.hash(newPin);
+
+//              Creates a new user account based on user input
+        User newUser = bankService.addUserToBank(currentBank, fname, lname, newPin,
+                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
+        Account newAccount2 = accountService.createAccount("CHECKING", newUser, 0.0);
+        userService.addAccountToUser(newUser, newAccount2);
+        bankService.addAccountToBank(currentBank, newAccount2);
+
+
+        // Add new user to SQL
+        SQLService.addNewUser(newUser.getCustomerID(),fname,lname,newPin,currentBank,
+                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
+        SQLService.addAccount(newAccount2.getAccountID(),newUser.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+
+        System.out.println("Account successfully created.");
+    }
+    //endregion
+
+    //region GETTTERS
     public int numAccounts(User user) {
         return user.getAccounts().size();
     }
@@ -74,24 +123,38 @@ public class UserService {
     public Account getAcct(User user, int acctIndex) {
         return user.getAccounts().get(acctIndex);
     }
+
     /**
-     * Print transaction history for a particular account.
-     * @param acctIdx	the index of the account to use
+     * Get the remaining local transfer limit for the user
+     * @param user the user to check
+     * @return the remaining local transfer limit
      */
-    public void printAcctTransHistory(User user, int acctIdx) {
-        accountCLI.printTransHistory(user.getAccounts().get(acctIdx));
+    public double getLocalTransferLimit(User user){
+        double recentLocalTransfers = transactionService.getRecentLocalTransfers(user);
+        System.out.printf("Recent Local Transfers: $%.2f  your limit is: $%.2f.\n",recentLocalTransfers,user.getLocal_transfer_limit());
+        if (recentLocalTransfers >= user.getLocal_transfer_limit()){
+            return -1;
+        }
+        return user.getLocal_transfer_limit() - recentLocalTransfers;
     }
 
     /**
-     * Check whether a given pin matches the true User pin
-     * @param aPin	the pin to check
-     * @return		whether the pin is valid or not
+     * Get the remaining overseas transfer limit for the user
+     * @param user the user to check
+     * @return the remaining overseas transfer limit
      */
-    public boolean validatePin(User user, String aPin) {
-        return Util.hash(aPin).equals(user.getPinHash());
+    public double getOverseasTransferLimit(User user){
+        double recentOverseasTransfers = transactionService.getRecentOverseasTransfers(user);
+        System.out.printf("Recent Overseas Transfers: $%.2f, your limit is: $%.2f.\n", recentOverseasTransfers, user.getOverseas_transfer_limit());
+        if (recentOverseasTransfers >= user.getOverseas_transfer_limit()){
+            return -1;
+        }
+        return user.getOverseas_transfer_limit() - recentOverseasTransfers;
     }
 
+    //endregion
 
+    //region SETTER
     /**
      * Allow user to change account name
      * @param acctIdx get the acctId
@@ -101,6 +164,9 @@ public class UserService {
         Account account = user.getAccounts().get(acctIdx);
         account.setName(name);
     }
+    //endregion
+
+    //region ACCOUNT DELETE
 
     /**
      * Allow user to change account name
@@ -116,6 +182,9 @@ public class UserService {
         }
     }
 
+    //endregion
+
+    //region LOGIN
     /**
      * Get the User object associated with a particular userID and pin, if they
      * are valid.
@@ -150,24 +219,26 @@ public class UserService {
         // if we haven't found the user or have an incorrect pin, return null
         return null;
     }
+    //endregion
 
+    //region UTIL
+    /**
+     * Print transaction history for a particular account.
+     * @param acctIdx	the index of the account to use
+     */
+    public void printAcctTransHistory(User user, int acctIdx) {
+        accountCLI.printTransHistory(user.getAccounts().get(acctIdx));
+    }
+    /**
+     * Check whether a given pin matches the true User pin
+     * @param aPin	the pin to check
+     * @return		whether the pin is valid or not
+     */
+    public boolean validatePin(User user, String aPin) {
+        return Util.hash(aPin).equals(user.getPinHash());
+    }
 
-    public double getLocalTransferLimit(User user){
-        double recentLocalTransfers = transactionService.getRecentLocalTransfers(user);
-        System.out.printf("Recent Local Transfers: $%.2f  your limit is: $%.2f.\n",recentLocalTransfers,user.getLocal_transfer_limit());
-        if (recentLocalTransfers >= user.getLocal_transfer_limit()){
-            return -1;
-        }
-        return user.getLocal_transfer_limit() - recentLocalTransfers;
-    }
-    public double getOverseasTransferLimit(User user){
-        double recentOverseasTransfers = transactionService.getRecentOverseasTransfers(user);
-        System.out.printf("Recent Overseas Transfers: $%.2f, your limit is: $%.2f.\n", recentOverseasTransfers, user.getOverseas_transfer_limit());
-        if (recentOverseasTransfers >= user.getOverseas_transfer_limit()){
-            return -1;
-        }
-        return user.getOverseas_transfer_limit() - recentOverseasTransfers;
-    }
+    //endregion
 }
 
 

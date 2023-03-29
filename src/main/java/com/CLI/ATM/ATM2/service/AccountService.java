@@ -17,7 +17,6 @@ import static com.CLI.ATM.ATM2.Constants.*;
 
 @Component
 public class AccountService {
-
     @Autowired
     UserService userService;
     @Autowired
@@ -26,10 +25,6 @@ public class AccountService {
     UserCLI userCli;
     @Autowired
     SQLService SQLService;
-    @Autowired
-    BankService bankService;
-    @Autowired
-    AccountService accountService;
 
 
     //region ACCOUNT_CREATION
@@ -57,6 +52,10 @@ public class AccountService {
     }
 
 
+    //endregion
+
+    //region BALANCE UPDATE
+
     /**
      * Add amount to the account that the user chooses
      * @param account account that user chooses
@@ -66,30 +65,11 @@ public class AccountService {
         var balance = account.getBalance();
         account.setBalance(balance + amount);
     }
+
+
     //endregion
 
-
-    //region THIRD_PARTY_TRANSFER
-    /**
-     * Get summary of the account
-     * @param account account that user chooses
-     */
-    public HashMap<String,String> getSummaryLine(Account account) {
-
-        // get the account's balance
-        double balance = account.getBalance();
-
-        // summary value
-        HashMap<String, String> val = new HashMap<>();
-        // format summary line depending on whether balance is negative
-
-        val.put("balance", String.format("%.2f", balance));
-        val.put("uuid", String.valueOf(account.getAccountID()));
-        val.put("name", account.getName());
-
-        return val;
-    }
-
+    //region TRANSACTIONS
     /**
      * Add a new transaction in this account.
      * @param account	    the account that user chooses
@@ -97,8 +77,7 @@ public class AccountService {
      * @param receiverID    the recipient
      * @param memo	        adds a memo
      */
-    public void addTransaction(Account account, double amount, int receiverID, String memo, boolean local) {
-
+    public void addTransactionToAcct(Account account, double amount, int receiverID, String memo, boolean local) {
         // create new transaction and add it to our list
         Transaction newTrans = transactionService.createTransaction(amount, account.getAccountID(), receiverID, memo, local);
         // add transaction to SQL database too
@@ -116,7 +95,7 @@ public class AccountService {
      * @param timestamp	    time when the transaction was made
      * @param memo	        adds a memo
      */
-    public void addExistingTransaction(Account account, int transactionID, int receiverID, double amount, java.sql.Date timestamp, String memo, boolean local) {
+    public void addExistingTransactionToAcct(Account account, int transactionID, int receiverID, double amount, java.sql.Date timestamp, String memo, boolean local) {
 
         // create new transaction and add it to our list
         Transaction newTrans = transactionService.createTransactionFromSQL(account.getAccountID(), transactionID, receiverID, amount, timestamp, memo, local);
@@ -124,8 +103,9 @@ public class AccountService {
 
     }
 
+    //endregion
 
-
+    //region GETTERS
     /**
      * Gets an internal account of a user for transferring purposes
      * by asking for user input
@@ -151,6 +131,52 @@ public class AccountService {
         return fromAccount;
     }
 
+    public Account getAccountFromID(User user, int acctId){
+        for (int acc_index = 0; acc_index < user.getAccounts().size(); acc_index++){
+            if (user.getAccounts().get(acc_index).getAccountID() == acctId){
+                return user.getAccounts().get(acc_index);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the bankID of the bank that an accountID belongs to.
+     * returns -1 if not found
+     */
+    public static int getBankIDFromAccountID(int accountIDInput){
+        int bankID = NOT_FOUND;
+        for (Bank bank : bankList) {
+            for (Account acc : bank.getAccounts()){
+                if (acc.getAccountID() == accountIDInput){
+                    bankID = bank.getBankID();
+                    break;
+                }
+            }
+        }
+        return bankID;
+    }
+
+    /**
+     * Get summary of the account
+     * @param account account that user chooses
+     */
+    public HashMap<String,String> getSummaryLine(Account account) {
+
+        // get the account's balance
+        double balance = account.getBalance();
+
+        // summary value
+        HashMap<String, String> val = new HashMap<>();
+        // format summary line depending on whether balance is negative
+
+        val.put("balance", String.format("%.2f", balance));
+        val.put("uuid", String.valueOf(account.getAccountID()));
+        val.put("name", account.getName());
+
+        return val;
+    }
+
     /**
      * Validates whether an accountID exists or not.
      * Creates a new user if the account exists in SQL database
@@ -173,86 +199,5 @@ public class AccountService {
         // returns accountId and which bank it belongs to if it exists in local mem
         return bankID;
     }
-    /**
-     * Asks user for third party accountID to transfer to
-     * @return User inputted accountID (may not be valid accountID)
-     */
-    public int getThirdPartyAccount() {
-        System.out.println("Enter the account number of the account to transfer to: ");
-        sc.nextLine();
-        return sc.nextInt();
-    }
-
-    /**
-     * Gets the bankID of the bank that an accountID belongs to.
-     * returns -1 if not found
-     */
-    public static int getBankIDFromAccountID(int accountIDInput){
-        int bankID = NOT_FOUND;
-        for (Bank bank : bankList) {
-            for (Account acc : bank.getAccounts()){
-                if (acc.getAccountID() == accountIDInput){
-                    bankID = bank.getBankID();
-                    break;
-                }
-            }
-        }
-        return bankID;
-    }
     //endregion
-
-
-    //region LOGIN_&_SIGNUP
-
-
-
-
-    /**
-     * Sign up function
-     * @param currentBank  bank that the user is in
-     */
-    public void handleSignUp(Bank currentBank){
-        System.out.printf("Welcome to %s's sign up\n", currentBank.getName());
-
-        // init class
-
-        String fname = Util.readString("Enter First name:");
-        if (fname.equals("-1")){
-            return;
-        }
-        String lname = Util.readString("Enter last name:");
-        if (lname.equals("-1")){
-            return;
-        }
-        String newPin = Util.readString("Enter pin:");
-        if (newPin.equals("-1")){
-            return;
-        }
-        newPin = Util.hash(newPin);
-
-//              Creates a new user account based on user input
-        User newUser = bankService.addUserToBank(currentBank, fname, lname, newPin,
-                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        Account newAccount2 = accountService.createAccount("CHECKING", newUser, 0.0);
-        userService.addAccountToUser(newUser, newAccount2);
-        bankService.addAccountToBank(currentBank, newAccount2);
-
-
-        // Add new user to SQL
-        SQLService.addNewUser(newUser.getCustomerID(),fname,lname,newPin,currentBank,
-                DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        SQLService.addAccount(newAccount2.getAccountID(),newUser.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
-
-        System.out.println("Account successfully created.");
-    }
-    //endregion
-
-    public Account getAccountFromID(User user, int acctId){
-        for (int acc_index = 0; acc_index < user.getAccounts().size(); acc_index++){
-            if (user.getAccounts().get(acc_index).getAccountID() == acctId){
-                return user.getAccounts().get(acc_index);
-            }
-        }
-        return null;
-    }
 }

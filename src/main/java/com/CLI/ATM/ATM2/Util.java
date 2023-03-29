@@ -164,7 +164,11 @@ public class Util {
         }
         return input;
     }
-
+    /**
+     * reads user input, will validate if input is a proper string
+     * @param prompt prompt to ask user for input
+     * @return string input
+     */
     public static String readString(String prompt){
         String input = "";
         boolean valid = false;

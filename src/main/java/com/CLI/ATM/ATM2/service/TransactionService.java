@@ -18,6 +18,7 @@ public class TransactionService {
     @Autowired
     SQLService SQLService;
 
+    //region TRANSACTION_CREATION
     /**
      * Create a new transaction
      * *@param *amount		the dollar amount transacted
@@ -43,6 +44,15 @@ public class TransactionService {
         return new Transaction(amount, timestamp, memo, accountID, receiverID, transactionID, local);
     }
 
+    //endregion
+
+    //region GETTERS
+
+    /**
+     * Get the total amount of money that has been transferred locally in the last 24 hours
+     * @param user the user to check
+     * @return the total amount of money that has been transferred locally in the last 24 hours
+     */
     public double getRecentLocalTransfers(User user){
         double recentLocalTransfers = 0;
         for (Account account : user.getAccounts()){
@@ -57,6 +67,11 @@ public class TransactionService {
         return -recentLocalTransfers;
     }
 
+    /**
+     * Get the total amount of money that has been transferred overseas in the last 24 hours
+     * @param user the user to check
+     * @return the total amount of money that has been transferred overseas in the last 24 hours
+     */
     public double getRecentOverseasTransfers(User user){
         double recentOverseasTransfers = 0;
         for(Account account : user.getAccounts()){
@@ -70,8 +85,6 @@ public class TransactionService {
         }
         return -recentOverseasTransfers;
     }
-
-
-
+    //endregion
 
 }
