@@ -240,8 +240,6 @@ public class accountController {
         Account currAcc = accountService.getAccountFromID(HTML_currUser, HTML_currAccID);
         List<Transaction> transactionListing = currAcc.getTransactions();
 
-        // implement date sorting
-
         model.addAttribute("transactions", transactionListing);
         model.addAttribute("currAcctID", HTML_currAccID);
 

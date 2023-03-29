@@ -64,7 +64,7 @@
           <tr th:each="transaction : ${transactions}">
             <td th:text="${transaction.timestamp}"></td>
             <td th:text="${#numbers.formatCurrency(transaction.amount)}"></td>
-            <td th:text="${transaction.receiverID}"></td>
+            <td th:text="${transaction.receiverID == -1} ? 'SELF' : ${transaction.receiverID} "></td>
             <td th:text="${transaction.memo}"></td>
             <td th:text="${transaction.transactionID}"></td>
           </tr>
