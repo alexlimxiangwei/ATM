@@ -125,7 +125,7 @@ public class userController {
         HTML_currAccID = -1;
         HTML_currUser = null;
         HTML_currBank = null;
-        HTML_error = false;
+        HTML_transferError = false;
         HTML_accIDExists = -1;
         HTML_newUserID = -1;
         return "signOutPage";

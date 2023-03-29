@@ -1,3 +1,4 @@
+    const messageBox = document.getElementById("error-box");
     const showDivButton = document.getElementById("show-deposit");
     const depositDiv = document.getElementById("deposit-div");
 
@@ -6,6 +7,7 @@
             depositDiv.style.display = "block";
             withdrawDiv.style.display = "none";
             transferDiv.style.display = "none";
+            messageBox.style.display = "none";
         } else {
             depositDiv.style.display = "none";
         }
@@ -19,6 +21,7 @@
             withdrawDiv.style.display = "block";
             depositDiv.style.display = "none";
             transferDiv.style.display = "none";
+            messageBox.style.display = "none";
         } else {
             withdrawDiv.style.display = "none";
         }
@@ -32,6 +35,7 @@
             transferDiv.style.display = "block";
             depositDiv.style.display = "none";
             withdrawDiv.style.display = "none";
+            messageBox.style.display = "none";
         } else {
             transferDiv.style.display = "none";
         }

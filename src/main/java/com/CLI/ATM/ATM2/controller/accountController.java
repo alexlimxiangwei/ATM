@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.CLI.ATM.ATM2.controller.userController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -59,8 +58,12 @@ public class accountController {
         model.addAttribute("accounts", accountListing);
 
         // error message box
-        if (HTML_error){
+        if (HTML_transferError){
             String message = "TRANSFER FAILED\nNo such Account ID [" + HTML_accIDExists +"] exists !";
+            model.addAttribute("message", message);
+        }
+        if (HTML_withdrawError){
+            String message = "WITHDRAW FAILED\nInsufficient Balance !";
             model.addAttribute("message", message);
         }
 
@@ -88,16 +91,19 @@ public class accountController {
                               @RequestParam("withdraw") double amount,
                               @RequestParam("memo-withdraw") String memo) {
 
-
         Account currAcc = accountService.getAccountFromID(HTML_currUser, accId);
 
-        amount = -amount;
+        if(amount > currAcc.getBalance()){
+            HTML_withdrawError = true;
+        } else {
+            amount = -amount;
 
-        accountService.addTransactionToAcct(currAcc, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-        accountService.addBalance(currAcc, amount);
+            accountService.addTransactionToAcct(currAcc, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+            accountService.addBalance(currAcc, amount);
 
-        // update balance on SQL
-        sqlService.updateBalance(currAcc.getBalance(),currAcc.getAccountID());
+            // update balance on SQL
+            sqlService.updateBalance(currAcc.getBalance(), currAcc.getAccountID());
+        }
 
         return "redirect:/accounts";
     }
@@ -118,7 +124,7 @@ public class accountController {
         // return form if accountID doesn't exist
         if (accountService.getAccountFromID(fromUser, accIdTo_External) == null){
             HTML_accIDExists = accIdTo_External;
-            HTML_error = true;
+            HTML_transferError = true;
         }else {
 
             switch (transferType) {
