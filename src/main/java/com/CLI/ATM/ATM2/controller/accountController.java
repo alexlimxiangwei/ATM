@@ -144,65 +144,76 @@ public class accountController {
 
         User fromUser = HTML_currUser;
         Account fromAcct = accountService.getAccountFromID(fromUser, accIdFrom);
-        Account toAcct = accountService.getAccountFromID(fromUser, accIdTo_External);
-
-        if (toAcct == null && accIdTo_External != -1){
-            HTML_accIDExists = accIdTo_External;
-            HTML_transferError_exists = true;
-        } else if (accIdFrom == accIdTo_Internal || accIdFrom == accIdTo_External) {
-            HTML_transferError_sameAcc = true;
-        } else {
-
-            switch (transferType) {
-                case 1 -> { // internal transfer
-                    toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
-                    double local_limit = userService.getLocalTransferLimit(HTML_currUser);
-
-                    if (amount > local_limit | amount > fromAcct.getBalance()) {
-                        HTML_transferError_balance = true;
-                    } else {
-                        // add transaction to both accounts
-                        accountService.addTransactionToAcct(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-                        accountService.addTransactionToAcct(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-                    }
+        double transfer_limit = fromAcct.getBalance();
+        Account toAcct = null;
+        switch (transferType) {
+            case 1 -> { // internal transfer
+                toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
+                if (toAcct == fromAcct) { // if same account
+                    // TODO: add your error in below
+                    HTML_transferError_sameAcc = true;
+                    break;
                 }
-                case 2 -> { // external transfer
-                    int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
-                    if (toBankID == -1) {
-                        HTML_accIDExists = accIdTo_External;
-                        HTML_transferError_exists = true;
-                        break;
-                    }
-                    Bank toBank = bankService.getBankFromID(bankList, toBankID);
-                    boolean isLocal = toBank.isLocal();
-                    double limit;
-                    if (isLocal) {
-                        limit = userService.getLocalTransferLimit(HTML_currUser);
-                    } else {
-                        limit = userService.getOverseasTransferLimit(HTML_currUser);
-                    }
-                    toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
-                    if (amount > fromAcct.getBalance() | amount > limit) {
-                        HTML_transferError_balance = true;
-                        break;
-                    }
 
-                    // add transaction to both accounts
-                    accountService.addTransactionToAcct(fromAcct, -amount, accIdTo_External, memo, isLocal);
-                    accountService.addTransactionToAcct(toAcct, amount, accIdFrom, memo, isLocal);
-
-
+                double local_limit = userService.getLocalTransferLimit(HTML_currUser);
+                if (transfer_limit > local_limit) { // set limit to whichever is lower : current balance or local limit
+                    transfer_limit = local_limit;
                 }
-                default -> {
+                if (transfer_limit == -1) { // if transfer limit is -1, then limit is reached
+                    // TODO: if local limit reached , add in your error below
+                    break;
                 }
+
+                if (amount > local_limit) { // if amount to transfer is greater than limit
+                    //TODO: add your error in below
+                    HTML_transferError_balance = true;
+                    break;
+                }
+
+                // if everything is ok, then add transaction to both accounts
+                accountService.addTransactionToAcct(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                accountService.addTransactionToAcct(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
             }
+
+            case 2 -> { // external transfer
+                int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
+                if (toBankID == -1) {
+                    // if third party account does not exist
+                    // TODO: add your error in below
+                    HTML_accIDExists = accIdTo_External;
+                    HTML_transferError_exists = true;
+                }
+                Bank toBank = bankService.getBankFromID(bankList, toBankID);
+                toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
+                boolean isLocal = toBank.isLocal();
+                double limit;
+                if (isLocal) {
+                    limit = userService.getLocalTransferLimit(HTML_currUser);
+
+                } else {
+                    limit = userService.getOverseasTransferLimit(HTML_currUser);
+                }
+                if (transfer_limit > limit) { // set limit to whichever is lower : current balance or local/overseas limit
+                    transfer_limit = limit;
+                }
+
+                if (amount > transfer_limit) { // if amount to transfer is greater than limit
+                    //TODO: add your error in below
+                    HTML_transferError_balance = true;
+                }
+                // if everything is ok, then add transaction to both accounts
+                accountService.addTransactionToAcct(fromAcct, -amount, accIdTo_External, memo, isLocal);
+                accountService.addTransactionToAcct(toAcct, amount, accIdFrom, memo, isLocal);
+            }
+
+        }
             accountService.addBalance(fromAcct, -amount);
             accountService.addBalance(toAcct, amount);
             //update on SQL
             sqlService.updateBalance(fromAcct.getBalance(), accIdFrom);
             sqlService.updateBalance(toAcct.getBalance(), accIdTo_External);
 
-        }
+
         return "redirect:/accounts";
     }
 
