@@ -130,11 +130,13 @@ public class UserService {
      */
     public double getLocalTransferLimit(User user){
         double recentLocalTransfers = transactionService.getRecentLocalTransfers(user);
-        System.out.printf("Recent Local Transfers: $%.2f  your limit is: $%.2f.\n",recentLocalTransfers,user.getLocal_transfer_limit());
         if (recentLocalTransfers >= user.getLocal_transfer_limit()){
             return -1;
         }
-        return user.getLocal_transfer_limit() - recentLocalTransfers;
+        double remaining_limit = user.getLocal_transfer_limit() - recentLocalTransfers;
+        System.out.printf("Recent Local Transfers: $%.2f  your remaining limit is: $%.2f.\n\n",recentLocalTransfers,remaining_limit);
+
+        return remaining_limit;
     }
 
     /**
@@ -144,11 +146,12 @@ public class UserService {
      */
     public double getOverseasTransferLimit(User user){
         double recentOverseasTransfers = transactionService.getRecentOverseasTransfers(user);
-        System.out.printf("Recent Overseas Transfers: $%.2f, your limit is: $%.2f.\n", recentOverseasTransfers, user.getOverseas_transfer_limit());
         if (recentOverseasTransfers >= user.getOverseas_transfer_limit()){
             return -1;
         }
-        return user.getOverseas_transfer_limit() - recentOverseasTransfers;
+        double remaining_limit = user.getOverseas_transfer_limit() - recentOverseasTransfers;
+        System.out.printf("Recent Overseas Transfers: $%.2f, your limit is: $%.2f.\n\n", recentOverseasTransfers, remaining_limit);
+        return remaining_limit;
     }
 
     //endregion
