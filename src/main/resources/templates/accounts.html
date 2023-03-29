@@ -22,14 +22,14 @@
             <tr>
                 <th>Account Name</th>
                 <th>Account ID</th>
-                <th>Balance($)</th>
+                <th>Balance</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="account : ${accounts}">
                 <td th:text="${account.name}"></td>
                 <td th:text="${account.accountID}"></td>
-                <td th:text="${account.balance}"></td>
+                <td th:text="${#numbers.formatCurrency(account.balance)}"></td>
             </tr>
             </tbody>
         </table>
@@ -115,17 +115,20 @@
                 <!-- Third Party & Overseas Transfer -->
                 <div id="external-div" style="display: none;">
                     <label for="accId-transfer-to-external">Transfer To:</label>
-                    <input type="text" id="accId-transfer-to-external" name="accId-transfer-to-external" pattern="[0-9]+" title="Invalid Account Format !" value="-1">
+                    <input type="text" id="accId-transfer-to-external" name="accId-transfer-to-external" pattern="^-?([1-9]|[1-9][0-]|-1|[0-9]+)$" title="Invalid Account Format !" value="-1">
                 </div>
 
                 <label for="transfer">Transfer Amount:</label>
-                <input type="text" id="transfer" name="transfer" pattern="[0-9]+" title="Only can transfer numeric values !"required>
+                <input type="text" id="transfer" name="transfer" pattern="[0-9]+" title="Only can transfer numeric values !" required>
 
                 <label for="memo-transfer">Transfer Memo:</label>
                 <input type="text" id="memo-transfer" name="memo-transfer">
 
                 <button type="submit">Confirm Transfer</button>
             </form>
+        </div>
+        <div th:if="${message}" th:class="${'alert alert-' + type}" role="alert" id="errorbox">
+            <span th:text="${message}"></span>
         </div>
     </div>
 

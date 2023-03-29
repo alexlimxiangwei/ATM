@@ -161,6 +161,24 @@
         }
 
         button {
+			display: inline-block;
+			padding: 10px 20px;
+			border-radius: 5px;
+			font-weight: bold;
+			color: #fff;
+			text-decoration: none;
+			background-color: #007bff;
+			margin: 10px;
+			box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+
+        button:hover {
+            background-color: #3e8e41;
+            box-shadow: 0px 0px 5px #888888;
+        }
+
+        #password-change{
             background-color: #4CAF50;
             border: none;
             border-radius: 100px;
@@ -174,11 +192,6 @@
             cursor: pointer;
         }
 
-        button:hover {
-            background-color: #3e8e41;
-            box-shadow: 0px 0px 5px #888888;
-        }
-
         #acc-edit{
             background-color: orange;
         }
@@ -188,18 +201,15 @@
         }
 
         .create-acc{
-            margin: 0 auto;
-            background-color: #7FFFD4;
+            background-color: #28a745;
         }
 
         .edit-acc{
-            margin: 0 auto;
-            background-color: #FFD700;
+            background-color: #007bff;
         }
 
         .delete-acc{
-            margin: 0 auto;
-            background-color: #CD5C5C;
+            background-color: #dc3545 ;
         }
 
 

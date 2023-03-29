@@ -20,8 +20,10 @@ public class Constants {
     public static ArrayList<Bank> bankList;
     public static int HTML_currUserID = -1;
     public static int HTML_currAccID = -1;
-
     public static User HTML_currUser;
     public static Bank HTML_currBank;
+
+    public static boolean HTML_error;
+    public static int HTML_accIDNoExists;
 
 }

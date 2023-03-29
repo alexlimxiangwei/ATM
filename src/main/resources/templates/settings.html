@@ -54,14 +54,12 @@
         <tr>
           <th>Account Name</th>
           <th>Account ID</th>
-          <th>Balance($)</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="account : ${accounts}">
           <td th:text="${account.name}"></td>
           <td th:text="${account.accountID}"></td>
-          <td th:text="${account.balance}"></td>
         </tr>
         </tbody>
       </table>

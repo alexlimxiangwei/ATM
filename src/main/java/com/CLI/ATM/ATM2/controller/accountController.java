@@ -56,14 +56,14 @@ public class accountController {
         model.addAttribute("fullName", userName);
         model.addAttribute("accounts", accountListing);
 
+        // error message box
+        if (HTML_error){
+            String message = "TRANSFER FAILED\nNo such Account ID [" + HTML_accIDNoExists +"] exists !";
+            model.addAttribute("message", message);
+        }
+
         return "accounts.html";
     }
-
-//    @GetMapping("/transactions")
-//    public String getTransactionsHTML(Model model){
-//        getAccountsHTML(model);
-//        return "transactions.html";
-//    }
 
     @PostMapping("/accounts/deposit")
     public String depositHTML(Model mode,
@@ -113,35 +113,41 @@ public class accountController {
         Account fromAcct = accountService.getAccountFromID(fromUser, accIdFrom);
         Account toAcct = null;
 
-        switch (transferType) {
-            case 1 -> { // internal transfer
-                toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
+        // return form if accountID doesn't exist
+        if (accountService.getAccountFromID(fromUser, accIdTo_External) == null){
+            HTML_accIDNoExists = accIdTo_External;
+            HTML_error = true;
+        }else {
 
-                // add transaction locally
-                accountService.addTransaction(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-                accountService.addTransaction(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-            }
-            case 2 -> { // external transfer
-                int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
-                Bank toBank = bankService.getBankFromID(bankList, toBankID);
-                toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
-                boolean isLocal = toBank.isLocal();
-                // add transaction locally
-                accountService.addTransaction(fromAcct, -amount, accIdTo_External, memo, isLocal);
-                accountService.addTransaction(toAcct, amount, accIdFrom, memo, isLocal);
+            switch (transferType) {
+                case 1 -> { // internal transfer
+                    toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
+
+                    // add transaction locally
+                    accountService.addTransaction(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                    accountService.addTransaction(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                }
+                case 2 -> { // external transfer
+                    int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
+                    Bank toBank = bankService.getBankFromID(bankList, toBankID);
+                    toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
+                    boolean isLocal = toBank.isLocal();
+                    // add transaction locally
+                    accountService.addTransaction(fromAcct, -amount, accIdTo_External, memo, isLocal);
+                    accountService.addTransaction(toAcct, amount, accIdFrom, memo, isLocal);
 
 
+                }
+                default -> {
+                }
             }
-            default -> {
-            }
-        }
             accountService.addBalance(fromAcct, -amount);
             accountService.addBalance(toAcct, amount);
             //update on SQL
-            sqlService.updateBalance(fromAcct.getBalance(),accIdFrom);
-            sqlService.updateBalance(toAcct.getBalance(),accIdTo_External);
+            sqlService.updateBalance(fromAcct.getBalance(), accIdFrom);
+            sqlService.updateBalance(toAcct.getBalance(), accIdTo_External);
 
-
+        }
         return "redirect:/accounts";
     }
 

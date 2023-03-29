@@ -108,15 +108,15 @@
 		}
 
 		.deposit {
-			background-color: #3385ff;
+			background-color: #28a745;
 		}
 
 		.withdraw{
-		    background-color: #ff4000;
+		    background-color: #dc3545;
 		}
 
 		.transfer{
-		    background-color: #00e600;
+		    background-color: #007bff;
 		}
 
 		a {
@@ -170,4 +170,16 @@
 
         select, option{
             font-family: "Lucida Console", "Courier New", monospace;
+        }
+
+        #errorbox {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            font-weight: bold;
+            width: 400px;
+            text-align: center;
+            margin: auto;
         }
