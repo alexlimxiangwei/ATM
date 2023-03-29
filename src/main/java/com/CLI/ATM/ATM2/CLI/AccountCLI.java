@@ -21,6 +21,12 @@ public class AccountCLI {
             System.out.println("No transactions found for this account");
             return;
         }
+        else if (account.getTransactions().size() <= PAGE_SIZE) {
+            for (int t = 0; t < account.getTransactions().size(); t++) {
+                System.out.println(transactionCLI.getSummaryLine(account.getTransactions().get(t)));
+            }
+            return;
+        }
         int page = 1;
         int max_page = (int) Math.ceil((account.getTransactions().size() / PAGE_SIZE));
         System.out.printf("\nTransaction history for account %s:\n\n", account.getAccountID());
