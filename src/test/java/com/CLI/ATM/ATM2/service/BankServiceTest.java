@@ -81,10 +81,10 @@ public class BankServiceTest {
         mockBank.getUsers().add(user);
 
         // Call the userLogin method with correct credentials
-        User loggedInUser = bankService.userLogin(mockBank, 123, "1234");
+        User loggedInUser = userService.userLogin(mockBank, 123, "1234");
 
         // Call the userLogin method with incorrect credentials
-        User nullUser = bankService.userLogin(mockBank, 123, "4321");
+        User nullUser = userService.userLogin(mockBank, 123, "4321");
 
         // Assert that null was returned
         assertNull(nullUser);

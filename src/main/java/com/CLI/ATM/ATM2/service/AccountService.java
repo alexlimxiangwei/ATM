@@ -222,49 +222,9 @@ public class AccountService {
 
 
     //region LOGIN_&_SIGNUP
-    /**
-     * Handles the login
-     * @param currentBank currentBank user is in
-     */
-    public User handleLogIn(Bank currentBank){
-        User curUser;
-        do{
-            curUser = accountService.loginPrompt(currentBank);
 
-            if (curUser == null){
-                System.out.println("Incorrect user ID/pin combination. " +
-                        "Please try again");
-            }
-        }
-        while(curUser == null);
-        System.out.printf("Login Successful.\nWelcome, %s!", curUser.getFirstName());
-        // stay in main menu until user quits
-        return curUser;
-    }
 
-    /**
-     * Prompts user to login
-     * @param theBank  bank that the user is in
-     */
-    public User loginPrompt(Bank theBank) {
-        // inits
-        // test
-        int userID;
-        String pin;
-        User authUser;
 
-        // prompt user for user ID/pin combo until a correct one is reached
-
-        System.out.print("Enter user ID: ");
-        userID = sc.nextInt();
-        sc.nextLine();
-
-        System.out.print("Enter pin: ");
-        pin = sc.nextLine();
-        // try to get user object corresponding to ID and pin combo
-        authUser = bankService.userLogin(theBank, userID, pin);
-        return authUser;
-    }
 
     /**
      * Sign up function
@@ -294,12 +254,13 @@ public class AccountService {
         userService.addAccountToUser(newUser2, newAccount2);
         bankService.addAccountToBank(currentBank, newAccount2);
 
-        System.out.println("Account successfully created.");
 
         // Add new user to SQL
         SQLService.addNewUser(newUser2.getCustomerID(),fname,lname,newPin,currentBank,
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
         SQLService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+
+        System.out.println("Account successfully created.");
     }
     //endregion
 

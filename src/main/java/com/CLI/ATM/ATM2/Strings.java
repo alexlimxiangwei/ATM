@@ -2,6 +2,8 @@ package com.CLI.ATM.ATM2;
 
 import com.CLI.ATM.ATM2.model.Bank;
 
+import java.util.ArrayList;
+
 import static com.CLI.ATM.ATM2.Constants.*;
 
 
@@ -19,7 +21,16 @@ public class Strings {
         return choice;
     }
 
-
+    public static void displayBankSelectionPage(ArrayList<Bank> bankList) {
+        System.out.println("List of local banks:");
+        int bank_no = 1;
+        for (Bank bank : bankList) {
+            if (bank.isLocal()) {
+                System.out.printf("  %d) %s\n", bank_no, bank.getName());
+                bank_no++;
+            }
+        }
+    }
     public static int displayUserMenu(){
         int choice;
         do {
@@ -47,9 +58,12 @@ public class Strings {
         System.out.println("What would you like to do?");
         System.out.println("  1) Log In");
         System.out.println("  2) Sign Up");
-        System.out.print("Enter choice: ");
     }
 
+    public static void print_welcomeMessage(){
+        System.out.println("\n\nWelcome to the ATM!");
+        System.out.println("Enter -1 to quit at any time!\n");
+    }
     public static void print_AskAmount(double limit) {
         if (limit == -1){
             System.out.print("Enter the amount to transfer: $");

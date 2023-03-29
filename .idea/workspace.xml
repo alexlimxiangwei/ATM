@@ -6,14 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- removed a useless constant">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/accountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/accounts.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/accounts.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/settings.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/settings.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/accounts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/settings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/transactions.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/transactions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/CLI/ATM/ATM2/service/BankServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/CLI/ATM/ATM2/service/BankServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

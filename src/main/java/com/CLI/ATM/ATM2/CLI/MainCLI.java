@@ -9,8 +9,6 @@ import com.CLI.ATM.ATM2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
 import static com.CLI.ATM.ATM2.Constants.*;
 import static com.CLI.ATM.ATM2.Strings.*;
 
@@ -31,20 +29,10 @@ public class MainCLI {
 
     //region BANK_MENU
 
-    public void displayBankSelectionPage(ArrayList<Bank> bankList) {
-        System.out.println("Please select the bank you would like to use");
-        int bank_no = 1;
-        for (Bank bank : bankList) {
-            if (bank.isLocal()) {
-                System.out.printf("  %d) %s\n", bank_no, bank.getName());
-                bank_no++;
-            }
-        }
-        System.out.print("Enter choice: ");
-    }
 
 
-    public void printUserMenu(User theUser, Bank theBank){
+
+    public void handleUserMenu(User theUser, Bank theBank){
 
         // print a summary of the user's accounts
         userCLI.printAccountsSummary(theUser);
@@ -66,7 +54,7 @@ public class MainCLI {
 
         // redisplay this menu unless the user wants to quit
         if (choice != 6) {
-            printUserMenu(theUser,theBank);
+            handleUserMenu(theUser,theBank);
         }
 
     }

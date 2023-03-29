@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+import static com.CLI.ATM.ATM2.Constants.bankList;
+
 @Component
 public class BankService {
     @Autowired
@@ -95,44 +97,11 @@ public class BankService {
     //endregion
 
     //region USER_LOGIN
-    /**
-     * Get the User object associated with a particular userID and pin, if they
-     * are valid.
-     * @param userID	the user UUID to log in
-     * @param pin		the associate pin of the user
-     * @return			the User object, if login is successfully, or null, if
-     * 					it is not
-     */
 
-    public User userLogin(Bank bank, int userID, String pin) {
-
-        // search through list of users
-        for (User u : bank.getUsers()) {
-
-            // if we find the user, and the pin is correct, return User object
-            if (u.getCustomerID() == userID)
-            {
-                if (userService.validatePin(u, pin)){
-                    return u;
-                }
-                else {
-                    return null;
-                }
-            }
-        }
-        //If userId isn't found locally, search sql database
-//        System.out.println("User not found locally, attempting to fetch user from database...");
-        User u = SQLService.addExistingUserByCustomerID(bank, userID);
-        if (u != null && u.getCustomerID() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) { // TODO: shorten
-            return u;
-        }
-        // if we haven't found the user or have an incorrect pin, return null
-        return null;
-    }
     //endregion
 
 
-    //region GET_REQUESTED_IDS
+    //region GETTERS
     /**
      * gets the accountID requested
      * @param bank	the bank that the user is in
@@ -175,5 +144,20 @@ public class BankService {
         }
         return null;
     }
+
+    /**
+     * gets the number of local banks
+     * @return number of local banks
+     */
+    public int getNumOfLocalBanks() {
+        int num_of_local_banks = 0;
+        for (Bank bank : bankList) {
+            if (bank.isLocal()){
+                num_of_local_banks++;
+            }
+        }
+        return num_of_local_banks;
+    }
+
     //endregion
 }

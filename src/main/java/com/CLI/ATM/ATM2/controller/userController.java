@@ -65,7 +65,7 @@ public class userController {
         Bank bankObj = bankService.getBankFromID(bankList, bankid);
 
         assert bankObj != null;
-        User authUser = bankService.userLogin(bankObj, userid, pin);
+        User authUser = userService.userLogin(bankObj, userid, pin);
 
         // print html authentication for userLogin
         String message = "No message here";
