@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- removed a useless constant">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/ATM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/CLI/MainCLI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Strings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/Util.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/controller/userController.java" afterDir="false" />
+    <list default="true" id="1f30dd84-4896-484d-be56-1a5754417c85" name="Changes" comment="DONE:&#10;- moved some functions in wrong places to different services&#10;&#10;- added a few Util functions to read and validate different input&#10;&#10;- changed some functions to include a way to quit at any time (will slowly fill in for all functions) currently works for selecting back to logging in">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/BankService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/SQLService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/CLI/ATM/ATM2/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/CLI/ATM/ATM2/service/BankServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/CLI/ATM/ATM2/service/BankServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -313,7 +302,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679838404348</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="DONE:&#10;- moved some functions in wrong places to different services&#10;&#10;- added a few Util functions to read and validate different input&#10;&#10;- changed some functions to include a way to quit at any time (will slowly fill in for all functions) currently works for selecting back to logging in">
+      <created>1680088313062</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1680088313062</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -328,7 +324,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added 2 functions in Bank to get account by searching an id, so we can make third party transfers" />
     <MESSAGE value="new balance field in Account class to keep track of each account's balance." />
     <MESSAGE value="Changes:&#10;1)&#10;shortened a lot of code for withdraw/transfer/deposit&#10;by converting repeated code into Utils.java functions&#10;2)&#10;added 'balance' attribute to Account class&#10;no longer need to loop through all transactions everytime we want to get an account balance (more efficient)" />
     <MESSAGE value="fixed nextLine issues with logging in" />
@@ -353,6 +348,7 @@
     <MESSAGE value="DONE:&#10;- added Bank and User constants for HTML use.&#10;- added in code for all settings except for pin (needs String)" />
     <MESSAGE value="DONE:&#10;- fixed -1 user id for all accounts on html, my fault" />
     <MESSAGE value="DONE:&#10;- removed a useless constant" />
-    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- removed a useless constant" />
+    <MESSAGE value="DONE:&#10;- moved some functions in wrong places to different services&#10;&#10;- added a few Util functions to read and validate different input&#10;&#10;- changed some functions to include a way to quit at any time (will slowly fill in for all functions) currently works for selecting back to logging in" />
+    <option name="LAST_COMMIT_MESSAGE" value="DONE:&#10;- moved some functions in wrong places to different services&#10;&#10;- added a few Util functions to read and validate different input&#10;&#10;- changed some functions to include a way to quit at any time (will slowly fill in for all functions) currently works for selecting back to logging in" />
   </component>
 </project>

@@ -234,31 +234,33 @@ public class AccountService {
         System.out.printf("Welcome to %s's sign up\n", currentBank.getName());
 
         // init class
-        User newUser = new User();
 
-        System.out.print("Enter First name: ");
-        String fname = sc.nextLine();
-        newUser.setFirstName(fname);
-
-        System.out.print("Enter last name: ");
-        String lname = sc.nextLine();
-        newUser.setLastName(lname);
-
-        System.out.print("Enter pin: ");
-        String newPin = Util.hash(sc.nextLine()); //hash it immediately, so we don't store the password at all
+        String fname = Util.readString("Enter First name:");
+        if (fname.equals("-1")){
+            return;
+        }
+        String lname = Util.readString("Enter last name:");
+        if (lname.equals("-1")){
+            return;
+        }
+        String newPin = Util.readString("Enter pin:");
+        if (newPin.equals("-1")){
+            return;
+        }
+        newPin = Util.hash(newPin);
 
 //              Creates a new user account based on user input
-        User newUser2 = bankService.addUserToBank(currentBank, fname, lname, newPin,
+        User newUser = bankService.addUserToBank(currentBank, fname, lname, newPin,
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        Account newAccount2 = accountService.createAccount("CHECKING", newUser2, 0.0);
-        userService.addAccountToUser(newUser2, newAccount2);
+        Account newAccount2 = accountService.createAccount("CHECKING", newUser, 0.0);
+        userService.addAccountToUser(newUser, newAccount2);
         bankService.addAccountToBank(currentBank, newAccount2);
 
 
         // Add new user to SQL
-        SQLService.addNewUser(newUser2.getCustomerID(),fname,lname,newPin,currentBank,
+        SQLService.addNewUser(newUser.getCustomerID(),fname,lname,newPin,currentBank,
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
-        SQLService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
+        SQLService.addAccount(newAccount2.getAccountID(),newUser.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
 
         System.out.println("Account successfully created.");
     }
