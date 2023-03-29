@@ -26,6 +26,8 @@ public class MainCLI {
     SQLService SQLService;
     @Autowired
     UserCLI userCLI;
+    @Autowired
+    AccountCLI accountCLI;
 
     //region USER_MENU
     public void handleUserMenu(User theUser, Bank theBank){
@@ -63,15 +65,12 @@ public class MainCLI {
      */
     public void showTransHistory(User theUser) {
 
-        int acctID;
+        Account acct;
         // get account whose transactions to print
-        acctID = accountService.getInternalAccount(theUser, "view the transaction history of").getAccountID();
+        acct = accountService.getInternalAccount(theUser, "view the transaction history of");
 
         // print the transaction history
-        userService.printAcctTransHistory(theUser, acctID);
-        System.out.println("Enter any key to continue");
-        sc.nextLine();
-        sc.nextLine();
+        accountCLI.printTransHistory(acct);
     }
 
     //region ACCOUNT TRANSACTION FUNCTIONS

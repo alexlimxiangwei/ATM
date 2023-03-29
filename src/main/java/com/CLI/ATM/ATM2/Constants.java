@@ -12,6 +12,7 @@ public class Constants {
     public static final int WITHDRAW = -1;
     public static final int QUIT = -1;
     public static final String QUIT_STRING = "-1";
+    public static final double PAGE_SIZE = 10;
     public static final boolean LOCAL_TRANSACTION = true;
     public static final double DEFAULT_LOCAL_TRANSFER_LIMIT = 1000;
     public static final double DEFAULT_OVERSEAS_TRANSFER_LIMIT = 1000;
