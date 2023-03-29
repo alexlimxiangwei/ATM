@@ -118,7 +118,7 @@ public class AccountService {
         int numOfAccounts = userService.numAccounts(theUser);
         userCli.printAccountsSummarySimp(theUser);
         String choice_prompt = String.format("\nEnter the number (1-%d) of the account to %s: ", numOfAccounts, prompt);
-        fromAcctIndex = Util.readInt(choice_prompt, 1, numOfAccounts-1);
+        fromAcctIndex = Util.readInt(choice_prompt, 1, numOfAccounts);
         if (fromAcctIndex == QUIT){
             return null;
         }
