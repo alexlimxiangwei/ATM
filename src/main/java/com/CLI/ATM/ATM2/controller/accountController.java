@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.CLI.ATM.ATM2.controller.userController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class accountController {
     TransactionService transactionService;
 
     @GetMapping("/menuPage")
-    public String getHomeHTML(Model model){
+    public String getHomeHTML(Model model, RedirectAttributes redirectAttributes){
         String firstName = HTML_currUser.getFirstName();
         String lastName = HTML_currUser.getLastName();
         String userName = firstName + " " + lastName;
@@ -58,7 +60,7 @@ public class accountController {
 
         // error message box
         if (HTML_error){
-            String message = "TRANSFER FAILED\nNo such Account ID [" + HTML_accIDNoExists +"] exists !";
+            String message = "TRANSFER FAILED\nNo such Account ID [" + HTML_accIDExists +"] exists !";
             model.addAttribute("message", message);
         }
 
@@ -115,7 +117,7 @@ public class accountController {
 
         // return form if accountID doesn't exist
         if (accountService.getAccountFromID(fromUser, accIdTo_External) == null){
-            HTML_accIDNoExists = accIdTo_External;
+            HTML_accIDExists = accIdTo_External;
             HTML_error = true;
         }else {
 

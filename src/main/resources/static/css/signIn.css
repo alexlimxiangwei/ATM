@@ -42,11 +42,22 @@
 			margin-top: 20px;
 			text-align: center;
 		}
-		#errorbox {
+		#error-box {
 		    background-color: #f8d7da;
             color: #721c24;
             padding: 10px;
             border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            font-weight: bold;
+            width: 400px;
+            text-align: center;
+            margin: auto;
+		}
+		#newIdBox {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border: 1px solid #c3e6cb;
             border-radius: 4px;
             font-weight: bold;
             width: 400px;

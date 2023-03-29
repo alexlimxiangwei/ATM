@@ -26,6 +26,7 @@ public class Constants {
     public static Bank HTML_currBank;
 
     public static boolean HTML_error;
-    public static int HTML_accIDNoExists;
+    public static int HTML_accIDExists;
+    public static int HTML_newUserID = -1;
 
 }

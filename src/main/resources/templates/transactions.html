@@ -5,6 +5,7 @@
   <link rel="stylesheet" th:href="@{/css/transactions.css}">
 </head>
 <body>
+<script type="text/javascript" th:src="@{/js/signOut.js}"></script>
 <div class="container">
   <div class="sidebar">
     <h2>ATM Menu</h2>
@@ -13,6 +14,7 @@
     <a href="http://localhost:8090/accounts">Accounts</a>
     <a href="http://localhost:8090/transactions" class="active">Transactions</a>
     <a href="http://localhost:8090/settings">Settings</a>
+    <a href="http://localhost:8090/signOut"  onclick="return confirm('Are you sure you want to sign out ?')" >Sign Out</a>
   </div>
   <div class="main-content">
     <h2><span th:text="${fullName}"></span>'s Accounts</h2>
@@ -22,7 +24,7 @@
       <tr>
         <th>Account Name</th>
         <th>Account ID</th>
-        <th>Balance</th>
+        <th>Balance($)</th>
       </tr>
       </thead>
       <tbody>
@@ -61,7 +63,7 @@
           <tbody>
           <tr th:each="transaction : ${transactions}">
             <td th:text="${transaction.timestamp}"></td>
-            <td th:text="${transaction.amount}"></td>
+            <td th:text="${#numbers.formatCurrency(transaction.amount)}"></td>
             <td th:text="${transaction.receiverID}"></td>
             <td th:text="${transaction.memo}"></td>
             <td th:text="${transaction.transactionID}"></td>
@@ -70,19 +72,20 @@
         </table>
       </div>
     </div>
-</div>
-<script>
-    const acctSelect = document.getElementById("currAcctID");
-    const transactionTable = document.getElementById("transaction-table");
-    const idLabel = document.getElementById("idLabel");
+  </div>
+  <script>
+      const acctSelect = document.getElementById("currAcctID");
+      const transactionTable = document.getElementById("transaction-table");
+      const idLabel = document.getElementById("idLabel");
 
-        if (acctSelect.textContent.trim() === "") {
-            transactionTable.style.display = "none";
-            idLabel.style.display = "none"
-        } else {
-            transactionTable.style.display = "block";
-            idLabel.style.display = "block"
-        }
-</script>
+          if (acctSelect.textContent.trim() === "") {
+              transactionTable.style.display = "none";
+              idLabel.style.display = "none"
+          } else {
+              transactionTable.style.display = "block";
+              idLabel.style.display = "block"
+          }
+  </script>
+</div>
 </body>
 </html>

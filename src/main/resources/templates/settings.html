@@ -5,6 +5,7 @@
   <link rel="stylesheet" th:href="@{/css/settings.css}">
 </head>
 <body>
+<script type="text/javascript" th:src="@{/js/signOut.js}"></script>
 <div class="container">
   <div class="sidebar">
     <h2>ATM Menu</h2>
@@ -13,6 +14,7 @@
     <a href="http://localhost:8090/accounts">Accounts</a>
     <a href="http://localhost:8090/transactions">Transactions</a>
     <a href="http://localhost:8090/settings" class="active">Settings</a>
+    <a href="http://localhost:8090/signOut"  onclick="return confirm('Are you sure you want to sign out ?')" >Sign Out</a>
   </div>
   <div class="main-content user-settings">
     <h1>User Settings</h1>

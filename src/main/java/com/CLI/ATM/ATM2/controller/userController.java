@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import static com.CLI.ATM.ATM2.Constants.*;
 
@@ -32,7 +33,7 @@ public class userController {
     }
 
     @RequestMapping(value = "/signInPage", method = RequestMethod.GET)
-    public String populateList(Model model) {
+    public void populateList(Model model) {
         List<Bank> bankListing = sqlService.fetchBanks();
         for (int i = 0; i < bankListing.size(); i++){
             if (!bankListing.get(i).isLocal()){
@@ -40,19 +41,24 @@ public class userController {
             }
         }
         model.addAttribute("bankListing", bankListing);
-        return "signInPage.html";
+        String message_newID = "";
+        if (HTML_newUserID != -1) {
+            message_newID = "New User ID: " + HTML_newUserID + " created successfully";
+            model.addAttribute("message_newID", message_newID);
+            HTML_newUserID = -1;
+        }
     }
 
     @RequestMapping(value = "/signUpPage", method = RequestMethod.GET)
-    public String populateList2(Model model) {
+    public void populateList2(Model model) {
         List<Bank> bankListing = sqlService.fetchBanks();
-        for (int i = 0; i < bankListing.size(); i++){
-            if (!bankListing.get(i).isLocal()){
+        for (int i = 0; i < bankListing.size(); i++) {
+            if (!bankListing.get(i).isLocal()) {
                 bankListing.remove(i);
             }
         }
         model.addAttribute("bankListing", bankListing);
-        return "signUpPage.html";
+        model.addAttribute("newUserID", HTML_newUserID);
     }
 
     @PostMapping("/signInPage")
@@ -72,7 +78,7 @@ public class userController {
         if (authUser == null){
             message = "Wrong Login Credentials";
             model.addAttribute("message", message);
-        }else{
+        } else{
             HTML_currBank = bankService.getBankFromID(bankList, bankid);
             HTML_currUser = bankService.getUserFromID(HTML_currBank, userid);
             HTML_currUserID = userid;
@@ -89,14 +95,7 @@ public class userController {
                              Model model) {
 
         populateList2(model);
-        System.out.println(firstName);
-        System.out.println(lastName);
-        System.out.println(pin);
-        System.out.println(bankid);
 
-        User newuser = new User();
-        newuser.setFirstName(firstName);
-        newuser.setLastName(lastName);
         String newPin = Util.hash(pin);
         Bank currentBank = bankList.get(bankid);
 
@@ -107,6 +106,7 @@ public class userController {
         userService.addAccountToUser(newUser2, newAccount2);
         bankService.addAccountToBank(currentBank, newAccount2);
 
+        HTML_newUserID = newUser2.getCustomerID();
         System.out.println("Account successfully created.");
 
         // Add new user to SQL
@@ -114,9 +114,20 @@ public class userController {
                 DEFAULT_LOCAL_TRANSFER_LIMIT, DEFAULT_OVERSEAS_TRANSFER_LIMIT);
         sqlService.addAccount(newAccount2.getAccountID(),newUser2.getCustomerID(),currentBank.getBankID(),"Savings",0.00);
 
-        System.out.println(newUser2.getCustomerID());
-        System.out.println(currentBank.getBankID());
+        populateList2(model);
 
         return "redirect:/signInPage";
+    }
+
+    @GetMapping("/signOut")
+    public String signOutHTML(RedirectAttributes redirectAttributes){
+        HTML_currUserID = -1;
+        HTML_currAccID = -1;
+        HTML_currUser = null;
+        HTML_currBank = null;
+        HTML_error = false;
+        HTML_accIDExists = -1;
+        HTML_newUserID = -1;
+        return "signOutPage";
     }
 }
