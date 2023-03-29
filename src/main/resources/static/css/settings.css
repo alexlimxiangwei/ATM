@@ -212,6 +212,17 @@
             background-color: #dc3545 ;
         }
 
+        #error-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            font-weight: bold;
+            width: 400px;
+            text-align: center;
+            margin: auto;
+        }
 
 
 

@@ -34,5 +34,6 @@ public class Constants {
     public static boolean HTML_withdrawError_limit;
     public static int HTML_accIDExists;
     public static int HTML_newUserID = -1;
+    public static boolean HTML_deleteError;
 
 }

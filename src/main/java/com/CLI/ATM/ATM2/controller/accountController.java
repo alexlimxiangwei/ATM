@@ -4,6 +4,8 @@ import com.CLI.ATM.ATM2.Util;
 import com.CLI.ATM.ATM2.model.*;
 import com.CLI.ATM.ATM2.service.*;
 import static com.CLI.ATM.ATM2.Constants.*;
+
+import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,32 +61,32 @@ public class accountController {
 
         // error message box
         if (HTML_transferError_exists){
-            String message = "TRANSFER FAILED\nNo such Account ID [" + HTML_accIDExists +"] exists !";
+            String message = "TRANSFER FAILED!\nNo such Account ID [" + HTML_accIDExists +"] exists !";
             model.addAttribute("message", message);
             HTML_transferError_exists = false;
         }
         if (HTML_transferError_balance){
-            String message = "TRANSFER FAILED\nInsufficient Balance !";
+            String message = "TRANSFER FAILED!\nInsufficient Balance !";
             model.addAttribute("message", message);
             HTML_transferError_balance = false;
         }
         if (HTML_transferError_limit){
-            String message = "TRANSFER FAILED\nDaily Local Withdraw Limit Reached !";
+            String message = "TRANSFER FAILED!\nDaily Local Withdraw Limit Reached !";
             model.addAttribute("message", message);
             HTML_transferError_limit = false;
         }
         if (HTML_transferError_sameAcc){
-            String message = "TRANSFER FAILED\nUnable to Transfer to Same Account !";
+            String message = "TRANSFER FAILED!\nUnable to Transfer to Same Account !";
             model.addAttribute("message", message);
             HTML_transferError_sameAcc = false;
         }
         if (HTML_withdrawError){
-            String message = "WITHDRAW FAILED\nInsufficient Balance !";
+            String message = "WITHDRAW FAILED!\nInsufficient Balance !";
             model.addAttribute("message", message);
             HTML_withdrawError = false;
         }
         if (HTML_withdrawError_limit){
-            String message = "WITHDRAW FAILED\nDaily Local Withdraw Limit Reached !";
+            String message = "WITHDRAW FAILED!\nDaily Local Withdraw Limit Reached !";
             model.addAttribute("message", message);
             HTML_withdrawError_limit = false;
         }
@@ -150,7 +152,6 @@ public class accountController {
             case 1 -> { // internal transfer
                 toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
                 if (toAcct == fromAcct) { // if same account
-                    // TODO: add your error in below
                     HTML_transferError_sameAcc = true;
                     break;
                 }
@@ -160,13 +161,12 @@ public class accountController {
                     transfer_limit = local_limit;
                 }
                 if (transfer_limit == -1) { // if transfer limit is -1, then limit is reached
-                    // TODO: if local limit reached , add in your error below
+                    HTML_transferError_limit = true;
                     break;
                 }
 
                 if (amount > local_limit) { // if amount to transfer is greater than limit
-                    //TODO: add your error in below
-                    HTML_transferError_balance = true;
+                    HTML_transferError_limit = true;
                     break;
                 }
 
@@ -179,9 +179,9 @@ public class accountController {
                 int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
                 if (toBankID == -1) {
                     // if third party account does not exist
-                    // TODO: add your error in below
                     HTML_accIDExists = accIdTo_External;
                     HTML_transferError_exists = true;
+                    return "redirect:/accounts";
                 }
                 Bank toBank = bankService.getBankFromID(bankList, toBankID);
                 toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
@@ -198,8 +198,7 @@ public class accountController {
                 }
 
                 if (amount > transfer_limit) { // if amount to transfer is greater than limit
-                    //TODO: add your error in below
-                    HTML_transferError_balance = true;
+                    HTML_transferError_limit = true;
                 }
                 // if everything is ok, then add transaction to both accounts
                 accountService.addTransactionToAcct(fromAcct, -amount, accIdTo_External, memo, isLocal);
@@ -262,6 +261,12 @@ public class accountController {
         model.addAttribute("userId", HTML_currUserID);
         model.addAttribute("bankName", HTML_currBank.getName());
 
+        if (HTML_deleteError){
+            String message = "ACCOUNT DELETE FAILED!\nPlease make sure account balance is 0 !";
+            model.addAttribute("message", message);
+            HTML_deleteError = false;
+        }
+
         return "settings";
     }
 
@@ -314,11 +319,17 @@ public class accountController {
                                 @RequestParam("accID_delete") int accID){
 
         getAccountsHTML(model);
-        // add delete account functions
-        userService.deleteAccount(HTML_currUser, accID);
 
-        // Update deleted account on sql
-        sqlService.deleteAccount(accID);
+        Account currAcc = accountService.getAccountFromID(HTML_currUser, accID);
+        if (currAcc.getBalance() > 0){
+            HTML_deleteError = true;
+        }
+        else {
+            // add delete account functions
+            userService.deleteAccount(HTML_currUser, accID);
+            // Update deleted account on sql
+            sqlService.deleteAccount(accID);
+        }
         return "redirect:/settings";
     }
 }

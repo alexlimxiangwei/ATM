@@ -107,6 +107,9 @@
           <button type="submit">Delete Account</button>
         </form>
       </div>
+      <div th:if="${message}" th:class="${'alert alert-' + type}" role="alert" id="error-box">
+        <span th:text="${message}"></span>
+      </div>
     </div>
   </div>
 </div>
