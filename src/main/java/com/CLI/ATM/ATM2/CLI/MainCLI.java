@@ -27,40 +27,112 @@ public class MainCLI {
     @Autowired
     UserCLI userCLI;
 
-    //region BANK_MENU
-
-
-
-
+    //region USER_MENU
     public void handleUserMenu(User theUser, Bank theBank){
 
         // print a summary of the user's accounts
         userCLI.printAccountsSummary(theUser);
 
-        // init
-        int choice = Strings.displayUserMenu();
-        // user menu
-
+        // print user menu
+        Strings.displayUserMenu();
 
         // process the choice
+        int choice = Util.readInt("Enter your choice: ",1, 5);
+
         switch (choice) {
             case 1 -> showTransHistory(theUser);
             case 2 -> updateFunds(theUser, WITHDRAW);
             case 3 -> updateFunds(theUser, DEPOSIT);
             case 4 -> transferFunds(theUser);
             case 5 -> showAccountSetting(theUser, theBank);
-            case 6 -> sc.nextLine(); // gobble up rest of previous input
+            case QUIT -> sc.nextLine(); // gobble up rest of previous input
         }
 
         // redisplay this menu unless the user wants to quit
-        if (choice != 6) {
+        if (choice != QUIT) {
             handleUserMenu(theUser,theBank);
         }
+        System.out.println("Logging out...\n");
 
     }
     //endregion
 
+    /**
+     * Show the transaction history for an account.
+     * @param theUser	the logged-in User object
+     */
+    public void showTransHistory(User theUser) {
+
+        int acctID;
+        // get account whose transactions to print
+        acctID = accountService.getInternalAccount(theUser, "view the transaction history of").getAccountID();
+
+        // print the transaction history
+        userService.printAcctTransHistory(theUser, acctID);
+        System.out.println("Enter any key to continue");
+        sc.nextLine();
+        sc.nextLine();
+    }
+
     //region ACCOUNT_FUNCTIONS
+    /**
+     * Process a fund withdraw from an account.
+     * @param theUser	the logged-in User object
+     */
+    public void updateFunds(User theUser, int direction ) {
+
+        Account fromAcct;
+        double amount;
+        double limit = Double.POSITIVE_INFINITY;
+        String memo;
+        String prompt;
+
+        // get account to withdraw from
+        if (direction == WITHDRAW) {
+            prompt = "withdraw from";
+        } else {
+            prompt = "deposit to";
+        }
+
+        fromAcct = accountService.getInternalAccount(theUser, prompt);
+        if (fromAcct == null){
+            return;
+        }
+        if (direction == WITHDRAW) { // if making a withdrawal, set a limit
+            // set transfer limit to whichever is lower :  current account balance or local transfer limit
+            if (theUser.getLocal_transfer_limit() < fromAcct.getBalance()) {
+                limit = userService.getLocalTransferLimit(theUser);
+                if (limit == -1) {
+                    System.out.println("Sorry, you have reached your daily withdrawal limit\nPress enter to continue.");
+                    sc.nextLine();
+                    sc.nextLine();
+                    return;
+                }
+            }
+        }
+        // get amount to transfer
+        amount = Util.readDouble(Strings.askAmountPrompt(limit), 0.1, limit);
+        if (amount == QUIT) {
+            return;
+        }
+
+        // make amount negative if withdrawing (WITHDRAW is = -1 while DEPOSIT is = 1)
+        amount = direction * amount;
+        // gobble up rest of previous input
+        sc.nextLine();
+
+        // get a memo
+        memo = Util.readString("Enter a memo: ");
+
+        // do the transfer
+        // receiverID is -1 (TRANSACTION_TO_SELF) when it's an internal transaction (deposit/withdrawal)
+        accountService.addTransaction(fromAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+
+        accountService.addBalance(fromAcct, amount);
+        // update balance on SQL
+        SQLService.updateBalance(fromAcct.getBalance(), fromAcct.getAccountID());
+
+    }
     public void transferFunds(User theUser) {
         Account fromAcct;
         Account toAcct;
@@ -69,33 +141,54 @@ public class MainCLI {
         double amount;
         double transferLimit;
         boolean isLocalTransaction = true;
-        int choice = transferFundsMenu();
-        String amountValidationString;
+
+        Strings.print_transfer_fund_choices();
+        int choice = Util.readInt("Enter your choice: ", 1, 2);
+        if (choice == QUIT) {
+            return;
+        }
         // get account to transfer from
         fromAcct = accountService.getInternalAccount(theUser, "transfer from");
+        if (fromAcct == null){
+            return;
+        }
+        else if (fromAcct.getBalance() == 0){
+            System.out.println("Sorry, you cannot transfer from an empty account.\nPlease press enter to continue.");
+            sc.nextLine();
+            return;
+        }
         transferLimit = fromAcct.getBalance();
 
         if (choice == 1){
             // get internal account to transfer to
             toAcct = accountService.getInternalAccount(theUser, "transfer to");
+            if (toAcct == null){
+                return;
+            }
             toAcctID = toAcct.getAccountID();
+
         }
         else{
             //get third party account to transfer to
             do {
-                toAcctID = accountService.getThirdPartyAccount();
+                toAcctID = Util.readInt("Enter the account number of the account to transfer to: ");
+                if (toAcctID == QUIT) {
+                    return;
+                }
                 bankID = accountService.validateThirdPartyAccount(toAcctID);
+                if (bankID == NOT_FOUND){
+                    System.out.println("Sorry, the account number you entered is not found.\nPress enter to try again.");
+                    sc.nextLine();
+                }
             }while (bankID == NOT_FOUND);
 
             Bank toBank = bankService.getBankFromID(bankList, bankID);
             toAcct = bankService.getAccountFromID(toBank, toAcctID);
 
-            // TODO: change the below to get remaining transfer limits instead of just the limit
             if (toBank.isLocal() & transferLimit > theUser.getLocal_transfer_limit()){
                 transferLimit = userService.getLocalTransferLimit(theUser); // if it's a local bank, apply limit for local transfer
                 if (transferLimit == -1){
                     System.out.println("Sorry, you have reached your local transfer limit for today.\nPress enter to continue.");
-                    sc.nextLine();
                     sc.nextLine();
                     return;
                 }
@@ -106,27 +199,25 @@ public class MainCLI {
                 if (transferLimit == -1){
                     System.out.println("Sorry, you have reached your overseas transfer limit for today.\nPress enter to continue.");
                     sc.nextLine();
-                    sc.nextLine();
                     return;
                 }
             }
 
         }
-        do {
-            // get amount to transfer
-            Strings.print_AskAmount(transferLimit);
-            amount = sc.nextDouble();
-            // check if amount is > 0 and < limit
-            amountValidationString = accountService.validateAmount(amount, transferLimit);
-            // if invalid amount, print the error message
-            if (amountValidationString != null){
-                System.out.println(amountValidationString);
-            }
-        }while (amountValidationString != null);
+        // if trying to transfer to same account
+        if (toAcct == fromAcct){
+            System.out.println("Sorry, you cannot transfer to the same account.\nPlease press enter to continue.");
+            sc.nextLine();
+            return;
+        }
+        // get amount to transfer
+        amount = Util.readDouble(Strings.askAmountPrompt(transferLimit), 0.1, transferLimit);
+        if (amount == QUIT) {
+            return;
+        }
+
         // get memo for transfer
-        sc.nextLine();
-        System.out.println("Enter memo for this transaction: ");
-        String memo = sc.nextLine();
+        String memo = Util.readString("Enter memo for this transaction: ");
 
         // add transaction and update balance of fromAcct
         accountService.addTransaction(fromAcct, -amount, toAcctID, memo, isLocalTransaction);
@@ -143,108 +234,8 @@ public class MainCLI {
 
 
 
-    /**
-     * Process a fund withdraw from an account.
-     * @param theUser	the logged-in User object
-     */
-    public void updateFunds(User theUser, int direction ) {
-
-        Account fromAcct;
-        double amount;
-        double withdrawLimit = -1;
-        String memo;
-        String directionString;
-        String amountValidationString;
-
-        // get account to withdraw from
-        if (direction == WITHDRAW) {
-            directionString = "withdraw from";
-        }
-        else{
-            directionString = "transfer to";
-        }
-
-        fromAcct = accountService.getInternalAccount(theUser, directionString);
-        if (direction == WITHDRAW){ // if making a withdraw, set a limit
-            // set transfer limit to whichever is lower :  current account balance or local transfer limit
-            if (theUser.getLocal_transfer_limit() < fromAcct.getBalance()){
-                withdrawLimit = userService.getLocalTransferLimit(theUser);
-                if (withdrawLimit == -1){
-                    System.out.println("Sorry, you have reached your daily withdrawal limit\nPress enter to continue.");
-                    sc.nextLine();
-                    sc.nextLine();
-                    return;
-                }
-            }
-        }
 
 
-        do {
-            // get amount to transfer
-            Strings.print_AskAmount(withdrawLimit);
-            amount = sc.nextDouble();
-            // check if amount is > 0 and < limit
-            amountValidationString = accountService.validateAmount(amount, withdrawLimit);
-            // if invalid amount, print the error message
-            if (amountValidationString != null){
-                System.out.println(amountValidationString);
-            }
-        }while (amountValidationString != null); // while invalid amount
-
-        // make amount negative if withdrawing (WITHDRAW is = -1 while DEPOSIT is = 1)
-        amount = direction * amount;
-        // gobble up rest of previous input
-        sc.nextLine();
-
-        // get a memo
-        System.out.print("Enter a memo: ");
-        memo = sc.nextLine();
-
-        // do the transfer
-        // receiverID is -1 (TRANSACTION_TO_SELF) when it's an internal transaction (deposit/withdrawal)
-        accountService.addTransaction(fromAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-
-        accountService.addBalance(fromAcct, amount);
-        // update balance on SQL
-        SQLService.updateBalance(fromAcct.getBalance(),fromAcct.getAccountID());
-    }
-
-    /**
-     * Show the transaction history for an account.
-     * @param theUser	the logged-in User object
-     */
-    public void showTransHistory(User theUser) {
-
-        int theAcct;
-
-        int numOfAcc = userService.numAccounts(theUser);
-
-        // get account whose transactions to print
-        do {
-            System.out.println("\n");
-            System.out.println("Account Transaction History");
-            System.out.printf("Enter number (1-%d)\n", numOfAcc);
-
-            int count = 1;
-            for (Account acc: theUser.getAccounts()) {
-                System.out.println(count + ") " + acc.getName());
-                count++;
-            }
-
-            theAcct = sc.nextInt()-1;
-            if (theAcct < 0 || theAcct >= numOfAcc) {
-                System.out.println("Invalid account. Please try again.");
-            }
-        } while (theAcct < 0 || theAcct >= numOfAcc);
-
-        // print the transaction history
-        userService.printAcctTransHistory(theUser, theAcct);
-        sc.nextLine();
-        System.out.println("Enter any key to continue");
-        sc.nextLine();
-
-
-    }
     //endregion
 
     //region ACCOUNT_SETTINGS

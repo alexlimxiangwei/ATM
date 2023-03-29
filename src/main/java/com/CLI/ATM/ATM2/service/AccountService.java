@@ -130,28 +130,25 @@ public class AccountService {
      * Gets an internal account of a user for transferring purposes
      * by asking for user input
      * @param theUser	the user to loop through his accounts
-     * @param directionString direction of transfer, e.g. : transfer to / withdraw from
+     * @param prompt prompt to ask, e.g. : transfer to / withdraw from
      * @return Account object for transferring of $
      */
-    public Account getInternalAccount(User theUser, String directionString){
+    public Account getInternalAccount(User theUser, String prompt){
         int fromAcctIndex;
-        int printSumFlag = 0;
         int numOfAccounts = userService.numAccounts(theUser);
-        do {
-            System.out.printf("Enter the number (1-%d) of the account to %s: ", numOfAccounts, directionString);
-            while (printSumFlag != 1){
-                userCli.printAccountsSummarySimp(theUser);
-                printSumFlag +=1;
-            }
-
-            fromAcctIndex = sc.nextInt()-1;
-            if (fromAcctIndex < 0 || fromAcctIndex >= numOfAccounts) {
-                System.out.println("Invalid account. Please try again.");
-            }
-        } while (fromAcctIndex < 0 || fromAcctIndex >= numOfAccounts);
-
-        return userService.getAcct(theUser, fromAcctIndex);
-
+        userCli.printAccountsSummarySimp(theUser);
+        String choice_prompt = String.format("\nEnter the number (1-%d) of the account to %s: ", numOfAccounts, prompt);
+        fromAcctIndex = Util.readInt(choice_prompt, 1, numOfAccounts-1);
+        if (fromAcctIndex == QUIT){
+            return null;
+        }
+        fromAcctIndex--; // since index starts from 0
+        Account fromAccount = userService.getAcct(theUser, fromAcctIndex);
+        if (fromAccount == null){
+            System.out.println("Invalid account. Please try again.");
+            getInternalAccount(theUser, prompt);
+        }
+        return fromAccount;
     }
 
     /**
@@ -185,22 +182,6 @@ public class AccountService {
         sc.nextLine();
         return sc.nextInt();
     }
-
-    /**
-     * Makes sure that the amount transferred is > than 0
-     * @param amount	users inputted amount
-     * @param limit     checks for the users daily limit
-     */
-    public String validateAmount(double amount, double limit) { // TODO: convert the 2 ifs below to throw custom exceptions
-        if (amount < 0) {
-            return "Amount must be greater than zero.";
-        }
-        if (limit != -1 && amount > limit) {
-            return String.format("Amount must not be greater than balance of $%.02f.", limit);
-        }
-        return null;
-    }
-
 
     /**
      * Gets the bankID of the bank that an accountID belongs to.

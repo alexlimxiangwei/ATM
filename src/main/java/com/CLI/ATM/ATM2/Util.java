@@ -156,10 +156,9 @@ public class Util {
                 } else {
                     throw new Exception();
                 }
-                sc.nextLine();  // discard any other data entered on the line
             }
             catch(Exception e) {
-                System.out.println("Please enter a valid double.\n");
+                System.out.println("Please enter a valid number.\n");
                 sc.nextLine();  // discard any other data entered on the line
             }
         }
