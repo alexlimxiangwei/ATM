@@ -213,7 +213,7 @@ public class UserService {
         //If userId isn't found locally, search sql database
 //        System.out.println("User not found locally, attempting to fetch user from database...");
         User u = SQLService.addExistingUserByCustomerID(bank, userID);
-        if (u != null && u.getCustomerID() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) { // TODO: shorten
+        if (u != null && u.getCustomerID() == userID && u.getPinHash().equalsIgnoreCase(Util.hash(pin))) {
             return u;
         }
         // if we haven't found the user or have an incorrect pin, return null

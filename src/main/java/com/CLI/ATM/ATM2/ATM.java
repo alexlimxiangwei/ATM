@@ -1,10 +1,7 @@
 package com.CLI.ATM.ATM2;
 
-import com.CLI.ATM.ATM2.CLI.MainCLI;
 import com.CLI.ATM.ATM2.model.Bank;
-import com.CLI.ATM.ATM2.model.User;
 import com.CLI.ATM.ATM2.service.BankService;
-import com.CLI.ATM.ATM2.service.AccountService;
 import com.CLI.ATM.ATM2.service.SQLService;
 import com.CLI.ATM.ATM2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

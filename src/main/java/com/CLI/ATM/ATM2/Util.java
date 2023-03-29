@@ -1,10 +1,8 @@
 package com.CLI.ATM.ATM2;
 
 import com.CLI.ATM.ATM2.CLI.MainCLI;
-import com.CLI.ATM.ATM2.CLI.UserCLI;
 import com.CLI.ATM.ATM2.model.Bank;
 import com.CLI.ATM.ATM2.model.User;
-import com.CLI.ATM.ATM2.service.BankService;
 import com.CLI.ATM.ATM2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,14 +21,13 @@ public class Util {
     UserService userService;
 
     @Autowired
-    BankService bankService;
-
-    @Autowired
-    UserCLI userCLI;
-
-    @Autowired
     MainCLI mainCLI;
 
+    /**
+     * Hashes a string using SHA-256
+     * @param pin pin to hash
+     * @return hashed pin
+     */
     public static String hash(String pin){
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -41,6 +38,8 @@ public class Util {
             return null;
         }
     }
+
+    //region NON-ERROR HANDLERS
     public static void handleQuitApp(){
         System.out.println("Thank you for using our ATM!");
         System.out.println("Quitting...");
@@ -65,8 +64,9 @@ public class Util {
         }
         mainCLI.handleUserMenu(curUser, currentBank);
     }
+    //endregion
 
-    //region Error Handlers
+    //region ERROR HANDLERS
 
     /**
      * reads user input, will validate if input is an integer
@@ -194,6 +194,7 @@ public class Util {
         }
         return input;
     }
+    //endregion
 }
 
 
