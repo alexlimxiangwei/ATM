@@ -43,6 +43,7 @@
 
     const showInternal = document.getElementById("type-transfer");
     const internalDiv = document.getElementById("internal-div");
+    const inputVal = document.getElementById("accId-transfer-to-external");
 
     showInternal.addEventListener("change", () => {
         if (showInternal.value === "1") {
@@ -56,7 +57,6 @@
 
     const showExternal = document.getElementById("type-transfer");
     const externalDiv = document.getElementById("external-div");
-    const inputVal = document.getElementById("accId-transfer-to-external");
 
     showExternal.addEventListener("change", () => {
         if (showExternal.value === "2" || showExternal.value === "3") {

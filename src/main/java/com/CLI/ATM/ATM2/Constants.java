@@ -26,8 +26,12 @@ public class Constants {
     public static User HTML_currUser;
     public static Bank HTML_currBank;
 
-    public static boolean HTML_transferError;
+    public static boolean HTML_transferError_exists;
+    public static boolean HTML_transferError_balance;
+    public static boolean HTML_transferError_limit;
+    public static boolean HTML_transferError_sameAcc;
     public static boolean HTML_withdrawError;
+    public static boolean HTML_withdrawError_limit;
     public static int HTML_accIDExists;
     public static int HTML_newUserID = -1;
 

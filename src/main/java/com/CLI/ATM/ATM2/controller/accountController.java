@@ -58,13 +58,35 @@ public class accountController {
         model.addAttribute("accounts", accountListing);
 
         // error message box
-        if (HTML_transferError){
+        if (HTML_transferError_exists){
             String message = "TRANSFER FAILED\nNo such Account ID [" + HTML_accIDExists +"] exists !";
             model.addAttribute("message", message);
+            HTML_transferError_exists = false;
+        }
+        if (HTML_transferError_balance){
+            String message = "TRANSFER FAILED\nInsufficient Balance !";
+            model.addAttribute("message", message);
+            HTML_transferError_balance = false;
+        }
+        if (HTML_transferError_limit){
+            String message = "TRANSFER FAILED\nDaily Local Withdraw Limit Reached !";
+            model.addAttribute("message", message);
+            HTML_transferError_limit = false;
+        }
+        if (HTML_transferError_sameAcc){
+            String message = "TRANSFER FAILED\nUnable to Transfer to Same Account !";
+            model.addAttribute("message", message);
+            HTML_transferError_sameAcc = false;
         }
         if (HTML_withdrawError){
             String message = "WITHDRAW FAILED\nInsufficient Balance !";
             model.addAttribute("message", message);
+            HTML_withdrawError = false;
+        }
+        if (HTML_withdrawError_limit){
+            String message = "WITHDRAW FAILED\nDaily Local Withdraw Limit Reached !";
+            model.addAttribute("message", message);
+            HTML_withdrawError_limit = false;
         }
 
         return "accounts.html";
@@ -92,9 +114,12 @@ public class accountController {
                               @RequestParam("memo-withdraw") String memo) {
 
         Account currAcc = accountService.getAccountFromID(HTML_currUser, accId);
+        double local_limit = userService.getLocalTransferLimit(HTML_currUser);
 
         if(amount > currAcc.getBalance()){
             HTML_withdrawError = true;
+        } else if (amount > local_limit) {
+            HTML_withdrawError_limit = true;
         } else {
             amount = -amount;
 
@@ -120,12 +145,18 @@ public class accountController {
         User fromUser = HTML_currUser;
         Account fromAcct = accountService.getAccountFromID(fromUser, accIdFrom);
         Account toAcct = null;
+        double local_limit = userService.getLocalTransferLimit(HTML_currUser);
 
-        // return form if accountID doesn't exist
-        if (accountService.getAccountFromID(fromUser, accIdTo_External) == null){
+        if (accountService.getAccountFromID(fromUser, accIdTo_External) == null && accIdTo_External != -1){
             HTML_accIDExists = accIdTo_External;
-            HTML_transferError = true;
-        }else {
+            HTML_transferError_exists = true;
+        } else if (amount > fromAcct.getBalance()) {
+            HTML_transferError_balance = true;
+        } else if (amount > local_limit) {
+            HTML_transferError_limit = true;
+        } else if (accIdFrom == accIdTo_Internal || accIdFrom == accIdTo_External) {
+            HTML_transferError_sameAcc = true;
+        } else {
 
             switch (transferType) {
                 case 1 -> { // internal transfer
