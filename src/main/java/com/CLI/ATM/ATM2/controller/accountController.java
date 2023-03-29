@@ -144,16 +144,11 @@ public class accountController {
 
         User fromUser = HTML_currUser;
         Account fromAcct = accountService.getAccountFromID(fromUser, accIdFrom);
-        Account toAcct = null;
-        double local_limit = userService.getLocalTransferLimit(HTML_currUser);
+        Account toAcct = accountService.getAccountFromID(fromUser, accIdTo_External);
 
-        if (accountService.getAccountFromID(fromUser, accIdTo_External) == null && accIdTo_External != -1){
+        if (toAcct == null && accIdTo_External != -1){
             HTML_accIDExists = accIdTo_External;
             HTML_transferError_exists = true;
-        } else if (amount > fromAcct.getBalance()) {
-            HTML_transferError_balance = true;
-        } else if (amount > local_limit) {
-            HTML_transferError_limit = true;
         } else if (accIdFrom == accIdTo_Internal || accIdFrom == accIdTo_External) {
             HTML_transferError_sameAcc = true;
         } else {
@@ -161,17 +156,38 @@ public class accountController {
             switch (transferType) {
                 case 1 -> { // internal transfer
                     toAcct = accountService.getAccountFromID(fromUser, accIdTo_Internal);
+                    double local_limit = userService.getLocalTransferLimit(HTML_currUser);
 
-                    // add transaction locally
-                    accountService.addTransactionToAcct(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
-                    accountService.addTransactionToAcct(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                    if (amount > local_limit | amount > fromAcct.getBalance()) {
+                        HTML_transferError_balance = true;
+                    } else {
+                        // add transaction to both accounts
+                        accountService.addTransactionToAcct(fromAcct, -amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                        accountService.addTransactionToAcct(toAcct, amount, TRANSACTION_TO_SELF, memo, LOCAL_TRANSACTION);
+                    }
                 }
                 case 2 -> { // external transfer
                     int toBankID = accountService.validateThirdPartyAccount(accIdTo_External);
+                    if (toBankID == -1) {
+                        HTML_accIDExists = accIdTo_External;
+                        HTML_transferError_exists = true;
+                        break;
+                    }
                     Bank toBank = bankService.getBankFromID(bankList, toBankID);
-                    toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
                     boolean isLocal = toBank.isLocal();
-                    // add transaction locally
+                    double limit;
+                    if (isLocal) {
+                        limit = userService.getLocalTransferLimit(HTML_currUser);
+                    } else {
+                        limit = userService.getOverseasTransferLimit(HTML_currUser);
+                    }
+                    toAcct = bankService.getAccountFromID(toBank, accIdTo_External);
+                    if (amount > fromAcct.getBalance() | amount > limit) {
+                        HTML_transferError_balance = true;
+                        break;
+                    }
+
+                    // add transaction to both accounts
                     accountService.addTransactionToAcct(fromAcct, -amount, accIdTo_External, memo, isLocal);
                     accountService.addTransactionToAcct(toAcct, amount, accIdFrom, memo, isLocal);
 

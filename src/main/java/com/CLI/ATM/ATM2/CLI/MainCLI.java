@@ -201,7 +201,6 @@ public class MainCLI {
                     return;
                 }
             }
-
         }
         // if trying to transfer to same account
         if (toAcct == fromAcct){
